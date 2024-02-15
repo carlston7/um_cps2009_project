@@ -1,0 +1,219 @@
+openapi: "3.0.2"
+info:
+  title: "CPS2009 Tennis Court Booking API"
+  version: "1.0.0"
+  description: "API for managing tennis court bookings with different roles for club owners, members, and admins."
+
+servers:
+  - url: "http://localhost:3001"
+    description: "Development server"
+
+paths:
+  /clubs: # Allows a club owner to create a new club entity
+    post:
+      summary: "Club owner creates a new club"
+      operationId: "createClub"
+      tags:
+        - "Club Owner"
+      requestBody:
+        required: true
+        description: "Payload containing necessary club information."
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Club"
+      responses:
+        "201":
+          description: "Club created."
+        "400":
+          description: "Invalid input."
+
+  /clubs/{clubId}/courts:
+    get: # Retrieves a list of courts for a given club by the club ID.
+      summary: "Get a list of all tennis courts for a club"
+      operationId: "listClubCourts"
+      tags:
+        - "Club Owner"
+      parameters:
+        - name: "clubId"
+          in: "path"
+          required: true
+          description: "Unique identifier of the club."
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "A list of tennis courts for the specified club."
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Court"
+        "404":
+          description: "Club or courts not found."
+
+    post: # Allows a club owner to add a new court to their club.
+      summary: "Club owner adds a new court to their club"
+      operationId: "addClubCourt"
+      tags:
+        - "Club Owner"
+      parameters:
+        - name: "clubId"
+          in: "path"
+          required: true
+          description: "Payload containing necessary court information."
+          schema:
+            type: "integer"
+            format: "int64"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Court"
+      responses:
+        "201":
+          description: "Court created."
+        "400":
+          description: "Invalid input."
+
+  /courts/{courtId}/bookings: # Gets all bookings for a particular court. Restricted to club owners and admins.
+    get:
+      summary: "Get all bookings for a specific court"
+      operationId: "listCourtBookings"
+      tags:
+        - "Club Owner"
+        - "Administrator"
+      parameters:
+        - name: "courtId"
+          in: "path"
+          required: true
+          description: "Unique identifier of the court."
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "A list of bookings for the specified court."
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Booking"
+        "404":
+          description: "Court not found."
+        "401":
+          description: "Unauthorized access."
+
+    post: # Allows a club member to create a booking for a court.
+      summary: "Club member books a court"
+      operationId: "bookCourt"
+      tags:
+        - "Club Member"
+      parameters:
+        - name: "courtId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Booking"
+      responses:
+        "201":
+          description: "Booking created."
+        "400":
+          description: "Invalid input or court already booked for the requested time."
+
+  /bookings/{bookingId}: # Allows a club member to cancel their booking.
+    delete:
+      summary: "Club member cancels a booking"
+      operationId: "cancelBooking"
+      tags:
+        - "Club Member"
+      parameters:
+        - name: "bookingId"
+          in: "path"
+          required: true
+          description: "Unique identifier of the booking to be cancelled."
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "204":
+          description: "Booking cancelled."
+        "404":
+          description: "Booking not found."
+
+components:
+  schemas:
+    Club:
+      type: "object"
+      required:
+        - "name"
+      properties:
+        name:
+          type: "string" # name of club
+        location:
+          type: "string"
+        ownerId:
+          type: "integer" #logic is: only valid owner IDs can create Clubs
+          format: "int64"
+
+    Court:
+      type: "object"
+      required:
+        - "id"
+        - "name"
+        - "price"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        clubId:
+          type: "integer" #club that we want to book with
+          format: "int64"
+        name:
+          type: "string" #Court1,Court2 etc.. (must be unique)
+        price:
+          type: "number" #Price of court
+          format: "float"
+        availableHours:
+          type: "object"
+          properties:
+            start:
+              type: "string"
+              format: "time"
+            end:
+              type: "string"
+              format: "time"
+
+    Booking:
+      type: "object"
+      required:
+        - "courtId"
+        - "memberId"
+        - "startTime"
+        - "endTime"
+      properties:
+        id:
+          type: "integer"
+          format: "int64" #booking
+        courtId:
+          type: "string" #id of court we want to book
+        memberId:
+          type: "integer" #member id who booked
+          format: "int64"
+        startTime:
+          type: "string"
+          format: "date-time"
+        endTime:
+          type: "string"
+          format: "date-time"
