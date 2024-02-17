@@ -1,20 +1,56 @@
 openapi: "3.0.2"
 info:
-  title: "CPS2009 Tennis Court Booking API"
+  title: "Sports Club Booking System API"
   version: "1.0.0"
-  description: "API for managing tennis court bookings with different roles for club owners, members, and admins."
+  description: "API for managing sports club court bookings, configurations, and statistics with role-based features for club owners, members, and administrators."
 
 servers:
-  - url: "http://localhost:3001"
-    description: "Development server"
+  - url: "https://api.sportsclubbooking.com/v1"
+    description: "Production server"
 
 paths:
-  /clubs: # Allows a club owner to create a new club entity
+  /signup:
+    post:
+      summary: "User signup"
+      description: "Allows new users to sign up by specifying their role (member, club owner, administrator)."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignupRequest"
+      responses:
+        "201":
+          description: "User registered successfully."
+        "400":
+          description: "Invalid request."
+
+  /login:
+    post:
+      summary: "User login"
+      description: "Authenticates users and returns a JWT for accessing protected endpoints."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: "Authentication successful."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "401":
+          description: "Authentication failed."
+
+  /clubs:
     post:
       summary: "Club owner creates a new club"
-      operationId: "createClub"
-      tags:
-        - "Club Owner"
+      tags: ["Club Owner"]
+      security:
+        - BearerAuth: []
       requestBody:
         required: true
         description: "Payload containing necessary club information."
@@ -29,19 +65,13 @@ paths:
           description: "Invalid input."
 
   /clubs/{clubId}/courts:
-    get: # Retrieves a list of courts for a given club by the club ID.
+    get:
       summary: "Get a list of all tennis courts for a club"
-      operationId: "listClubCourts"
-      tags:
-        - "Club Owner"
+      tags: ["Club Owner", "Administrator"]
+      security:
+        - BearerAuth: []
       parameters:
-        - name: "clubId"
-          in: "path"
-          required: true
-          description: "Unique identifier of the club."
-          schema:
-            type: "integer"
-            format: "int64"
+        - $ref: '#/components/parameters/clubId'
       responses:
         "200":
           description: "A list of tennis courts for the specified club."
@@ -54,19 +84,13 @@ paths:
         "404":
           description: "Club or courts not found."
 
-    post: # Allows a club owner to add a new court to their club.
+    post:
       summary: "Club owner adds a new court to their club"
-      operationId: "addClubCourt"
-      tags:
-        - "Club Owner"
+      tags: ["Club Owner"]
+      security:
+        - BearerAuth: []
       parameters:
-        - name: "clubId"
-          in: "path"
-          required: true
-          description: "Payload containing necessary court information."
-          schema:
-            type: "integer"
-            format: "int64"
+        - $ref: '#/components/parameters/clubId'
       requestBody:
         required: true
         content:
@@ -75,25 +99,18 @@ paths:
               $ref: "#/components/schemas/Court"
       responses:
         "201":
-          description: "Court created."
+          description: "Court added."
         "400":
           description: "Invalid input."
 
-  /courts/{courtId}/bookings: # Gets all bookings for a particular court. Restricted to club owners and admins.
+  /courts/{courtId}/bookings:
     get:
       summary: "Get all bookings for a specific court"
-      operationId: "listCourtBookings"
-      tags:
-        - "Club Owner"
-        - "Administrator"
+      tags: ["Club Owner", "Administrator"]
+      security:
+        - BearerAuth: []
       parameters:
-        - name: "courtId"
-          in: "path"
-          required: true
-          description: "Unique identifier of the court."
-          schema:
-            type: "integer"
-            format: "int64"
+        - $ref: '#/components/parameters/courtId'
       responses:
         "200":
           description: "A list of bookings for the specified court."
@@ -105,21 +122,14 @@ paths:
                   $ref: "#/components/schemas/Booking"
         "404":
           description: "Court not found."
-        "401":
-          description: "Unauthorized access."
 
-    post: # Allows a club member to create a booking for a court.
+    post:
       summary: "Club member books a court"
-      operationId: "bookCourt"
-      tags:
-        - "Club Member"
+      tags: ["Club Member"]
+      security:
+        - BearerAuth: []
       parameters:
-        - name: "courtId"
-          in: "path"
-          required: true
-          schema:
-            type: "integer"
-            format: "int64"
+        - $ref: '#/components/parameters/courtId'
       requestBody:
         required: true
         content:
@@ -132,88 +142,217 @@ paths:
         "400":
           description: "Invalid input or court already booked for the requested time."
 
-  /bookings/{bookingId}: # Allows a club member to cancel their booking.
+  /bookings/{bookingId}:
     delete:
       summary: "Club member cancels a booking"
-      operationId: "cancelBooking"
-      tags:
-        - "Club Member"
+      tags: ["Club Member"]
+      security:
+        - BearerAuth: []
       parameters:
-        - name: "bookingId"
-          in: "path"
-          required: true
-          description: "Unique identifier of the booking to be cancelled."
-          schema:
-            type: "integer"
-            format: "int64"
+        - $ref: '#/components/parameters/bookingId'
       responses:
         "204":
           description: "Booking cancelled."
         "404":
           description: "Booking not found."
+  /admin/courts/{courtId}/config:
+    put:
+      summary: "Update court booking parameters"
+      tags: ["Administrator"]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/courtId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CourtConfig"
+      responses:
+        "200":
+          description: "Booking parameters updated successfully."
+        "400":
+          description: "Invalid input."
+        "404":
+          description: "Court not found."
+        "401":
+          description: "Unauthorized access."
 
+  /admin/statistics/bookings:
+    get:
+      summary: "Get statistics on bookings"
+      tags: ["Administrator"]
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: date
+          schema:
+            type: string
+            format: date
+          description: "The date to retrieve bookings statistics for."
+      responses:
+        "200":
+          description: "Statistics for the given date."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookingStatistics"
+        "400":
+          description: "Invalid date format."
+        "401":
+          description: "Unauthorized access."
 components:
   schemas:
+    SignupRequest:
+      type: "object"
+      required: ["email", "password", "role"]
+      properties:
+        email:
+          type: "string"
+        password:
+          type: "string"
+        role:
+          type: "string"
+          enum: ["member", "clubOwner", "admin"]
+
+    LoginRequest:
+      type: "object"
+      required: ["email", "password"]
+      properties:
+        email:
+          type: "string"
+        password:
+          type: "string"
+
+    LoginResponse:
+      type: "object"
+      properties:
+        token:
+          type: "string"
+
     Club:
       type: "object"
-      required:
-        - "name"
+      required: ["name", "location", "ownerId"]
       properties:
         name:
-          type: "string" # name of club
+          type: "string"
+          description: "The name of the club."
         location:
           type: "string"
+          description: "The physical address or location of the club."
         ownerId:
-          type: "integer" #logic is: only valid owner IDs can create Clubs
+          type: "integer"
           format: "int64"
+          description: "The unique identifier of the user who owns this club."
+
 
     Court:
       type: "object"
-      required:
-        - "id"
-        - "name"
-        - "price"
+      required: ["clubId", "name", "price", "availableHours"]
       properties:
-        id:
+        clubId:
           type: "integer"
           format: "int64"
-        clubId:
-          type: "integer" #club that we want to book with
-          format: "int64"
+          description: "The identifier of the club this court belongs to."
         name:
-          type: "string" #Court1,Court2 etc.. (must be unique)
+          type: "string"
+          description: "A unique name or identifier for the court."
         price:
-          type: "number" #Price of court
+          type: "number"
           format: "float"
+          description: "The cost to book the court per hour."
         availableHours:
           type: "object"
+          required: ["start", "end"]
           properties:
             start:
               type: "string"
               format: "time"
+              description: "The start time of availability for the court."
             end:
               type: "string"
               format: "time"
+              description: "The end time of availability for the court."
 
     Booking:
       type: "object"
-      required:
-        - "courtId"
-        - "memberId"
-        - "startTime"
-        - "endTime"
+      required: ["courtId", "memberId", "startTime", "endTime"]
       properties:
         id:
           type: "integer"
-          format: "int64" #booking
-        courtId:
-          type: "string" #id of court we want to book
-        memberId:
-          type: "integer" #member id who booked
           format: "int64"
+          description: "A unique identifier for the booking."
+        courtId:
+          type: "integer"
+          format: "int64"
+          description: "The identifier of the court being booked."
+        memberId:
+          type: "integer"
+          format: "int64"
+          description: "The identifier of the member who made the booking."
         startTime:
           type: "string"
           format: "date-time"
+          description: "The start time of the booking."
         endTime:
           type: "string"
           format: "date-time"
+          description: "The end time of the booking."
+    CourtConfig:
+      type: "object"
+      properties:
+        price:
+          type: "number"
+          format: "float"
+        restrictions:
+          type: "object"
+          additionalProperties: true
+
+    BookingStatistics:
+      type: "object"
+      properties:
+        totalBookings:
+          type: "integer"
+        mostPopularCourts:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Court"
+        bookingDetails:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Booking"
+
+  parameters:
+    clubId:
+      in: path
+      name: clubId
+      required: true
+      schema:
+        type: "string"
+        description: "Unique identifier of the club."
+
+    courtId:
+      in: path
+      name: courtId
+      required: true
+      schema:
+        type: "string"
+        description: "Unique identifier of the court."
+
+    bookingId:
+      in: path
+      name: bookingId
+      required: true
+      schema:
+        type: "string"
+        description: "Unique identifier of the booking."
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  
+
