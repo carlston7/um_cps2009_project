@@ -1,5 +1,5 @@
 """
-URL configuration for myproject project.
+URL configuration for backend project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.0/topics/http/urls/
@@ -14,14 +14,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path, include, re_path
-from django.views.generic import RedirectView
 from django.contrib import admin
+from django.urls import path
+from myapp.views import test_api
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('api.urls')),
-    re_path(r'^$', RedirectView.as_view(url='/api/', permanent=False)),  # Redirect root to /api/
+    path('api/test/', test_api, name='test_api'),
 ]
-
 
