@@ -12,7 +12,7 @@ Activate teh virtual environment: source environ/bin/activate
 Install Django within the virtual environment: pip install django
 Install Django REST framework using pip: pip install djangorestframework
 
-Run Python server: python manage.py runserver
+Run Python server: python3 manage.py runserver
 
 Commands used (frontend):
 check if you have node.js and npm installed 
