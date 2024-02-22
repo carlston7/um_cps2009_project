@@ -10,14 +10,22 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+# settings.py
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Correct path to the frontend build directory
+FRONTEND_BUILD_DIR = BASE_DIR / 'frontend/build'
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    FRONTEND_BUILD_DIR,
+]
+
+
+# Optionally, specify a path for static files when collected for production
+STATIC_ROOT = BASE_DIR / 'static'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-$v+mk-9$qrx!et#)z6935*t4s6*-o*h!0*r7=8l(o((ntur7@^'
