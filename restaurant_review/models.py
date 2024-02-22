@@ -3,17 +3,17 @@ from django.db import models
 
 # Create your models here.
 
-class Restaurant(models.Model):
+class Court(models.Model):
     name = models.CharField(max_length=50)
-    street_address = models.CharField(max_length=50)
-    description = models.CharField(max_length=250)
+    price = models.IntegerField(default=0)
+    hours = models.CharField(max_length=250)
 
     def __str__(self):
         return self.name
 
 
 class Review(models.Model):
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
+    restaurant = models.ForeignKey(Court, on_delete=models.CASCADE)
     user_name = models.CharField(max_length=20)
     rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     review_text = models.CharField(max_length=500)
