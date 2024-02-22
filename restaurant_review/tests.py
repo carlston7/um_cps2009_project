@@ -3,11 +3,11 @@ import datetime
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import Restaurant
+from .models import Court
 
 
 def create_restaurant():
-    return Restaurant.objects.create(
+    return Court.objects.create(
         name="Test Restaurant",
         street_address="123 Test Street",
         description="Test Description",
@@ -42,7 +42,7 @@ class RestaurantRoutesTestCase(TestCase):
                 "description": "Test Description",
             },
         )
-        restaurant = Restaurant.objects.get(name="Test Restaurant")
+        restaurant = Court.objects.get(name="Test Restaurant")
         self.assertEqual(restaurant.name, "Test Restaurant")
         self.assertEqual(restaurant.street_address, "123 Test Street")
         self.assertEqual(restaurant.description, "Test Description")

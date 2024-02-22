@@ -45,7 +45,7 @@
 {% if LastViewedRestaurant %}
 <h3>Last viewed restaurant (saved in cache): {{ LastViewedRestaurant }}</h3>
 {% endif %}
-<h1>TEST TITLE 2 for tennis aspp bla bla bla</h1>
+<h1>Tennis Court</h1>
 
 {% if restaurants %}
 <table class="table">
@@ -71,6 +71,6 @@
 {% endif %}
 
 <div class="d-flex justify-content-end">
-  <a href="{% url 'create_restaurant' %}" class="btn btn-success px-4 gap-3">Add new restaurant</a>
+  <a href="{% url 'create_court' %}" class="btn btn-success px-4 gap-3">Create New Court</a>
 </div>
 {% endblock %}

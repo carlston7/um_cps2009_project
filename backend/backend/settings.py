@@ -10,14 +10,29 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+# settings.py
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# This should be the path to the directory where your 'manage.py' is
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# The 'build' directory should be at the same level as 'backend' directory,
+# so you don't need to go up two levels, just one.
+FRONTEND_BUILD_DIR = BASE_DIR.parent / 'frontend/build'
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
+# 'STATICFILES_DIRS' should include the path where Django will search for additional static files,
+# in addition to the 'static' directory within each app.
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    # This should be the path to the 'static' directory inside your 'build' directory
+    FRONTEND_BUILD_DIR / 'static',
+]
+
+
+
+
+# Optionally, specify a path for static files when collected for production
+STATIC_ROOT = BASE_DIR / 'static'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-$v+mk-9$qrx!et#)z6935*t4s6*-o*h!0*r7=8l(o((ntur7@^'
