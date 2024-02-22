@@ -1,9 +1,10 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
+
 # Create your models here.
 
-class Court(models.Model):
+class Restaurant(models.Model):
     name = models.CharField(max_length=50)
     price = models.IntegerField(default=0)
     hours = models.CharField(max_length=250)
