@@ -22,7 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/test/', test_api, name='test_api'),
     # Route for serving frontend
-    path('', frontend, name='frontend'),
-    # Catch-all for SPA routing
-    re_path(r'^(?:.*)/?$', frontend),
+    path('', frontend, name='frontend')
 ]

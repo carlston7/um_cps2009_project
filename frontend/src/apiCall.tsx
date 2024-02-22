@@ -6,8 +6,8 @@ const MyComponent = () => {
 
     // useEffect to fetch data from the backend
     useEffect(() => {
-        // Your fetch call to the Django backend
-        fetch('http://17.0.0.1:8000/')
+        // Your fetch call to the Django backend API endpoint
+        fetch('/api/test/')
             .then(response => response.json())
             .then(data => {
                 console.log(data); // Log the response data

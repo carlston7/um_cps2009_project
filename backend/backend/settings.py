@@ -13,15 +13,22 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 # settings.py
 from pathlib import Path
 
+# This should be the path to the directory where your 'manage.py' is
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Correct path to the frontend build directory
-FRONTEND_BUILD_DIR = BASE_DIR / 'frontend/build'
+# The 'build' directory should be at the same level as 'backend' directory,
+# so you don't need to go up two levels, just one.
+FRONTEND_BUILD_DIR = BASE_DIR.parent / 'frontend/build'
 
+# 'STATICFILES_DIRS' should include the path where Django will search for additional static files,
+# in addition to the 'static' directory within each app.
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    FRONTEND_BUILD_DIR,
+    # This should be the path to the 'static' directory inside your 'build' directory
+    FRONTEND_BUILD_DIR / 'static',
 ]
+
+
 
 
 # Optionally, specify a path for static files when collected for production
