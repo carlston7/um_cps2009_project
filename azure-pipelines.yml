@@ -19,3 +19,8 @@ steps:
     npm install
     npm run build
   displayName: 'npm install and build'
+    python -m venv venv #this onwards is my addition, can be removed if it doesn't make sense
+    . venv/bin/activate
+    pip install -r requirements.txt
+    python manage.py collectstatic --noinput
+  displayName: 'Install dependencies and run collectstatic'
