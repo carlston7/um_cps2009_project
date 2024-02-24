@@ -38,8 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
     "whitenoise.runserver_nostatic",
+    'django.contrib.staticfiles',
 ]
 
 MIDDLEWARE = [
@@ -101,8 +101,6 @@ DATABASES = {
         'PASSWORD': os.environ.get('DBPASS'),
     }
 }
-
-
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 

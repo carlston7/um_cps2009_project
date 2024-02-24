@@ -12,7 +12,7 @@ paths:
   /signup:
     post:
       summary: "User signup"
-      description: "Allows new users to sign up by specifying their role (member, club owner, administrator)."
+      description: "Allows new users to sign up by specifying their role (member, club owner)."
       requestBody:
         required: true
         content:
@@ -45,33 +45,12 @@ paths:
         "401":
           description: "Authentication failed."
 
-  /clubs:
-    post:
-      summary: "Club owner creates a new club"
-      tags: ["Club Owner"]
-      security:
-        - BearerAuth: []
-      requestBody:
-        required: true
-        description: "Payload containing necessary club information."
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Club"
-      responses:
-        "201":
-          description: "Club created."
-        "400":
-          description: "Invalid input."
-
-  /clubs/{clubId}/courts:
+  /courts:
     get:
-      summary: "Get a list of all tennis courts for a club"
+      summary: "Get a list of all tennis courts for the club"
       tags: ["Club Owner", "Administrator"]
       security:
         - BearerAuth: []
-      parameters:
-        - $ref: '#/components/parameters/clubId'
       responses:
         "200":
           description: "A list of tennis courts for the specified club."
@@ -89,8 +68,6 @@ paths:
       tags: ["Club Owner"]
       security:
         - BearerAuth: []
-      parameters:
-        - $ref: '#/components/parameters/clubId'
       requestBody:
         required: true
         content:
@@ -250,12 +227,8 @@ components:
 
     Court:
       type: "object"
-      required: ["clubId", "name", "price", "availableHours"]
+      required: ["name", "price", "availableHours"]
       properties:
-        clubId:
-          type: "integer"
-          format: "int64"
-          description: "The identifier of the club this court belongs to."
         name:
           type: "string"
           description: "A unique name or identifier for the court."
@@ -325,14 +298,6 @@ components:
             $ref: "#/components/schemas/Booking"
 
   parameters:
-    clubId:
-      in: path
-      name: clubId
-      required: true
-      schema:
-        type: "string"
-        description: "Unique identifier of the club."
-
     courtId:
       in: path
       name: courtId
