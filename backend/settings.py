@@ -35,10 +35,10 @@ INSTALLED_APPS = [
     'myapp.apps.MyappConfig',
     'django.contrib.admin',
     'django.contrib.auth',
-    "whitenoise.runserver_nostatic",
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    "whitenoise.runserver_nostatic",
     'django.contrib.staticfiles',
 ]
 
@@ -100,12 +100,6 @@ DATABASES = {
         'USER': os.environ.get('DBUSER'),
         'PASSWORD': os.environ.get('DBPASS'),
     }
-}
-
-STORAGES = {
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
 }
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
