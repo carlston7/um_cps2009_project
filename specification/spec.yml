@@ -132,7 +132,7 @@ paths:
           description: "Booking cancelled."
         "404":
           description: "Booking not found."
-  /admin/courts/{courtId}/config:
+  /courts/{courtId}/config:
     put:
       summary: "Update court booking parameters"
       tags: ["Administrator"]
@@ -156,7 +156,7 @@ paths:
         "401":
           description: "Unauthorized access."
 
-  /admin/statistics/bookings:
+  /statistics/bookings:
     get:
       summary: "Get statistics on bookings"
       tags: ["Administrator"]
@@ -192,7 +192,7 @@ components:
           type: "string"
         role:
           type: "string"
-          enum: ["member", "clubOwner", "admin"]
+          enum: ["member", "clubOwner"]
 
     LoginRequest:
       type: "object"
@@ -208,23 +208,6 @@ components:
       properties:
         token:
           type: "string"
-
-    Club:
-      type: "object"
-      required: ["name", "location", "ownerId"]
-      properties:
-        name:
-          type: "string"
-          description: "The name of the club."
-        location:
-          type: "string"
-          description: "The physical address or location of the club."
-        ownerId:
-          type: "integer"
-          format: "int64"
-          description: "The unique identifier of the user who owns this club."
-
-
     Court:
       type: "object"
       required: ["name", "price", "availableHours"]
