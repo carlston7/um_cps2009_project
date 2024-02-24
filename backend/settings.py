@@ -11,21 +11,16 @@ FRONTEND_BUILD_DIR = BASE_DIR / 'frontend/build'
 
 STATIC_URL = '/static/'
 
-# Make sure to only include paths that exist
-STATICFILES_DIRS = [
-    FRONTEND_BUILD_DIR / 'static',
-    # If you have additional static directories, add them here
-]
+STATICFILES_DIRS = [FRONTEND_BUILD_DIR / 'static']
 
-# Optionally, specify a path for static files when collected for production
 STATIC_ROOT = BASE_DIR / 'collected_static'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = os.getenv('SECRET_KEY')
-SECRET_KEY = 'django-insecure-z0ilx=ejgvvs@(y^#v4(5pzyq03j3xj&$c$g-sqo#!iw@+b3v1'
+SECRET_KEY = os.getenv('SECRET_KEY')
+#SECRET_KEY = 'django-insecure-z0ilx=ejgvvs@(y^#v4(5pzyq03j3xj&$c$g-sqo#!iw@+b3v1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -143,12 +138,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.0/howto/static-files/
-
-STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
