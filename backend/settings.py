@@ -10,7 +10,7 @@ FRONTEND_BUILD_DIR = BASE_DIR / 'frontend/build'
 # in addition to the 'static' directory within each app.
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [FRONTEND_BUILD_DIR / STATIC_URL.strip('/')]
+STATICFILES_DIRS = [FRONTEND_BUILD_DIR / 'static']
 
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'collectstatic')
