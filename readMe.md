@@ -20,3 +20,8 @@ check if you have node.js and npm installed
 
 Install needed packages: npm install (frontend)
 Run React.ts server: npm start 
+
+
+Commit style:
+
+git commit -m "<Summary of Task>, <ID>, <Type of Work>" 
