@@ -11,7 +11,7 @@ FRONTEND_BUILD_DIR = BASE_DIR / 'frontend/build'
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = FRONTEND_BUILD_DIR / 'static'
+STATICFILES_DIRS = [str(FRONTEND_BUILD_DIR / 'static')]
 
 STATIC_ROOT = BASE_DIR / 'collected_static'
 
@@ -19,8 +19,8 @@ STATIC_ROOT = BASE_DIR / 'collected_static'
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
-#SECRET_KEY = 'django-insecure-z0ilx=ejgvvs@(y^#v4(5pzyq03j3xj&$c$g-sqo#!iw@+b3v1'
+#SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = 'django-insecure-z0ilx=ejgvvs@(y^#v4(5pzyq03j3xj&$c$g-sqo#!iw@+b3v1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
