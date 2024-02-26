@@ -10,8 +10,11 @@ FRONTEND_BUILD_DIR = BASE_DIR / 'frontend/build'
 # in addition to the 'static' directory within each app.
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [FRONTEND_BUILD_DIR / 'static']
 
+STATICFILES_DIRS = [
+    FRONTEND_BUILD_DIR / 'static',
+    FRONTEND_BUILD_DIR,  # If service-worker.js and manifest.json are in the root
+]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'collectstatic')
 
@@ -20,8 +23,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'collectstatic')
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
-#SECRET_KEY = 'django-insecure-z0ilx=ejgvvs@(y^#v4(5pzyq03j3xj&$c$g-sqo#!iw@+b3v1'
+#SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = 'django-insecure-z0ilx=ejgvvs@(y^#v4(5pzyq03j3xj&$c$g-sqo#!iw@+b3v1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
