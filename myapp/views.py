@@ -8,7 +8,7 @@ def test_api(request):
     return JsonResponse({"message": "Hello from Django!"})
 
 def frontend(request):
-    index_file_path = os.path.join(settings.FRONTEND_BUILD_DIR, 'index.html')
+    index_file_path = os.path.join(settings.STATICFILES_DIRS, 'index.html')
     try:
         with open(index_file_path, 'r') as file:
             return HttpResponse(file.read())

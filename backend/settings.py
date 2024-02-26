@@ -11,7 +11,7 @@ FRONTEND_BUILD_DIR = BASE_DIR / 'frontend/build'
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [FRONTEND_BUILD_DIR / 'static']
+STATICFILES_DIRS = FRONTEND_BUILD_DIR / 'static'
 
 STATIC_ROOT = BASE_DIR / 'collected_static'
 
