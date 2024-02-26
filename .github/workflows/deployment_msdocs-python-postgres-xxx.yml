@@ -1,3 +1,7 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+# More info on Python, GitHub Actions, and Azure App Service: https://aka.ms/python-webapps-actions
+
 name: Build and deploy Python app to Azure Web App - msdocs-python-postgres-XXX
 
 on:
@@ -30,11 +34,11 @@ jobs:
       - name: Setup Node.js for React build
         uses: actions/setup-node@v2
         with:
-          node-version: '14' 
+          node-version: '14' # Adjust as per your React project's requirements
 
       - name: Install and build React app
         run: |
-          cd frontend
+          cd frontend # Adjust this if your React app is in a different directory
           npm install
           npm run build
 
@@ -79,9 +83,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_AC93F41AAFE04304BA85410B76F65144 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_7FAC043BDA1340EDBE63B9183971F50B }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_14DCE2D8B8E14420A2F7C378FF4A9226 }}
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
@@ -89,3 +93,4 @@ jobs:
         with:
           app-name: 'msdocs-python-postgres-XXX'
           slot-name: 'Production'
+          
