@@ -58,6 +58,8 @@ MIDDLEWARE = [
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 ROOT_URLCONF = 'backend.urls'
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
