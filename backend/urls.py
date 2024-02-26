@@ -16,11 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path
-from myapp.views import frontend, test_api
+from myapp.views import frontend, test_api, javascriptfile, cssfile
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/test/', test_api, name='test_api'),
     # Route for serving frontend
-    path('', frontend, name='frontend')
+    path('', frontend, name='frontend'),
+    path('static/js/main.71cb23ab.js', javascriptfile, name = 'javascriptfile'),
+    path('static/css/main.f855e6bc.css', cssfile, name = 'cssfile')
 ]
