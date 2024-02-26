@@ -10,10 +10,11 @@ FRONTEND_BUILD_DIR = BASE_DIR / 'frontend/build'
 # in addition to the 'static' directory within each app.
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [FRONTEND_BUILD_DIR / STATIC_URL.strip('/')]
 
-STATICFILES_DIRS = [str(FRONTEND_BUILD_DIR / 'static/')]
 
-STATIC_ROOT = BASE_DIR / 'collected_static'
+STATIC_ROOT = os.path.join(BASE_DIR, 'collectstatic')
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
