@@ -1,7 +1,3 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-# More info on Python, GitHub Actions, and Azure App Service: https://aka.ms/python-webapps-actions
-
 name: Build and deploy Python app to Azure Web App - msdocs-python-postgres-XXX
 
 on:
@@ -27,25 +23,40 @@ jobs:
           python -m venv venv
           source venv/bin/activate
 
-      - name: Install dependencies
+      - name: Install Python dependencies
         run: |
           pip install -r requirements.txt
-          python manage.py collectstatic
-      - name: List static files
-        run: ls collectstatic
 
-      # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
+      - name: Setup Node.js for React build
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14' 
+
+      - name: Install and build React app
+        run: |
+          cd frontend
+          npm install
+          npm run build
+
+      - name: Move React build to static files directory
+        run: |
+          mkdir -p static/react
+          mv frontend/build/* static/react/
+
+      - name: Collect static files
+        run: |
+          python manage.py collectstatic --noinput
+      - name: List static files
+        run: ls -R static/
 
       - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
+        run: zip -r release.zip ./* -x "venv/*"
 
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v3
         with:
           name: python-app
-          path: |
-            release.zip
-            !venv/
+          path: release.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -65,13 +76,12 @@ jobs:
       - name: Unzip artifact for deployment
         run: unzip release.zip
 
-      
       - name: Login to Azure
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_AC93F41AAFE04304BA85410B76F65144 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_7FAC043BDA1340EDBE63B9183971F50B }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_14DCE2D8B8E14420A2F7C378FF4A9226 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
@@ -79,4 +89,3 @@ jobs:
         with:
           app-name: 'msdocs-python-postgres-XXX'
           slot-name: 'Production'
-          
