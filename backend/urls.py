@@ -25,4 +25,4 @@ urlpatterns = [
     path('api/test/', test_api, name='test_api'),
     # Route for serving frontend
     path('', frontend, name='frontend')
-]
+]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

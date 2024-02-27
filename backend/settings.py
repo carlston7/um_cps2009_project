@@ -9,7 +9,7 @@ FRONTEND_BUILD_DIR = BASE_DIR / 'frontend/build'
 # 'STATICFILES_DIRS' should include the path where Django will search for additional static files,
 # in addition to the 'static' directory within each app.
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
     FRONTEND_BUILD_DIR / 'static',

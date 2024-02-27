@@ -10,6 +10,7 @@ def test_api(request):
 
 
 def frontend(request):
+    print(settings.FRONTEND_BUILD_DIR)
     index_file_path = os.path.join(settings.FRONTEND_BUILD_DIR, 'index.html')
     try:
         with open(index_file_path, 'r') as file:
