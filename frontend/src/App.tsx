@@ -1,33 +1,25 @@
-import React, { useState } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import MyComponent from './apiCall'; // Import your MyComponent
+import React from 'react';
+import TopBar from './components/TopBar';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import ColorModeProvider from './context/ColourModeContext';
 
-function App() {
-  // State to control the visibility of MyComponent
-  const [showComponent, setShowComponent] = useState(false);
-
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Edit <code>src/App.tsx</code> and save to reload.</p>
-        <button onClick={() => setShowComponent(!showComponent)}>
-          {/* This button toggles the display of MyComponent */}
-          {showComponent ? 'Hide' : 'Show'} Message from Backend
-        </button>
-        {showComponent && <MyComponent />} {/* Conditionally render MyComponent */}
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ColorModeProvider>
+      <BrowserRouter>
+        <TopBar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          {/* Add more routes as needed */}
+        </Routes>
+      </BrowserRouter>
+    </ColorModeProvider>
   );
-}
+};
 
 export default App;
