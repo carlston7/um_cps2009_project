@@ -58,4 +58,4 @@ jobs:
           app-name: 'cps2009project'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0556A53FB51D4634AAADFD40A3A4A256 }}
-          package: server/release.zip  # Specify the path to the zipped package if needed
+          package: release.zip 
