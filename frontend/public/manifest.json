@@ -1,0 +1,10 @@
+{
+  "icons": [
+    {
+      "src": "greenball.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    }
+  ],
+  "start_url": "."
+}
