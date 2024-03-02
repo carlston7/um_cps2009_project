@@ -50,10 +50,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: node-app
+          path: release.zip
 
-      - name: Unzip artifact for deployment
-        run: unzip release.zip
-      
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
@@ -61,5 +59,4 @@ jobs:
           app-name: 'cps2009project'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0556A53FB51D4634AAADFD40A3A4A256 }}
-          package: . 
-
+          package: release.zip
