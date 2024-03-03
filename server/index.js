@@ -20,6 +20,14 @@ app.use(require("./routes/record"));
 //Get MongoDB driver connection
 const connect_db = require("./db/conn");
 
+const mongoose = require('mongoose');
+mongoose.set('strictQuery', false);
+
+const User = require('./models/users')
+const Court = require('./models/courts')
+const Booking = require('./models/bookings')
+
+
 // Route handler for the root URL (TEST)
 app.get('/', (req, res) => {
   // Read the contents of index.html file
