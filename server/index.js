@@ -28,7 +28,7 @@ const Court = require('./models/courts')
 const Booking = require('./models/bookings')
 
 // Creating an admin object
-const user = new User({
+const admin = new User({
     name: 'admin',
     surname: 'admin',
     email_address: 'admin@admin.com',
@@ -36,7 +36,7 @@ const user = new User({
     credit: 99999999
 });
 // Saving admin in db (commented so that it only runs once)
-user.save();
+// admin.save();
 
 // Route handler for the root URL (TEST)
 app.get('/', (req, res) => {
