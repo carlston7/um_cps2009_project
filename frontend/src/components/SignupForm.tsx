@@ -74,7 +74,7 @@ export const SignupForm = () => {
                         required
                         style={{ width: '100%', margin: '10px 0', padding: '10px', borderRadius: '4px' }}
                     />
-                    <div onClick={togglePasswordVisibility} style={{ position: 'absolute', top: '10px', right: '10px', cursor: 'pointer' }}>
+                    <div onClick={togglePasswordVisibility} style={{ position: 'absolute', top: '20px', right: '10px', cursor: 'pointer' }}>
                         {showPassword ? <FaEyeSlash size="1em" color="black" /> : <FaEye size="1em" color="black" />}
                     </div>
                 </div>
@@ -87,7 +87,7 @@ export const SignupForm = () => {
                         required
                         style={{ width: '100%', margin: '10px 0', padding: '10px', borderRadius: '4px' }}
                     />
-                    <div onClick={toggleRePasswordVisibility} style={{ position: 'absolute', top: '10px', right: '10px', cursor: 'pointer' }}>
+                    <div onClick={toggleRePasswordVisibility} style={{ position: 'absolute', top: '20px', right: '10px', cursor: 'pointer' }}>
                         {showRePassword ? <FaEyeSlash size="1em" color="black" /> : <FaEye size="1em" color="black" />}
                     </div>
                 </div>
