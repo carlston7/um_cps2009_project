@@ -8,4 +8,4 @@ exports.createUser = async (user_data) => {
     }catch (e){
         throw new Error('A problem was encountered while creating the user.');
     }
-}
+};
