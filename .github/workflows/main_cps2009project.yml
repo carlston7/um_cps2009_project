@@ -1,3 +1,11 @@
+name: Build and deploy Node.js app to Azure Web App - cps2009project
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -13,7 +21,7 @@ jobs:
 
       - name: Move to server directory
         run: cd server
-
+        
       - name: npm install and build for server
         run: |
           npm install
