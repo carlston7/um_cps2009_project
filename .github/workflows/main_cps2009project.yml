@@ -34,9 +34,7 @@ jobs:
         working-directory: ./server
 
       - name: Zip artifact for deployment
-        run: |
-          cp -R ../frontend/build/* ./public/
-          zip -r release.zip ./*
+        run: zip -r ../release.zip ./*
         working-directory: ./server
 
       - name: Upload artifact for deployment job
