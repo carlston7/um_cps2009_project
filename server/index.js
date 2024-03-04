@@ -38,6 +38,22 @@ const admin = new User({
 // Saving admin in db (commented so that it only runs once)
 // admin.save();
 
+//Testing signup
+const { create_user } = require('./controllers/usercontroller.js');
+const body_parser = require('body-parser')
+app.use(body_parser.json());
+app.post('/signup', async (req, res) => {
+  try{
+    const user_data = req.body;
+    const user = await create_user(user_data);
+    res.status (201).json(user);
+    console.log(user_data);
+  }catch(e){
+    console.error(e);
+    res.status(500).send('Server Error');
+  }
+});
+
 // Route handler for the root URL (TEST)
 // app.get('/', (req, res) => {
 //   // Read the contents of index.html file
