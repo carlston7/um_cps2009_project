@@ -5,7 +5,8 @@ const users_schema = new mongoose.Schema({
     surname: String,
     email_address: String,
     password: String,
-    credit: Number
+    credit: Number,
+    type: ['member', 'owner', 'admin']
 });
 
 module.exports = mongoose.model('users', users_schema);
