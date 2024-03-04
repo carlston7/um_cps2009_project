@@ -1,5 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { ColorModeContext } from '../context/ColourModeContext';
+import { AuthContext } from '../context/AuthContext';
 import { DarkMode, LightMode, Logout } from "@mui/icons-material";
 import { AppBar, Box, IconButton, Toolbar, Typography, Link } from "@mui/material";
 
@@ -26,22 +27,17 @@ function TopbarLink(props: TopbarLinkProps) {
 }
 
 export default function TopBar() {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const { toggleColorMode, currentTheme } = useContext(ColorModeContext);
-
-    const handleLogout = () => {
-        setIsAuthenticated(false);
-        alert('Logged out');
-        // add additional logout logic here
-    };
+    const { isAuthenticated, logout } = useContext(AuthContext); 
 
     return (
         <Box flexGrow={1}>
             <AppBar sx={{ backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#097969' : '#0BDA51' }}>
                 <Toolbar>
                     <TopbarLink href="/" text="Home" />
+                    <TopbarLink href="/dummy" text="DummyTest" />
                     {isAuthenticated ? (
-                        <IconButton onClick={handleLogout} color="inherit">
+                        <IconButton onClick={logout} color="inherit"> 
                             <Logout />
                         </IconButton>
                     ) : (

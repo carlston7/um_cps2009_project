@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import ColorModeProvider from './context/ColourModeContext';
+import Dummy from './pages/Dummy';
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
         <TopBar />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/dummy" element={<Dummy />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           {/* Add more routes as needed */}

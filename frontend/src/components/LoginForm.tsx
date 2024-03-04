@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { apiLogin } from '../api/Login';
-import { useAuth } from '../hooks/UseAuth';
-import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from './ui/button';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 export const LoginForm = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const { login } = useAuth();
-
+    const navigate = useNavigate();
     const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -18,9 +19,11 @@ export const LoginForm = () => {
         try {
             const response = await apiLogin({ email, password });
             login(response.data.token);
-            console.log('Login successful');
+            toast('Login successful');
+            navigate('/');
         } catch (error) {
-            console.error('Login failed', error);
+            toast('Login failed');
+            console.log(error);
         }
     };
 
