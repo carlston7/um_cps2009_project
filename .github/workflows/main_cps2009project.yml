@@ -1,6 +1,3 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Build and deploy Node.js app to Azure Web App - cps2009project
 
 on:
@@ -16,27 +13,36 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node.js version
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20.x'
+      - name: Install and build frontend
+        run: |
+          npm install
+          npm run build
+        working-directory: ./frontend
 
-      - name: npm install, build, and test
+      - name: Move to server directory
+        run: cd server
+        
+      - name: npm install and build for server
         run: |
           npm install
           npm run build --if-present
-          # npm run test --if-present
-        working-directory: server
+        working-directory: ./server
 
+      - name: Copy frontend build to server's public directory
+        run: |
+          mkdir -p ./server/public
+          cp -R ./frontend/build/* ./server/public/
+      
       - name: Zip artifact for deployment
-        run: zip -r release.zip ./*
-        working-directory: server
+        run: zip -r ../release.zip ./*
+        working-directory: ./server
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: node-app
-          path: server/release.zip
+          path: release.zip
+
 
   deploy:
     runs-on: ubuntu-latest
@@ -50,11 +56,9 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: node-app
-          # Remove the 'path' field to let the action use the default path
 
       - name: confirm release.zip exists
         run: ls -al release.zip
-        # This will list the release.zip file if it exists in the current directory
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2

@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { apiSignup } from '../api/Signup';
-import { useAuth } from '../hooks/UseAuth';
-import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from './ui/button';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 export const SignupForm = () => {
+    const [name, setName] = useState('');
+    const [surname, setSurname] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rePassword, setRePassword] = useState('');
@@ -15,19 +18,22 @@ export const SignupForm = () => {
 
     const togglePasswordVisibility = () => setShowPassword(!showPassword);
     const toggleRePasswordVisibility = () => setShowRePassword(!showRePassword);
+    const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (password !== rePassword) {
-            alert("Passwords don't match");
+            toast("Passwords don't match");
             return;
         }
         try {
-            const response = await apiSignup({ email, password });
+            const response = await apiSignup({ name, surname, email, password });
             login(response.data.token);
-            console.log('Signup successful', response.data);
+            toast('Signup successful', response.data);
+            navigate('/');
         } catch (error) {
-            console.error('Signup failed', error);
+            toast('Signup failed');
+            console.log(error);
         }
     };
 
@@ -35,6 +41,22 @@ export const SignupForm = () => {
         <div style={{ maxWidth: '400px', margin: '0 auto', padding: '20px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)', borderRadius: '8px' }}>
             <h2 style={{ textAlign: 'center' }}>Sign Up</h2>
             <form onSubmit={handleSubmit}>
+                <input
+                    type="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Name"
+                    required
+                    style={{ width: '100%', margin: '10px 0', padding: '10px', borderRadius: '4px' }}
+                />
+                <input
+                    type="name"
+                    value={surname}
+                    onChange={(e) => setSurname(e.target.value)}
+                    placeholder="Surname"
+                    required
+                    style={{ width: '100%', margin: '10px 0', padding: '10px', borderRadius: '4px' }}
+                />
                 <input
                     type="email"
                     value={email}
