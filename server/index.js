@@ -39,21 +39,24 @@ const admin = new User({
 // admin.save();
 
 // Route handler for the root URL (TEST)
-app.get('/', (req, res) => {
-  // Read the contents of index.html file
-  fs.readFile(express.static(path.join(__dirname, '../frontend/build', 'index.html')), 'utf8', (err, data) => {
-    console.log(filePath);
-    if (err) {
-      console.error('Error reading file:', err);
-      res.status(500).send('Internal Server Error');
-      return;
-    }
-    // Send the contents of index.html as the response
-    res.send(data);
-    console.log("This is working!")
-  });
-});  
-
+// app.get('/', (req, res) => {
+//   // Read the contents of index.html file
+//   fs.readFile(express.static(path.join(__dirname, '../frontend/build', 'index.html')), 'utf8', (err, data) => {
+//     console.log(filePath);
+//     if (err) {
+//       console.error('Error reading file:', err);
+//       res.status(500).send('Internal Server Error');
+//       return;
+//     }
+//     // Send the contents of index.html as the response
+//     res.send(data);
+//     console.log("This is working!")
+//   });
+// });  
+app.use(express.static(path.join(__dirname, 'public')));
+app.get('*', function (req, res) {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 const start = async() => {
   try{
