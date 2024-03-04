@@ -1,9 +1,7 @@
-import axios from 'axios';
+import axiosInstance from './AxiosInstance';
 import SignupRequest from '../models/SignupRequest';
 
-const API_BASE_URL = 'https://api.sportsclubbooking.com/v1';
-
-export const signup = async (data: SignupRequest) => {
-    return axios.post(`${API_BASE_URL}/signup`, data);
+export const apiSignup = async (data: SignupRequest) => {
+    return axiosInstance.post(`/signup`, data);
 };
 
