@@ -41,7 +41,8 @@ const admin = new User({
 // Route handler for the root URL (TEST)
 app.get('/', (req, res) => {
   // Read the contents of index.html file
-  fs.readFile(path.join(__dirname, '../frontend/build', 'index.html'), 'utf8', (err, data) => {
+  fs.readFile(express.static(path.join(__dirname, '../frontend/build', 'index.html')), 'utf8', (err, data) => {
+    console.log(filePath);
     if (err) {
       console.error('Error reading file:', err);
       res.status(500).send('Internal Server Error');
