@@ -6,10 +6,6 @@ const Home = () => {
             <h1>My code is so trash this doesn't print</h1>
             <h2>To Do:</h2>
 
-            <p>Download repo on PC</p>
-
-            <p>Re-enter password feature for signup</p>
-            <p>Password hiding</p>
             <p>Improve login and signup pages to be nicer</p>
 
             <p>Monday: Ask Mark how the homepage should look and what he wants</p>

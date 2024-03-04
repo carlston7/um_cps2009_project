@@ -3,7 +3,7 @@ import { apiSignup } from '../api/Signup';
 import { useAuth } from '../hooks/UseAuth';
 import { Link } from 'react-router-dom';
 import { Button } from './ui/button';
-import { FaEye, FaEyeSlash } from 'react-icons/fa'; 
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 export const SignupForm = () => {
     const [email, setEmail] = useState('');
@@ -16,7 +16,7 @@ export const SignupForm = () => {
     const togglePasswordVisibility = () => setShowPassword(!showPassword);
     const toggleRePasswordVisibility = () => setShowRePassword(!showRePassword);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (password !== rePassword) {
             alert("Passwords don't match");

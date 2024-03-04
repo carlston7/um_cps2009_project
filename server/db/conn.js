@@ -1,26 +1,16 @@
-const { MongoClient } = require("mongodb");
-const Db = process.env.ATLAS_URI;
-const client = new MongoClient(Db, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
- 
-var _db;
- 
-module.exports = {
-  connectToServer: function (callback) {
-    client.connect(function (err, db) {
-      // Verify we got a good "db" object
-      if (db)
-      {
-        _db = db.db("employees");
-        console.log("Successfully connected to MongoDB."); 
-      }
-      return callback(err);
-         });
-  },
- 
-  getDb: function () {
-    return _db;
-  },
+const mongoose = require('mongoose');
+const uri = process.env.ATLAS_URI;
+
+// Definition of the function that
+// makes the connection to the database
+const connect_db = async () => {
+  try {
+    await mongoose.connect(uri);
+    console.log('MongoDB connected successfully');
+  }catch (e) {
+    console.error('Error connecting to MongoDB: ', e.message);
+    process.exit(1); 
+  }
 };
+
+module.exports = connect_db;

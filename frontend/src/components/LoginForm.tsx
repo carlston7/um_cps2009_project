@@ -3,7 +3,7 @@ import { apiLogin } from '../api/Login';
 import { useAuth } from '../hooks/UseAuth';
 import { Link } from 'react-router-dom';
 import { Button } from './ui/button';
-import { FaEye, FaEyeSlash } from 'react-icons/fa'; 
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 export const LoginForm = () => {
     const [email, setEmail] = useState('');
@@ -13,7 +13,7 @@ export const LoginForm = () => {
 
     const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
             const response = await apiLogin({ email, password });
