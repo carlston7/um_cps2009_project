@@ -51,7 +51,7 @@ app.get('/', (req, res) => {
     res.send(data);
     console.log("This is working!")
   });
-});  
+});
 
 
 const start = async() => {
