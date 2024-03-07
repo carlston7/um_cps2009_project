@@ -58,7 +58,7 @@ app.post('/signup', async (req, res) => {
 //Login validation
 app.post('/login', async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { email_address, password } = req.body;
 
     // Retrieve user from the database
     const user = await client.db('tennis_booking_db').collection('users').findOne({ email_address });

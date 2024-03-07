@@ -1,15 +1,16 @@
 import React from 'react';
 import AiGeneratedFamilyPlayingTennis from '../imgs/homepage.webp';
+import { CSSProperties } from 'react';
 
-
-const imageStyle = {
+const imageStyle: CSSProperties = {
     maxWidth: '100%',
     height: 'auto',
     display: 'block',
     margin: '20px auto',
     transition: 'transform 0.5s ease', // Smooth transition for the zoom effect
 };
-const containerStyle = {
+
+const containerStyle: CSSProperties = {
     background: 'linear-gradient(to right, #56CCF2, #2F80ED)', // This is a blue gradient. Choose colors that complement your site's palette.
     textAlign: 'center',
     maxWidth: '800px',
@@ -19,15 +20,16 @@ const containerStyle = {
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
 };
 
-const pageStyle = {
-    background: 'url("../imgs/background.webp") no-repeat center center fixed',
-    backgroundSize: 'cover',
+const pageStyle: CSSProperties = {
+    background: 'url("../imgs/background.webp") repeat',
+    backgroundSize: 'auto',
 };
+
 const Home = () => {
     return (
         <div style={pageStyle}>
             <h1>Welcome to Our Family Tennis Club!</h1>
-            {/* <div style={containerStyle}>
+            <div style={containerStyle}>
                 <p style={{ margin: '0 auto', maxWidth: '600px' }}>
                     Join us at our picturesque courts nestled in the heart of the
                     Mediterranean. With perfect sunny weather, lush surroundings,
@@ -36,14 +38,14 @@ const Home = () => {
                     racket for the first time or you're an experienced player, our friendly
                     and inclusive atmosphere ensures a great experience for all.
                 </p>
-            </div> */}
+            </div>
 
             <img
                 src={AiGeneratedFamilyPlayingTennis}
                 alt="Family playing tennis"
                 style={imageStyle}
-                onMouseOver={e => e.currentTarget.style.transform = 'scale(1.05)'} // Slightly enlarges the image on hover
-                onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'} // Resets the image size when not hovered
+                onMouseOver={e => (e.currentTarget.style.transform = 'scale(1.05)')} // Slightly enlarges the image on hover
+                onMouseOut={e => (e.currentTarget.style.transform = 'scale(1)')} // Resets the image size when not hovered
             />
         </div>
     );
