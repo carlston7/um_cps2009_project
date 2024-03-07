@@ -35,12 +35,9 @@ const Home = () => {
             </div>
             <div style={containerStyle}>
                 <p>
-                    Join us at our picturesque courts nestled in the heart of the
-                    Mediterranean. With perfect sunny weather, lush surroundings,
-                    and top-notch facilities, our club is the ideal spot for families
-                    to enjoy the beautiful game of tennis. Whether you're picking up a
-                    racket for the first time or you're an experienced player, our friendly
-                    and inclusive atmosphere ensures a great experience for all.
+                    Tennis is a social sport available for players of all ages and our
+                    club is present to provide you with the best courts to best suit your needs.
+                    Book your court and come join us at cps2009project, we can't wait to have you!
                 </p>
             </div>
 

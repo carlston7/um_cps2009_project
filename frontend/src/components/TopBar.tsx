@@ -40,8 +40,8 @@ export default function TopBar() {
                     {isAuthenticated ? (
                         <IconButton
                             onClick={() => {
-                                logout(); // Call the logout function from your AuthContext
-                                toast.success('Logged out successfully'); // Show a success toast
+                                logout();
+                                toast.success('Logged out successfully'); 
                             }}
                             color="inherit"
                         >
