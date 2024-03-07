@@ -55,6 +55,26 @@ app.post('/signup', async (req, res) => {
   }
 });
 
+//Login validation
+app.post('/login', async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    // Retrieve user from the database
+    const user = await client.db('tennis_booking_db').collection('users').findOne({ email_address });
+
+    // Check if user exists and password is correct
+    if (user && user.password === password) {
+      res.status(200).send('Login successful');
+    } else {
+      res.status(401).send('Invalid username or password');
+    }
+  } catch (error) {
+    console.error('Error logging in:', error);
+    res.status(500).send('An error occurred');
+  }
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
