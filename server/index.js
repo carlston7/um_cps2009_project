@@ -63,6 +63,26 @@ app.post('/signup', async (req, res) => {
   }
 });
 
+//Login validation
+app.post('/login', async (req, res) => {
+  try {
+    const user_data = req.body;
+  
+    // Find user by email address using Mongoose
+    const user = await User.findOne({ email_address: user_data.email_address });
+  
+    // Check if user exists and compare passwords (make sure to hash passwords in production)
+    if (user && user.password === user_data.password) {
+      res.status(200).send('Login successful');
+    } else {
+      res.status(401).send('Invalid email address or password');
+    }
+  } catch (error) {
+    console.error('Error logging in:', error); // Log the specific error
+    res.status(500).send('An error occurred: ' + error.message);
+  }
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));

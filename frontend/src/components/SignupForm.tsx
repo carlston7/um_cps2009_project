@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from './ui/button';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import { containerStyle } from './background';
 
 export const SignupForm = () => {
     const [name, setName] = useState('');
@@ -29,7 +30,7 @@ export const SignupForm = () => {
         try {
             const response = await apiSignup({ name, surname, email, password });
             login(response.data.token);
-            toast.success('Signup successful', response.data);
+            toast.success('Signup successful');
             navigate('/');
         } catch (error) {
             toast.error('Signup failed');
@@ -38,7 +39,7 @@ export const SignupForm = () => {
     };
 
     return (
-        <div style={{ maxWidth: '400px', margin: '0 auto', padding: '20px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)', borderRadius: '8px' }}>
+        <div style={containerStyle}>
             <h2 style={{ textAlign: 'center' }}>Sign Up</h2>
             <form onSubmit={handleSubmit}>
                 <input

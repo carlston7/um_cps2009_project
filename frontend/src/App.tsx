@@ -7,6 +7,7 @@ import Signup from './pages/Signup';
 import ColorModeProvider from './context/ColourModeContext';
 import Dummy from './pages/Dummy';
 import { ToastContainer } from 'react-toastify';
+import Background from './components/background';
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
       <BrowserRouter>
         <ToastContainer />
         <TopBar />
+        <Background />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/dummy" element={<Dummy />} />
