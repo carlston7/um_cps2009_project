@@ -42,6 +42,7 @@ const admin = new User({
 const { create_user } = require('./controllers/usercontroller.js');
 const body_parser = require('body-parser')
 app.use(body_parser.json());
+
 app.post('/signup', async (req, res) => {
   try{
     const user_data = req.body;
@@ -54,21 +55,6 @@ app.post('/signup', async (req, res) => {
   }
 });
 
-// Route handler for the root URL (TEST)
-// app.get('/', (req, res) => {
-//   // Read the contents of index.html file
-//   fs.readFile(express.static(path.join(__dirname, '../frontend/build', 'index.html')), 'utf8', (err, data) => {
-//     console.log(filePath);
-//     if (err) {
-//       console.error('Error reading file:', err);
-//       res.status(500).send('Internal Server Error');
-//       return;
-//     }
-//     // Send the contents of index.html as the response
-//     res.send(data);
-//     console.log("This is working!")
-//   });
-// });  
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));

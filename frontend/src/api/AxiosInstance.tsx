@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-//const API_BASE_URL = 'https://api.sportsclubbooking.com/v1';
 const API_BASE_URL = 'https://cps2009project.azurewebsites.net';
 
 const axiosInstance = axios.create({
