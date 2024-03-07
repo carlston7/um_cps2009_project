@@ -45,10 +45,16 @@ app.use(body_parser.json());
 
 app.post('/signup', async (req, res) => {
   try{
-    const user_data = req.body;
-    const user = await create_user(user_data);
-    res.status (201).json(user);
-    console.log(user_data);
+
+    const user_exists = await User.exists({ email_address: req.body.email });
+
+    if (user_exists)
+    {
+      return res.status(400).json({ error: 'Email address already exists' });
+    }else{
+      const user = await create_user(req.body);
+      res.status (201).json(user);
+    }    
   }catch(e){
     console.error(e);
     res.status(500).send('Server Error');
