@@ -59,19 +59,19 @@ app.post('/signup', async (req, res) => {
 app.post('/login', async (req, res) => {
   try {
     const user_data = req.body;
-
-    // Retrieve user from the database
-    const user = await client.db('tennis_booking_db').collection('users').findOne({ email_address });
-
-    // Check if user exists and password is correct
+  
+    // Find user by email address using Mongoose
+    const user = await User.findOne({ email_address: user_data.email_address });
+  
+    // Check if user exists and compare passwords (make sure to hash passwords in production)
     if (user && user.password === user_data.password) {
       res.status(200).send('Login successful');
     } else {
-      res.status(401).send('Invalid username or password');
+      res.status(401).send('Invalid email address or password');
     }
   } catch (error) {
-    console.error('Error logging in:', error);
-    res.status(500).send('An error occurred');
+    console.error('Error logging in:', error); // Log the specific error
+    res.status(500).send('An error occurred: ' + error.message);
   }
 });
 
