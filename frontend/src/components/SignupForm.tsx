@@ -29,7 +29,7 @@ export const SignupForm = () => {
         try {
             const response = await apiSignup({ name, surname, email, password });
             login(response.data.token);
-            toast.success('Signup successful', response.data);
+            toast.success('Signup successful');
             navigate('/');
         } catch (error) {
             toast.error('Signup failed');
