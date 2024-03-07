@@ -1,6 +1,6 @@
 export default interface SignupRequest {
     name: string;
     surname: string;
-    email_address: string;
+    email: string;
     password: string;
 }

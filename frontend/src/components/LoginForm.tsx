@@ -19,10 +19,10 @@ export const LoginForm = () => {
         try {
             const response = await apiLogin({ email, password });
             login(response.data.token);
-            toast('Login successful');
+            toast.success('Login successful');
             navigate('/');
         } catch (error) {
-            toast('Login failed');
+            toast.error('Login failed');
             console.log(error);
         }
     };

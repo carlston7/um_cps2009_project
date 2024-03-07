@@ -5,6 +5,7 @@ import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './context/AuthContext';
+import 'react-toastify/dist/ReactToastify.css';
 
 import axiosInstance from './api/AxiosInstance';
 import MockAdapter from 'axios-mock-adapter';

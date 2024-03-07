@@ -6,11 +6,13 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import ColorModeProvider from './context/ColourModeContext';
 import Dummy from './pages/Dummy';
+import { ToastContainer } from 'react-toastify';
 
 const App = () => {
   return (
     <ColorModeProvider>
       <BrowserRouter>
+        <ToastContainer />
         <TopBar />
         <Routes>
           <Route path="/" element={<Home />} />

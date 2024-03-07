@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 export const SignupForm = () => {
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
-    const [email_address, setEmailAddress] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rePassword, setRePassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -23,16 +23,16 @@ export const SignupForm = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (password !== rePassword) {
-            toast("Passwords don't match");
+            toast.error("Passwords don't match");
             return;
         }
         try {
-            const response = await apiSignup({ name, surname, email_address, password });
+            const response = await apiSignup({ name, surname, email, password });
             login(response.data.token);
-            toast('Signup successful', response.data);
+            toast.success('Signup successful', response.data);
             navigate('/');
         } catch (error) {
-            toast('Signup failed');
+            toast.error('Signup failed');
             console.log(error);
         }
     };
@@ -59,8 +59,8 @@ export const SignupForm = () => {
                 />
                 <input
                     type="email"
-                    value={email_address}
-                    onChange={(e) => setEmailAddress(e.target.value)}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     placeholder="Email"
                     required
                     style={{ width: '100%', margin: '10px 0', padding: '10px', borderRadius: '4px' }}

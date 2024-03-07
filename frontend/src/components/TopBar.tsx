@@ -3,6 +3,7 @@ import { ColorModeContext } from '../context/ColourModeContext';
 import { AuthContext } from '../context/AuthContext';
 import { DarkMode, LightMode, Logout } from "@mui/icons-material";
 import { AppBar, Box, IconButton, Toolbar, Typography, Link } from "@mui/material";
+import { toast } from 'react-toastify';
 
 interface TopbarLinkProps {
     href: string;
@@ -37,7 +38,13 @@ export default function TopBar() {
                     <TopbarLink href="/" text="Home" />
                     <TopbarLink href="/dummy" text="DummyTest" />
                     {isAuthenticated ? (
-                        <IconButton onClick={logout} color="inherit"> 
+                        <IconButton
+                            onClick={() => {
+                                logout(); // Call the logout function from your AuthContext
+                                toast.success('Logged out successfully'); // Show a success toast
+                            }}
+                            color="inherit"
+                        >
                             <Logout />
                         </IconButton>
                     ) : (
