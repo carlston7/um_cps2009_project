@@ -44,11 +44,9 @@ const body_parser = require('body-parser')
 app.use(body_parser.json());
 
 app.post('/signup', async (req, res) => {
-  console.log('testing console.log');
-
   try{
 
-    const user_exists = await User.exists({ email_address: 'test@test.test' });
+    const user_exists = await User.exists({ email_address: req.body.email });
 
     if (user_exists)
     {
