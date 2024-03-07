@@ -16,7 +16,7 @@ export const containerStyle: CSSProperties = {
 const Background: React.FC = () => {
     const backgroundStyle: CSSProperties = {
         background: `url(${backgroundImage}) repeat`,
-        backgroundSize: 'auto',
+        backgroundSize: 'fill',
         position: 'fixed', 
         top: 0,
         left: 0,

@@ -34,7 +34,7 @@ const Home = () => {
                 <h1 style={headerStyle}>Welcome to Our Family Tennis Club!</h1>
             </div>
             <div style={containerStyle}>
-                <p style={{ margin: '10 auto', maxWidth: '600px' }} >
+                <p>
                     Join us at our picturesque courts nestled in the heart of the
                     Mediterranean. With perfect sunny weather, lush surroundings,
                     and top-notch facilities, our club is the ideal spot for families
