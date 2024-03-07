@@ -67,7 +67,7 @@ app.post('/login', async (req, res) => {
     const user_data = req.body;
   
     // Find user by email address using Mongoose
-    const user = await User.findOne({ email_address: user_data.email_address });
+    const user = await User.findOne({ email_address: user_data.email });
   
     // Check if user exists and compare passwords (make sure to hash passwords in production)
     if (user && user.password === user_data.password) {
