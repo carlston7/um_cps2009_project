@@ -7,21 +7,21 @@ import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './context/AuthContext';
 import 'react-toastify/dist/ReactToastify.css';
 
-import axiosInstance from './api/AxiosInstance';
-import MockAdapter from 'axios-mock-adapter';
+// import axiosInstance from './api/AxiosInstance';
+// import MockAdapter from 'axios-mock-adapter';
 
-const mock = new MockAdapter(axiosInstance);
-console.log("Starting mock adapters");
+// const mock = new MockAdapter(axiosInstance);
+// console.log("Starting mock adapters");
 
-mock.onPost('/login').reply(200, {
-  message: 'Login successful',
-  token: 'fake-jwt-token',
-});
+// mock.onPost('/login').reply(200, {
+//   message: 'Login successful',
+//   token: 'fake-jwt-token',
+// });
 
-mock.onPost('/signup').reply(200, {
-  message: 'Signup successful',
-  token: 'fake-jwt-token',
-});
+// mock.onPost('/signup').reply(200, {
+//   message: 'Signup successful',
+//   token: 'fake-jwt-token',
+// });
 
 
 const root = ReactDOM.createRoot(
