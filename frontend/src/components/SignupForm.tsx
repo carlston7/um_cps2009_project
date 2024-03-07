@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 export const SignupForm = () => {
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
-    const [email, setEmail] = useState('');
+    const [email_address, setEmailAddress] = useState('');
     const [password, setPassword] = useState('');
     const [rePassword, setRePassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -27,7 +27,7 @@ export const SignupForm = () => {
             return;
         }
         try {
-            const response = await apiSignup({ name, surname, email, password });
+            const response = await apiSignup({ name, surname, email_address, password });
             login(response.data.token);
             toast('Signup successful', response.data);
             navigate('/');
@@ -59,8 +59,8 @@ export const SignupForm = () => {
                 />
                 <input
                     type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    value={email_address}
+                    onChange={(e) => setEmailAddress(e.target.value)}
                     placeholder="Email"
                     required
                     style={{ width: '100%', margin: '10px 0', padding: '10px', borderRadius: '4px' }}
