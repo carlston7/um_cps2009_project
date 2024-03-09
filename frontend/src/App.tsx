@@ -7,7 +7,7 @@ import Signup from './pages/Signup';
 import ColorModeProvider from './context/ColourModeContext';
 import Dummy from './pages/Dummy';
 import { ToastContainer } from 'react-toastify';
-import Background from './components/background';
+import Background from './components/Background';
 
 const App = () => {
   return (
