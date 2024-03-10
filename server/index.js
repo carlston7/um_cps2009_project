@@ -76,9 +76,9 @@ app.post('/login', async (req, res) => {
 
       if(valid_pwd) {
         res.status(200).send('Login successful');
-      }      
+      } res.status(401).send('Invalid password');
     } else {
-      res.status(401).send('Invalid email address or password');
+      res.status(401).send('Invalid email address');
     }
   } catch (error) {
     console.error('Error logging in:', error); // Log the specific error
