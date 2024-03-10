@@ -42,6 +42,7 @@ const admin = new User({
 const { create_user } = require('./controllers/usercontroller.js');
 const body_parser = require('body-parser')
 app.use(body_parser.json());
+const bcrypt = require('bcryptjs')
 
 app.post('/signup', async (req, res) => {
   try{
