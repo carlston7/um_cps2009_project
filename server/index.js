@@ -5,7 +5,7 @@ const app = express();
 const cors = require("cors");
 
 require('dotenv').config();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 
 // Added the next two lines to test the landing page
 const fs = require('fs');

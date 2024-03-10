@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "go": "cd ../frontend && npm run build && cd ../server && mkdir -p public && cp -R ../frontend/build/* public/ && node index.js"
   },
   "keywords": [],
   "author": "",
