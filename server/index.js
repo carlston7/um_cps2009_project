@@ -68,10 +68,14 @@ app.post('/login', async (req, res) => {
   
     // Find user by email address using Mongoose
     const user = await User.findOne({ email_address: user_data.email });
-  
+
     // Check if user exists and compare passwords (make sure to hash passwords in production)
-    if (user && user.password === user_data.password) {
-      res.status(200).send('Login successful');
+    if (user) {
+      const valid_pwd = await bcrypt.compare(user_data.password, user.password);
+
+      if(valid_pwd) {
+        res.status(200).send('Login successful');
+      }      
     } else {
       res.status(401).send('Invalid email address or password');
     }
