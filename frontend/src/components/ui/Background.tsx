@@ -1,5 +1,5 @@
 import React, { CSSProperties } from 'react';
-import backgroundImage from '../imgs/background.webp';
+import backgroundImage from '../../imgs/background.webp';
 
 export const containerStyle: CSSProperties = {
     background: 'linear-gradient(to right, #097969, #209e61)',

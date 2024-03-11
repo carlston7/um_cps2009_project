@@ -7,7 +7,7 @@ import Signup from './pages/Signup';
 import ColorModeProvider from './context/ColourModeContext';
 import Dummy from './pages/Dummy';
 import { ToastContainer } from 'react-toastify';
-import Background from './components/Background';
+import Background from './components/ui/Background';
 import PaymentPage from './pages/Payment';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
