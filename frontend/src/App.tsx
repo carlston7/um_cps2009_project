@@ -11,6 +11,7 @@ import Background from './components/Background';
 import PaymentPage from './pages/Payment';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
+import HelpPage from './pages/HelpPage';
 
 const stripePromise = loadStripe('pk_live_51Ot7JOJ6A0BJ3zLkdnlqc78i8dmfxVLBrGT2wwX7iQ2iGlmpriFXMVZwYYyy6UKf42Y6jCrZCsuWOpAOpt2cEQwa00PAbI230Y'); 
 
@@ -28,6 +29,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/topup" element={ <PaymentPage />}/>
+          <Route path="/help" element={ <HelpPage />}/>
           {/* Add more routes as needed */}
         </Routes>
       </BrowserRouter>
