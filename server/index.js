@@ -11,6 +11,9 @@ const port = process.env.PORT || 3000;
 const fs = require('fs');
 const path = require('path');
 
+//Initialize the Stripe client with secret key
+const stripe = require('stripe')('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');
+
 app.use(cors());
 
 app.use(express.json());
@@ -83,6 +86,38 @@ app.post('/login', async (req, res) => {
   } catch (error) {
     console.error('Error logging in:', error); // Log the specific error
     res.status(500).send('An error occurred: ' + error.message);
+  }
+});
+
+//Stripe Payment
+app.post('/payment', async (req, res) => {
+  try {
+    const { token, userId } = req.body;
+
+    // Retrieve the user from the database
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    // Confirm payment with Stripe and create a charge
+    const charge = await stripe.charges.create({
+      amount: 100, // Amount in cents
+      currency: 'eur',
+      source: token,
+      description: 'Buying 1 token',
+    });
+
+    // Update user's credit balance in the database
+    user.credit += 1; // Add 20 to the user's credit (adjust as needed)
+    await user.save();
+
+    // Send response indicating successful payment and credit update
+    res.status(200).send('Payment successful, credit added to user');
+  } catch (error) {
+    console.error('Error processing payment:', error);
+    res.status(500).send('An error occurred while processing the payment');
   }
 });
 
