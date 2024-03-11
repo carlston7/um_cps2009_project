@@ -107,7 +107,7 @@ app.post('/payment', async (req, res) => {
       currency: 'eur',
       source: token,
       description: 'Buying 1 token',
-    });
+});
 
     // Update user's credit balance in the database
     user.credit += 1; // Add 20 to the user's credit (adjust as needed)
