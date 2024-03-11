@@ -1,7 +1,5 @@
 export interface TimeSlot {
-    startTime: string;
-    endTime: string;
-    available: boolean;
+    index: number;
 }
 
 export interface Court {
@@ -13,13 +11,13 @@ export interface Court {
 
 export interface CourtCreateRequest {
     name: string;
+    type: string;
     dayPrice: number;
     nightPrice: number;
 }
 
 export interface CourtUpdateRequest {
     id: string;
-    name?: string;
     dayPrice?: number;
     nightPrice?: number;
 }
