@@ -1,13 +1,13 @@
 import React from 'react';
+import { Help } from '../components/Help';
 
 
 const HelpPage = () => {
   return (
-      <div>
-        <h1>..</h1>
-        <h1>HELP</h1>
-        <h1>Email us at .....</h1>
-      </div>
+    <div>
+        <h1>.</h1>
+        <Help />
+    </div>
   );
 };
 

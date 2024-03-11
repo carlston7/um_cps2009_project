@@ -1,20 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import { apiCreatePaymentIntent } from '../api/Payment'; // Adjust the import path to where your API call is located
+import { apiCreatePaymentIntent } from '../api/Payment'; 
 import { Button } from './ui/button';
 import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
-import { containerStyle } from './Background'; // Assuming this is a shared style
+import { containerStyle } from './ui/Background'; 
 
 export const StripePaymentForm = () => {
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    // Additional setup if needed
-  }, []);
 
   const handleSubmit = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();

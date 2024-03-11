@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from './ui/button';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import { containerStyle } from './Background';
+import { containerStyle } from './ui/Background';
 
 export const SignupForm = () => {
     const [name, setName] = useState('');
