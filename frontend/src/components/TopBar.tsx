@@ -44,6 +44,9 @@ export default function TopBar() {
                                 onClick={() => {
                                     logout();
                                     toast.success('Logged out successfully'); 
+                                    localStorage.removeItem('token');
+                                    localStorage.removeItem('userEmail');
+                                    localStorage.removeItem('userType');
                                 }}
                                 color="inherit"
                             >

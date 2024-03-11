@@ -78,7 +78,11 @@ app.post('/login', async (req, res) => {
       const valid_pwd = await bcrypt.compare(user_data.password, user.password);
 
       if(valid_pwd) {
-        res.status(200).json(user);
+        res.status(200).json({
+          message: 'Login successful',
+          email: user.email_address,
+          type: user.type
+        });
       } res.status(401).send('Invalid password');
     } else {
       res.status(401).send('Invalid email address');
