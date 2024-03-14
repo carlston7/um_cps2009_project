@@ -17,7 +17,7 @@ export interface CourtCreateRequest {
 }
 
 export interface CourtUpdateRequest {
-    id: string;
+    name: string;
     dayPrice?: number;
     nightPrice?: number;
 }
