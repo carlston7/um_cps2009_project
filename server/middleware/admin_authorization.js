@@ -1,7 +1,8 @@
 // Authorization middleware
 const requireAdmin = (req, res, next) => {
     const headers = req.headers;
-
+    //test
+    console.log(req.header['User-Type']);
     // Check if user is authenticated
     // if (!req.user) {
     //     return res.status(401).json({ message: "Unauthorized" });
