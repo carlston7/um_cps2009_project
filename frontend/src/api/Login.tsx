@@ -1,7 +1,6 @@
 import axiosInstance from './AxiosInstance';
 import LoginRequest from '../models/LoginRequest';
 import axios from 'axios';
-
 export const apiLogin = async (data: LoginRequest) => {
     try {
         const response = await axiosInstance.post(`/login`, data);

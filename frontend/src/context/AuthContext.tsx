@@ -25,14 +25,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     useEffect(() => {
         const token = localStorage.getItem('authToken');
-        const userType = localStorage.getItem('type');
+        const userType = localStorage.getItem('userType');
         setIsAuthenticated(!!token);
         setIsAdmin(userType === 'admin');
     }, []);
 
     const login = (token: string) => {
         localStorage.setItem('authToken', token);
-        const userType = localStorage.getItem('type');
+        const userType = localStorage.getItem('userType');
         setIsAuthenticated(true);
         setIsAdmin(userType === 'admin');
     };

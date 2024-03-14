@@ -150,6 +150,22 @@ app.post('/payment', async (req, res) => {
   }
 });
 
+const { requireAdmin } = require('./middleware/admin_authorization.js'); 
+
+app.post('/court', requireAdmin, async (req, res) => {
+  try {
+    const court = await create_court(req.body);
+    res.status(201).json({ message: 'Sign up successful' });
+  } catch (error) {
+    if (error.statusCode === 403) {
+      return res.status(403).json({ message: "Forbidden" });
+    } else {
+      console.error('Error creating court', error); // Log the specific error
+      res.status(500).send('An error occurred: ' + error.message);
+    }
+  }
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
