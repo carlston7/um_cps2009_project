@@ -1,6 +1,6 @@
 // Authorization middleware
-function requireAdmin(req, res, next) {
-    const data = req.body;
+const requireAdmin = (req, res, next) => {
+    const headers = req.headers;
 
     // Check if user is authenticated
     // if (!req.user) {
@@ -8,10 +8,14 @@ function requireAdmin(req, res, next) {
     // }
     
     // Check if user is an admin
-    if (data.type !== "admin") {
-        return res.status(403).json({ message: "Forbidden" });
+    if (headers['type'] !== "admin") {
+        const error = new Error("Forbidden");
+        error.statusCode = 403;
+        next(error);
+    } else {
+        // User is authenticated and is an admin, proceed to the next middleware or route handler
+        next();
     }
-    
-    // User is authenticated and is an admin, proceed to the next middleware or route handler
-    next();
-}
+};
+
+module.exports = {requireAdmin};
