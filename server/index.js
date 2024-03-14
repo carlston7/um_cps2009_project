@@ -144,6 +144,7 @@ app.post('/payment', async (req, res) => {
 });
 
 const { requireAdmin } = require('./middleware/admin_authorization.js'); 
+const { create_court } = require('./controllers/courtcontroller.js');
 
 //app.post('/court', requireAdmin, async (req, res) => {
 app.post('/court', async (req, res) => { 
