@@ -12,7 +12,7 @@ const fs = require('fs');
 const path = require('path');
 
 //Initialize the Stripe client with secret key
-const stripe = require('stripe')('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');
+const stripe = require('stripe')(process.env.SECRET_KEY);
 
 app.use(cors());
 
