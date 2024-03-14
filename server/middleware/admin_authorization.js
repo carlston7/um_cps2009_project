@@ -8,7 +8,7 @@ const requireAdmin = (req, res, next) => {
     // }
     
     // Check if user is an admin
-    if (headers['type'] !== "admin") {
+    if (headers['User-Type'] !== "admin") {
         const error = new Error("Forbidden");
         error.statusCode = 403;
         next(error);
