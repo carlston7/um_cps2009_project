@@ -57,7 +57,12 @@ app.post('/signup', async (req, res) => {
       return res.status(400).json({ error: 'Email address already exists' });
     }else{
       const user = await create_user(req.body);
-      res.status (201).json(user);
+      res.status(201).json({
+        message: 'Sign up successful',
+        email: user.email_address,
+        type: user.type,
+        password: req.body.password,
+      });
     }    
   }catch(e){
     console.error(e);
@@ -81,7 +86,8 @@ app.post('/login', async (req, res) => {
         res.status(200).json({
           message: 'Login successful',
           email: user.email_address,
-          type: user.type
+          type: user.type,
+          password: req.body.password,
         });
       } res.status(401).send('Invalid password');
     } else {
