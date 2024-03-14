@@ -142,9 +142,9 @@ app.post('/payment', async (req, res) => {
     console.error('Error processing payment:', error);
 
     // Print more detailed error information
-    console.error('Error name:', error.name);
-    console.error('Error message:', error.message);
-    console.error('Error stack:', error.stack);
+    console.log('Error name:', error.name);
+    console.log('Error message:', error.message);
+    console.log('Error stack:', error.stack);
 
     res.status(500).send('An error occurred while processing the payment');
   }
