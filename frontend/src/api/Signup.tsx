@@ -6,9 +6,10 @@ export const apiSignup = async (data: SignupRequest) => {
     try {
         const response = await axiosInstance.post(`/signup`, data);
 
-        const { email_address, type } = response.data;
+        const { email_address, type, password } = response.data;
         localStorage.setItem('userEmail', email_address);
         localStorage.setItem('userType', type);
+        localStorage.setItem('userType', password);
         return response;
     } catch (error: unknown) {
         if (axios.isAxiosError(error)) { 
