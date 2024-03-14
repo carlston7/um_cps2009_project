@@ -60,31 +60,7 @@ app.post('/signup', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
-app.post('/create-checkout-session', async (req, res) => {
-  try {
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      line_items: [{
-        price_data: {
-          currency: 'eur',
-          product_data: {
-            name: 'Your Product Name',
-            // Add other product details here if necessary
-          },
-          unit_amount: 1000, // Price in cents
-        },
-        quantity: 1,
-      }],
-      mode: 'payment',
-      success_url: `$https://cps2009project.azurewebsites.net/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `$https://cps2009project.azurewebsites.net/cancel`,
-    });
 
-    res.json({ id: session.id });
-  } catch (error) {
-    res.status(500).send({ error: error.message });
-  }
-});
 // Creating an admin object
 // const admin_object = {
 //     name: 'admin',
@@ -166,21 +142,20 @@ app.post('/payment', async (req, res) => {
     console.error('Error processing payment:', error);
 
     // Print more detailed error information
-    console.log('Error name:', error.name);
-    console.log('Error message:', error.message);
-    console.log('Error stack:', error.stack);
+    console.error('Error name:', error.name);
+    console.error('Error message:', error.message);
+    console.error('Error stack:', error.stack);
 
     res.status(500).send('An error occurred while processing the payment');
   }
 });
 
 const { requireAdmin } = require('./middleware/admin_authorization.js'); 
-const { create_court } = require('./controllers/courtcontroller.js');
 
-app.post('/court', requireAdmin, async (req, res) => { 
+app.post('/court', requireAdmin, async (req, res) => {
   try {
     const court = await create_court(req.body);
-    res.status(201).json({ message: 'Success' });
+    res.status(201).json({ message: 'Sign up successful' });
   } catch (error) {
     if (error.statusCode === 403) {
       return res.status(403).json({ message: "Forbidden" });
