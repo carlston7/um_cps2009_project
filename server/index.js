@@ -117,23 +117,23 @@ app.post('/payment', async (req, res) => {
     const { token, email } = req.body;
 
     // Retrieve the user from the database
-    const user = await User.findOne({ email_address: email });
+    //const user = await User.findOne({ email_address: email });
 
-    if (!user) {
-      return res.status(404).send('User not found');
-    }
+    //if (!user) {
+    //  return res.status(404).send('User not found');
+    //}
 
     // Confirm payment with Stripe and create a charge
     const charge = await stripe.charges.create({
-      amount: 100, // Amount in cents
+      amount: 100,
       currency: 'eur',
       source: token,
       description: 'Buying 1 token',
-});
+    });
 
     // Update user's credit balance in the database
-    user.credit += 1; // Add 20 to the user's credit (adjust as needed)
-    await user.save();
+    //user.credit += 1; // Add 20 to the user's credit (adjust as needed)
+    //await user.save();
 
     // Send response indicating successful payment and credit update
     res.status(200).send('Payment successful, credit added to user');
