@@ -115,7 +115,7 @@ app.post('/login', async (req, res) => {
 //Stripe Payment
 app.post('/payment', async (req, res) => {
   try {
-    const { token, email } = req.body;
+    const { email, token } = req.body;
 
     // Retrieve the user from the database
     const user = await User.findOne({ email_address: email });
