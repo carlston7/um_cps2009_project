@@ -3,7 +3,7 @@ import { AuthContext } from '../context/AuthContext';
 import { Logout } from "@mui/icons-material";
 import { AppBar, Box, IconButton, Toolbar, Typography, Link } from "@mui/material";
 import { toast } from 'react-toastify';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 interface TopbarLinkProps {
     href: string;
@@ -29,6 +29,7 @@ function TopbarLink(props: TopbarLinkProps) {
 
 export default function TopBar() {
     const { isAuthenticated, logout } = useContext(AuthContext); 
+    const navigate = useNavigate();
 
     return (
         <Box flexGrow={1}>
@@ -47,6 +48,7 @@ export default function TopBar() {
                                     localStorage.removeItem('token');
                                     localStorage.removeItem('userEmail');
                                     localStorage.removeItem('userType');
+                                    navigate('/');
                                 }}
                                 color="inherit"
                             >
