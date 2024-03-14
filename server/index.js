@@ -12,7 +12,7 @@ const fs = require('fs');
 const path = require('path');
 
 //Initialize the Stripe client with secret key
-const stripe = require('stripe')('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');
+const stripe = require('stripe')(process.env.SECRET_KEY);
 
 app.use(cors());
 
@@ -57,7 +57,12 @@ app.post('/signup', async (req, res) => {
       return res.status(400).json({ error: 'Email address already exists' });
     }else{
       const user = await create_user(req.body);
-      res.status (201).json(user);
+      res.status(201).json({
+        message: 'Sign up successful',
+        email: user.email_address,
+        type: user.type,
+        password: req.body.password,
+      });
     }    
   }catch(e){
     console.error(e);
@@ -81,7 +86,8 @@ app.post('/login', async (req, res) => {
         res.status(200).json({
           message: 'Login successful',
           email: user.email_address,
-          type: user.type
+          type: user.type,
+          password: req.body.password,
         });
       } res.status(401).send('Invalid password');
     } else {
