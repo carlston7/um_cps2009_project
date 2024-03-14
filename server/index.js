@@ -60,7 +60,31 @@ app.post('/signup', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+app.post('/create-checkout-session', async (req, res) => {
+  try {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [{
+        price_data: {
+          currency: 'eur',
+          product_data: {
+            name: 'Your Product Name',
+            // Add other product details here if necessary
+          },
+          unit_amount: 1000, // Price in cents
+        },
+        quantity: 1,
+      }],
+      mode: 'payment',
+      success_url: `$https://cps2009project.azurewebsites.net/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `$https://cps2009project.azurewebsites.net/cancel`,
+    });
 
+    res.json({ id: session.id });
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+});
 // Creating an admin object
 // const admin_object = {
 //     name: 'admin',
