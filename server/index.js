@@ -68,8 +68,8 @@ app.post('/signup', async (req, res) => {
 });
 
 // Saving admin in db (commented so that it only runs once)
-const salt = await bcrypt.genSalt(10);
-const hashed_pwd = await bcrypt.hash(admin_object.password, salt);
+const salt = bcrypt.genSalt(10);
+const hashed_pwd = bcrypt.hash(admin_object.password, salt);
 admin_object.password = hashed_pwd;
 
 const mappedData = {
