@@ -30,16 +30,6 @@ const User = require('./models/users')
 const Court = require('./models/courts')
 const Booking = require('./models/bookings')
 
-// Creating an admin object
-const admin = new User({
-    name: 'admin',
-    surname: 'admin',
-    email_address: 'admin@admin.com',
-    password: 'admin',
-    credit: 99999999
-});
-// Saving admin in db (commented so that it only runs once)
-// admin.save();
 
 //Testing signup
 const { create_user } = require('./controllers/usercontroller.js');
@@ -69,6 +59,28 @@ app.post('/signup', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+
+// Creating an admin object
+// const admin_object = {
+//     name: 'admin',
+//     surname: 'admin',
+//     email: 'admin@admin.com',
+//     password: 'admin',
+// };
+
+// Saving admin in db (commented so that it only runs once)
+// const salt = bcrypt.genSalt(10);
+// const hashed_pwd = bcrypt.hash(admin_object.password, salt);
+// admin_object.password = hashed_pwd;
+
+// const mappedData = {
+//   ...admin_object,
+//   email_address: admin_object.email,
+//   credit: 9999999,
+//   type: 'admin'
+// };
+// const admin = new User(mappedData);
+// admin.save();
 
 //Login validation
 app.post('/login', async (req, res) => {
