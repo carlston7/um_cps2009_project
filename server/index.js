@@ -96,10 +96,10 @@ app.post('/login', async (req, res) => {
 //Stripe Payment
 app.post('/payment', async (req, res) => {
   try {
-    const { token, userId } = req.body;
+    const { token, email } = req.body;
 
     // Retrieve the user from the database
-    const user = await User.findById(userId);
+    const user = await User.findOne({ email_address: email });
 
     if (!user) {
       return res.status(404).send('User not found');
