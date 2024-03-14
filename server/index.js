@@ -117,11 +117,11 @@ app.post('/payment', async (req, res) => {
     const { token, email } = req.body;
 
     // Retrieve the user from the database
-    //const user = await User.findOne({ email_address: email });
+    const user = await User.findOne({ email_address: email });
 
-    //if (!user) {
-    //  return res.status(404).send('User not found');
-    //}
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
 
     // Confirm payment with Stripe and create a charge
     const charge = await stripe.charges.create({
@@ -131,14 +131,20 @@ app.post('/payment', async (req, res) => {
       description: 'Buying 1 token',
     });
 
-    // Update user's credit balance in the database
-    //user.credit += 1; // Add 20 to the user's credit (adjust as needed)
-    //await user.save();
+    //Update user's credit balance in the database
+    user.credit += 1; // Add 20 to the user's credit (adjust as needed)
+    await user.save();
 
     // Send response indicating successful payment and credit update
     res.status(200).send('Payment successful, credit added to user');
   } catch (error) {
     console.error('Error processing payment:', error);
+
+    // Print more detailed error information
+    console.error('Error name:', error.name);
+    console.error('Error message:', error.message);
+    console.error('Error stack:', error.stack);
+
     res.status(500).send('An error occurred while processing the payment');
   }
 });
