@@ -146,8 +146,7 @@ app.post('/payment', async (req, res) => {
 const { requireAdmin } = require('./middleware/admin_authorization.js'); 
 const { create_court } = require('./controllers/courtcontroller.js');
 
-//app.post('/court', requireAdmin, async (req, res) => {
-app.post('/court', async (req, res) => { 
+app.post('/court', requireAdmin, async (req, res) => { 
   try {
     const court = await create_court(req.body);
     res.status(201).json({ message: 'Success' });
