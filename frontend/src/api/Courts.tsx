@@ -5,11 +5,49 @@ import axiosInstance from './AxiosInstance';
 
 
 export const createCourt = async (data: CourtCreateRequest) => {
-    return axiosInstance.post(`/court`, data);
+    const userType = localStorage.getItem('userType');
+    if (!userType) {
+        console.error('No user type found');
+        throw new Error('Unauthorized: You must be logged in to make this request');
+    }
+
+    const userEmail = localStorage.getItem('userEmail');
+    const userPassword = localStorage.getItem('userEmail');
+    if (!userPassword || !userEmail) {
+        console.error('User email and password not found.');
+        throw new Error('User email and password are required for this operation.');
+    }
+
+    return axiosInstance.post(`/court`, data, {
+        headers: {
+            'User-Email': userEmail,
+            'User-Type': userType,
+            'User-Password': userPassword
+        }
+    });
 };
 
 export const updateCourt = async (courtId: string, data: CourtUpdateRequest) => {
-    return axiosInstance.patch(`$/court/${courtId}`, data);
+    const userType = localStorage.getItem('userType');
+    if (!userType) {
+        console.error('No user type found');
+        throw new Error('Unauthorized: You must be logged in to make this request');
+    }
+
+    const userEmail = localStorage.getItem('userEmail');
+    const userPassword = localStorage.getItem('userEmail');
+    if (!userPassword || !userEmail) {
+        console.error('User email and password not found.');
+        throw new Error('User email and password are required for this operation.');
+    }
+
+    return axiosInstance.patch(`$/court/${courtId}`, data, {
+        headers: {
+            'User-Email': userEmail,
+            'User-Type': userType,
+            'User-Password': userPassword
+        }
+    });
 };
 
 export const getCourts = async (): Promise<Court[]> => {
