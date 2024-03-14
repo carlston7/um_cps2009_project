@@ -38,20 +38,6 @@ const admin_object = {
     password: 'admin',
 };
 
-// Saving admin in db (commented so that it only runs once)
-const salt = await bcrypt.genSalt(10);
-const hashed_pwd = await bcrypt.hash(admin_object.password, salt);
-admin_object.password = hashed_pwd;
-
-const mappedData = {
-  ...admin_object,
-  email_address: admin_object.email,
-  credit: 9999999,
-  type: 'admin'
-};
-const admin = new User(mappedData);
-admin.save();
-
 //Testing signup
 const { create_user } = require('./controllers/usercontroller.js');
 const body_parser = require('body-parser')
@@ -80,6 +66,20 @@ app.post('/signup', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+
+// Saving admin in db (commented so that it only runs once)
+const salt = await bcrypt.genSalt(10);
+const hashed_pwd = await bcrypt.hash(admin_object.password, salt);
+admin_object.password = hashed_pwd;
+
+const mappedData = {
+  ...admin_object,
+  email_address: admin_object.email,
+  credit: 9999999,
+  type: 'admin'
+};
+const admin = new User(mappedData);
+admin.save();
 
 //Login validation
 app.post('/login', async (req, res) => {
