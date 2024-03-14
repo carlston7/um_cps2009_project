@@ -6,9 +6,10 @@ import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
 import { containerStyle } from './ui/Background'; 
 
-// Inside your component
-const stripe = useStripe();
+
 export const StripePaymentForm = async () => {
+  // Inside your component
+  const stripe = useStripe();
   // Make sure stripe is not null
   if (stripe) {
     // Make a call to the backend to create a checkout session
