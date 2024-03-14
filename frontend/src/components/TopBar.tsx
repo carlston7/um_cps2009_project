@@ -6,72 +6,67 @@ import { toast } from 'react-toastify';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 interface TopbarLinkProps {
-    href: string;
+    to: string;
     text: string;
     external?: boolean;
 }
 
-function TopbarLink(props: TopbarLinkProps) {
-    let { href, text, external } = {
-        external: false,
-        ...props
-    };
-
-    return <Box mx={2}>
-        <Link href={href} underline="none" color="inherit"
-            target={external ? "_blank" : "_self"}>
-            <Typography>
-                {text}
-            </Typography>
-        </Link>
-    </Box>;
-}
+const TopbarLink: React.FC<TopbarLinkProps> = ({ to, text, external = false }) => {
+    if (external) {
+        return (
+            <Box mx={2}>
+                <Link href={to} target="_blank" rel="noopener noreferrer" underline="none" color="inherit">
+                    <Typography>{text}</Typography>
+                </Link>
+            </Box>
+        );
+    } else {
+        return (
+            <Box mx={2}>
+                <Link component={RouterLink} to={to} underline="none" color="inherit">
+                    <Typography>{text}</Typography>
+                </Link>
+            </Box>
+        );
+    }
+};
 
 export default function TopBar() {
     const { isAuthenticated, isAdmin, logout } = useContext(AuthContext); 
     const navigate = useNavigate();
 
+    const handleLogout = () => {
+        logout();
+        toast.success('Logged out successfully');
+        localStorage.clear();
+        navigate('/');
+    };
+    console.log("isAdmin: " + isAdmin);
     return (
-        <Box flexGrow={1}>
-            <AppBar sx={{
-                backgroundImage: 'linear-gradient(to right, #097969, #209e61)'
-            }}>
-                <Toolbar>
-                    <TopbarLink href="/" text="Home" />
-                    {isAuthenticated ? (
-                        <>
-                            <IconButton
-                                onClick={() => {
-                                    logout();
-                                    toast.success('Logged out successfully'); 
-                                    localStorage.clear();
-                                    // localStorage.removeItem('token');
-                                    // localStorage.removeItem('userEmail');
-                                    // localStorage.removeItem('userType');
-                                    // localStorage.removeItem('userPassword');
-                                    navigate('/');
-                                }}
-                                color="inherit"
-                            >
-                                <Logout />
-                            </IconButton>
-                            {/* Use RouterLink for the "Topup" link to navigate within the app */}
-                            <Box mx={2}>
-                                <Link component={RouterLink} to="/topup" underline="none" color="inherit">
-                                    <Typography>Topup</Typography>
-                                </Link>
-                            </Box>
-                        </>
-                    ) : (
-                        <>
-                            <TopbarLink href="/signup" text="Sign Up" />
-                            <TopbarLink href="/login" text="Login" />
-                        </>
-                    )}
-                    <Box flexGrow={1} />
-                    {isAdmin && <TopbarLink href="/court-admin" text="Manage Courts" />}
-                </Toolbar>
-            </AppBar>
-        </Box>
+        <AppBar position="static" sx={{ backgroundImage: 'linear-gradient(to right, #097969, #209e61)' }}>
+            <Toolbar>
+                <TopbarLink to="/" text="Home" />
+                {isAdmin && (<>
+                    <TopbarLink to="/new-court" text="Create Court" />
+                    <TopbarLink to="/edit-court" text="Edit Court" />
+                </>)}
+                {isAuthenticated && (
+                    <>
+                        <TopbarLink to="/topup" text="Topup" />
+
+                        <IconButton onClick={handleLogout} color="inherit">
+                            <Logout />
+                        </IconButton>
+                    </>
+                )}
+                {!isAuthenticated && (
+                    <>
+                        <TopbarLink to="/signup" text="Sign Up" />
+                        <TopbarLink to="/login" text="Login" />
+                    </>
+                )}
+                <Box flexGrow={1} />
+            </Toolbar>
+        </AppBar>
     );
 }

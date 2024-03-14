@@ -11,7 +11,8 @@ import PaymentPage from './pages/Payment';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import HelpPage from './pages/HelpPage';
-import CourtCreatePage from './pages/CourtCreatePage';
+import CourtCreatePage from './pages/CreateCourtPage';
+import EditCourtPage from './pages/EditCourtPage';
 
 const stripePromise = loadStripe('pk_live_51Ot7JOJ6A0BJ3zLkdnlqc78i8dmfxVLBrGT2wwX7iQ2iGlmpriFXMVZwYYyy6UKf42Y6jCrZCsuWOpAOpt2cEQwa00PAbI230Y'); 
 
@@ -25,7 +26,8 @@ const App = () => {
         <Background />
         <Routes>
           <Route path="/" element={<Home />} />
-            <Route path="/court-admin" element={<CourtCreatePage />} />
+            <Route path="/new-court" element={<CourtCreatePage />} />
+            <Route path="/edit-court" element={<EditCourtPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/topup" element={ <PaymentPage />}/>
