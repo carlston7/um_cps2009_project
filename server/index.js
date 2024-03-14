@@ -31,15 +31,15 @@ const Court = require('./models/courts')
 const Booking = require('./models/bookings')
 
 // Creating an admin object
-const admin = new User({
+const admin = {
     name: 'admin',
     surname: 'admin',
-    email_address: 'admin@admin.com',
+    email: 'admin@admin.com',
     password: 'admin',
-    credit: 99999999
-});
+};
+
 // Saving admin in db (commented so that it only runs once)
-// admin.save();
+create_user(admin);
 
 //Testing signup
 const { create_user } = require('./controllers/usercontroller.js');
