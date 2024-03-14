@@ -13,7 +13,7 @@ const path = require('path');
 
 //Initialize the Stripe client with secret key
 const stripe = require('stripe')(process.env.SECRET_KEY);
-stripe.setApiKey('pk_live_51Ot7JOJ6A0BJ3zLkdnlqc78i8dmfxVLBrGT2wwX7iQ2iGlmpriFXMVZwYYyy6UKf42Y6jCrZCsuWOpAOpt2cEQwa00PAbI230Y', process.env.SECRET_KEY);
+//stripe.setApiKey('pk_live_51Ot7JOJ6A0BJ3zLkdnlqc78i8dmfxVLBrGT2wwX7iQ2iGlmpriFXMVZwYYyy6UKf42Y6jCrZCsuWOpAOpt2cEQwa00PAbI230Y', process.env.SECRET_KEY);
 
 app.use(cors());
 
