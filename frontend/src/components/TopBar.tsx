@@ -28,7 +28,7 @@ function TopbarLink(props: TopbarLinkProps) {
 }
 
 export default function TopBar() {
-    const { isAuthenticated, logout } = useContext(AuthContext); 
+    const { isAuthenticated, isAdmin, logout } = useContext(AuthContext); 
     const navigate = useNavigate();
 
     return (
@@ -38,16 +38,17 @@ export default function TopBar() {
             }}>
                 <Toolbar>
                     <TopbarLink href="/" text="Home" />
-                    <TopbarLink href="/dummy" text="DummyTest" />
                     {isAuthenticated ? (
                         <>
                             <IconButton
                                 onClick={() => {
                                     logout();
                                     toast.success('Logged out successfully'); 
-                                    localStorage.removeItem('token');
-                                    localStorage.removeItem('userEmail');
-                                    localStorage.removeItem('userType');
+                                    localStorage.clear();
+                                    // localStorage.removeItem('token');
+                                    // localStorage.removeItem('userEmail');
+                                    // localStorage.removeItem('userType');
+                                    // localStorage.removeItem('userPassword');
                                     navigate('/');
                                 }}
                                 color="inherit"
@@ -68,6 +69,7 @@ export default function TopBar() {
                         </>
                     )}
                     <Box flexGrow={1} />
+                    {isAdmin && <TopbarLink href="/court-admin" text="Manage Courts" />}
                 </Toolbar>
             </AppBar>
         </Box>
