@@ -139,7 +139,7 @@ app.post('/payment', async (req, res) => {
     if (paymentIntent.status === 'succeeded') {
       user.credit += 1; // adjust later to match amount
       await user.save();
-      res.status(200).json({ message: 'Payment successful, credit added to user' });
+      res.status(200).json({ message: 'Payment successful, credit added to user', clientSecret: paymentIntent.client_secret });
     } else {
       res.status(400).json({ error: 'Payment failed' });
     }
