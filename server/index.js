@@ -125,29 +125,27 @@ app.post('/payment', async (req, res) => {
     }
 
     // Confirm payment with Stripe and create a charge
-    const charge = await stripe.charges.create({
-      amount: 100,
+    const paymentIntent  = await stripe.paymentIntents.create({
+      amount: 1,
       currency: 'eur',
-      source: token,
+      payment_method: paymentMethodId,
+      confirmation_method: 'manual',
+      confirm: true,
       description: 'Buying 1 token',
     });
 
-    //Update user's credit balance in the database
-    user.credit += 1; // Add 20 to the user's credit (adjust as needed)
-    await user.save();
-
-    // Send response indicating successful payment and credit update
-    res.status(200).send('Payment successful, credit added to user');
-  } catch (error) {
-    console.error('Error processing payment:', error);
-
-    // Print more detailed error information
-    console.error('Error name:', error.name);
-    console.error('Error message:', error.message);
-    console.error('Error stack:', error.stack);
-
-    res.status(500).send('An error occurred while processing the payment');
-  }
+    //update user's credit balance in db
+    if (paymentIntent.status === 'succeeded') {
+      user.credit += 1; // adjust later to match amount
+      await user.save();
+      res.status(200).json({ message: 'Payment successful, credit added to user' });
+    } else {
+      res.status(400).json({ error: 'Payment failed' });
+    }
+    } catch (error) {
+      console.error('Error processing payment:', error);
+      res.status(500).json({ error: 'An error occurred while processing the payment' });
+    }
 });
 
 const { requireAdmin } = require('./middleware/admin_authorization.js'); 
