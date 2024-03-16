@@ -15,6 +15,7 @@ export const StripePaymentForm = () => {
   const handleSubmit = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
     if (!stripe || !elements) {
+      toast.error('Stripe has not been properly initialized.');
       return;
     }
 
@@ -27,38 +28,44 @@ export const StripePaymentForm = () => {
       return;
     }
   
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
+    const { error: paymentMethodError, paymentMethod } = await stripe.createPaymentMethod({
       type: 'card',
       card: cardElement,
     });
   
-    if (error) {
-      console.log('[error]', error);
-      toast.error(`Payment failed: ${error.message}`);
+    if (paymentMethodError) {
+      console.error('[error]', paymentMethodError);
+      toast.error(`Payment failed: ${paymentMethodError.message}`);
       setLoading(false);
-    } else {
-      try {
-        const paymentIntentResponse = await apiCreatePaymentIntent(paymentMethod.id);
+      return; // Early return on error
+    }
+
+    // Assuming apiCreatePaymentIntent correctly handles the creation and returns the clientSecret
+    try {
+      const { data: { clientSecret } } = await apiCreatePaymentIntent(paymentMethod.id);
+      console.log("client secret: ", clientSecret);
+      const { error: confirmationError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: paymentMethod.id,
+      });
   
-        const { paymentIntent, error: confirmError } = await stripe.confirmCardPayment(paymentIntentResponse.data.clientSecret, {
-          payment_method: paymentMethod.id,
-        });
-  
-        if (confirmError) {
-          console.log('[confirmError]', confirmError);
-          toast.error(`Payment confirmation failed: ${confirmError.message}`);
-          setLoading(false);
-        } else {
-          console.log('[PaymentIntent]', paymentIntent);
-          toast.success('Payment successful');
-          navigate('/');
-          setLoading(false);
-        }
-      } catch (error) {
-        toast.error('Payment process failed');
-        console.error(error);
+      if (confirmationError) {
+        console.error('[confirmError]', confirmationError);
+        toast.error(`Payment confirmation failed: ${confirmationError.message}`);
+        setLoading(false);
+      } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+        console.log('[PaymentIntent]', paymentIntent);
+        toast.success('Payment successful');
+        navigate('/'); // Navigate to home or success page
+        setLoading(false);
+      } else {
+        // Handle other paymentIntent statuses as needed (requires_action, processing, etc.)
+        toast.error('Payment process was not successful. Please try again or contact support if this issue persists.');
         setLoading(false);
       }
+    } catch (error) {
+      toast.error('Payment process failed');
+      console.error(error);
+      setLoading(false);
     }
   };
   

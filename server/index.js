@@ -126,12 +126,13 @@ app.post('/payment', async (req, res) => {
 
     // Confirm payment with Stripe and create a charge
     const paymentIntent  = await stripe.paymentIntents.create({
-      amount: 1,
+      amount: 100,
       currency: 'eur',
       payment_method: paymentMethodId,
-      confirmation_method: 'manual',
+      confirmation_method: 'automatic',
       confirm: true,
       description: 'Buying 1 token',
+      off_session: false,
     });
 
     //update user's credit balance in db
