@@ -17,9 +17,9 @@ export const StripePaymentForm = () => {
     if (!stripe || !elements) {
       return;
     }
-  
+
     setLoading(true);
-  
+
     const cardElement = elements.getElement(CardElement);
     if (!cardElement) {
       toast.error('Payment failed: Unable to find card details');
@@ -27,7 +27,7 @@ export const StripePaymentForm = () => {
       return;
     }
   
-    const {error, paymentMethod} = await stripe.createPaymentMethod({
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
       type: 'card',
       card: cardElement,
     });
@@ -40,7 +40,7 @@ export const StripePaymentForm = () => {
       try {
         const paymentIntentResponse = await apiCreatePaymentIntent(paymentMethod.id);
   
-        const {paymentIntent, error: confirmError} = await stripe.confirmCardPayment(paymentIntentResponse.data.clientSecret, {
+        const { paymentIntent, error: confirmError } = await stripe.confirmCardPayment(paymentIntentResponse.data.clientSecret, {
           payment_method: paymentMethod.id,
         });
   
@@ -51,7 +51,7 @@ export const StripePaymentForm = () => {
         } else {
           console.log('[PaymentIntent]', paymentIntent);
           toast.success('Payment successful');
-          navigate('/'); 
+          navigate('/');
           setLoading(false);
         }
       } catch (error) {
