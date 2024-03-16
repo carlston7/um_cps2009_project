@@ -44,6 +44,7 @@ export const StripePaymentForm = () => {
     try {
       const { data: { clientSecret } } = await apiCreatePaymentIntent(paymentMethod.id);
       console.log("client secret: ", clientSecret);
+      
       const { error: confirmationError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
         payment_method: paymentMethod.id,
       });
