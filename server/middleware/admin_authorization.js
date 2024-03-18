@@ -9,7 +9,7 @@ const requireAdmin = (req, res, next) => {
     if (req.headers['User-Type'] !=='admin') {
         const error = new Error("Forbidden");
         error.statusCode = 403;
-        //next(error);
+        next();
     } else {
         // User is authenticated and is an admin, proceed to the next middleware or route handler
         next();

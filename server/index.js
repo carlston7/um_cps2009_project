@@ -155,7 +155,7 @@ const { requireAdmin } = require('./middleware/admin_authorization.js');
 app.post('/court', requireAdmin, async (req, res) => {
   try {
     const court = await create_court(req.body);
-    res.status(201).json({ message: 'Sign up successful' });
+    res.status(201).json({ message: 'Success' });
   } catch (error) {
     if (error.statusCode === 403) {
       return res.status(403).json({ message: "Forbidden" });
