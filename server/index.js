@@ -113,37 +113,32 @@ app.post('/login', async (req, res) => {
 });
 
 //Stripe Payment
-app.post('/payment', async (req, res) => {
+router.post('/topup', async (req, res) => {
   try {
-    const { email, paymentMethodId } = req.body;
-
-    const user = await User.findOne({ email_address: email });
-    if (!user) {
-      return res.status(404).send('User not found');
-    }
-
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: 100,
-      currency: 'eur',
-      payment_method: paymentMethodId,
-      confirmation_method: 'automatic',
-      confirm: true,
-      return_url: "https://cps2009project.azurewebsites.net/", 
+    const { amount } = req.body;
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [{
+        price_data: {
+          currency: 'eur',
+          product_data: {
+            name: 'Balance Top-Up',
+          },
+          unit_amount: amount * 100, // Convert amount to cents
+        },
+        quantity: 1,
+      }],
+      mode: 'payment',
+      success_url: `${req.headers.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${req.headers.origin}/cancel`,
     });
 
-    if (paymentIntent.status === 'succeeded') {
-      user.credit += 1; // adjust later to match amount
-      await user.save();
-      res.status(200).json({ message: 'Payment successful, credit added to user', clientSecret: paymentIntent.client_secret });
-    } else {
-      res.status(400).json({ error: 'Payment failed' });
-    }
+    res.json({ url: session.url });
   } catch (error) {
-    console.error('Error processing payment:', error);
-    res.status(500).json({ error: 'An error occurred while processing the payment' });
+    console.error('Error creating checkout session', error);
+    res.status(500).send('Error creating checkout session');
   }
 });
-
 const { requireAdmin } = require('./middleware/admin_authorization.js'); 
 
 app.post('/court', requireAdmin, async (req, res) => {
