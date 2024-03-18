@@ -1,6 +1,6 @@
 import axiosInstance from './AxiosInstance';
 
-export const apiCreatePaymentIntent = async (token: string) => {
+export const apiCreatePaymentIntent = async (token: string, returnUrl: string) => {
     const userType = localStorage.getItem('userType');
     if (!userType) {
         console.error('No user type found');
@@ -14,5 +14,5 @@ export const apiCreatePaymentIntent = async (token: string) => {
     }
 
     console.log('Sending payment id:', token);
-    return axiosInstance.post(`/payment`, { token, email: userEmail });
+    return axiosInstance.post(`/payment`, { token, email: userEmail, returnUrl  });
 };

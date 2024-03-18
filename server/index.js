@@ -115,7 +115,7 @@ app.post('/login', async (req, res) => {
 //Stripe Payment
 app.post('/payment', async (req, res) => {
   try {
-    const { email, paymentMethodId  } = req.body;
+    const { email, paymentMethodId, returnUrl} = req.body;
 
     // Retrieve the user from the database
     const user = await User.findOne({ email_address: email });
@@ -133,6 +133,7 @@ app.post('/payment', async (req, res) => {
       confirm: true,
       description: 'Buying 1 token',
       off_session: false,
+      return_url: returnUrl,
     });
 
     //update user's credit balance in db
