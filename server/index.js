@@ -112,9 +112,7 @@ app.post('/login', async (req, res) => {
   }
 });
 
-const payment_router = express.Router();
-
-payment_router.post("/topup", async (req, res) => {
+app.post("/topup", async (req, res) => {
   try {
     const { email, amount } = req.body;
 
