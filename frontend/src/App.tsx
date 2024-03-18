@@ -13,6 +13,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import HelpPage from './pages/HelpPage';
 import EditCourtPage from './pages/EditCourtPage';
 import CreateCourtPage from './pages/CreateCourtPage';
+import ViewCourtPage from './pages/ViewCourtPage';
 
 const stripePromise = loadStripe('pk_live_51Ot7JOJ6A0BJ3zLkdnlqc78i8dmfxVLBrGT2wwX7iQ2iGlmpriFXMVZwYYyy6UKf42Y6jCrZCsuWOpAOpt2cEQwa00PAbI230Y'); 
 
@@ -27,6 +28,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/edit-court" element={<EditCourtPage />} />
+          <Route path="/view-courts" element={<ViewCourtPage/>} />
           <Route path="/new-court" element={<CreateCourtPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />

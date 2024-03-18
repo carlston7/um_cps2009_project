@@ -1,8 +1,6 @@
 import { Court, CourtCreateRequest, CourtUpdateRequest, TimeSlot } from '../models/Courts';
 import axiosInstance from './AxiosInstance';
 
-
-
 export const createCourt = async (data: CourtCreateRequest) => {
     const userType = localStorage.getItem('userType');
     if (!userType) {

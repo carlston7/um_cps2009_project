@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axiosInstance from '../api/AxiosInstance';
+import { containerStyle } from './ui/Background';
 
 const TopUp = () => {
   const [amount, setAmount] = useState('');
@@ -20,7 +21,7 @@ const TopUp = () => {
   };
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div style={containerStyle}>
       <h2>Top Up</h2>
       <form onSubmit={handleTopUp}>
         <input

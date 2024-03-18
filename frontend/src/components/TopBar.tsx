@@ -46,6 +46,7 @@ export default function TopBar() {
         <AppBar position="static" sx={{ backgroundImage: 'linear-gradient(to right, #097969, #209e61)' }}>
             <Toolbar>
                 <TopbarLink to="/" text="Home" />
+                <TopbarLink to="/view-courts" text="View Courts" />
                 {isAdmin && (<>
                     <TopbarLink to="/new-court" text="Create Court" />
                     <TopbarLink to="/edit-court" text="Edit Court" />
