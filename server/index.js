@@ -143,17 +143,16 @@ app.post("/topup", async (req, res) => {
   // update db later
 });
 
-// const { requireAdmin } = require('./middleware/admin_authorization.js'); 
+const { requireAdmin } = require('./middleware/admin_authorization.js'); 
 
 // app.post('/court', requireAdmin, async (req, res) => {
 app.post('/court', async (req, res) => {
   try {
-    if(req.header('User-Type') !== 'admin') {
+    if(req.headers['User-Type'] === 'admin') {
       const court = await create_court(req.body);
       return res.status(201).json({ message: 'Success' });
     }
-    return res.status(403).json({ message: "Forbidden" });
-    
+    return res.status(403).json({ message: "Forbidden" });    
   } catch (error) {
     console.error('Error creating court', error); // Log the specific error
     res.status(500).send('An error occurred: ' + error.message);
