@@ -149,7 +149,7 @@ const { create_court } = require('./controllers/courtcontroller.js');
 // app.post('/court', requireAdmin, async (req, res) => {
 app.post('/court', async (req, res) => {
   try {
-    if(req.headers['User-Type'] !== 'admin') {
+    if(req.headers['user-type'] !== 'admin') {
       res.status(403).json({ message: "Forbidden" });
     } else {
       const court = await create_court(req.body);
