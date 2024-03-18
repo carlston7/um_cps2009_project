@@ -14,7 +14,7 @@ export const createCourt = async (data: CourtCreateRequest) => {
         console.error('User email and password not found.');
         throw new Error('User email and password are required for this operation.');
     }
-
+    console.log("User-Email: ", userEmail, "User-Type: ", userType, "User-Password: ", userPassword);
     return axiosInstance.post(`/court`, data, {
         headers: {
             'User-Email': userEmail,
