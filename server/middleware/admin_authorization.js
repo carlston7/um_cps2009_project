@@ -1,20 +1,18 @@
 // Authorization middleware
-const requireAdmin = async (req, res, next) => {    
-    const userEmail = req.header('User-Email');
-    const userPassword = req.header('User-Password');
+const requireAdmin = (req, res, next) => {
+// Check if user is authenticated
+// if (!req.user) {
+//     return res.status(401).json({ message: "Unauthorized" });
+// }
 
-    // Ideally, these credentials should be stored securely and not hardcoded
-    const adminEmail = 'admin@admin.admin';
-
-    // Check if the email matches and password is correct
-    if (userEmail === adminEmail) {
-        if (userPassword === 'admin') {
-            next();
-        } else {
-            return res.status(401).json({ message: "Unauthorized: Incorrect password" });
-        }
+    // Check if user is an admin
+    if (req.header('User-Type') !== 'admin') {
+        const error = new Error("Forbidden");
+        error.statusCode = 403;
+        next(error);
     } else {
-        return res.status(401).json({ message: "Unauthorized: User is not an admin" });
+        // User is authenticated and is an admin, proceed to the next middleware or route handler
+        next();
     }
 };
 
