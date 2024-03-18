@@ -143,27 +143,29 @@ app.post("/topup", async (req, res) => {
   // update db later
 });
 
-const { requireAdmin } = require('./middleware/admin_authorization.js'); 
+// const { requireAdmin } = require('./middleware/admin_authorization.js'); 
 const { create_court } = require('./controllers/courtcontroller.js');
 
-app.post('/court', requireAdmin, async (req, res) => {
-// app.post('/court', async (req, res) => {
+// app.post('/court', requireAdmin, async (req, res) => {
+app.post('/court', async (req, res) => {
   try {
-    const court = await create_court(req.body);
-    res.status(201).json({ message: 'Success' });
-    // if(req.headers['user-type'] !== 'admin') {
-    //   res.status(403).json({ message: "Forbidden" });
-    // } else {
-    //   const court = await create_court(req.body);
-    //   res.status(201).json({ message: 'Success' });
-    // }    
-  } catch (error) {
-    if(error.statusCode === 403) {
-      return res.status(403).json({ message: "Forbidden" });
+    // const court = await create_court(req.body);
+    // res.status(201).json({ message: 'Success' });
+    if(req.headers['user-type'] !== 'admin') {
+      res.status(403).json({ message: "Forbidden" });
     } else {
-      console.error('Error creating court', error); // Log the specific error
-      res.status(500).send('An error occurred: ' + error.message);
-    }
+      const court = await create_court(req.body);
+      res.status(201).json({ message: 'Success' });
+    }    
+  } catch (error) {
+    console.error('Error creating court', error); // Log the specific error
+    res.status(500).send('An error occurred: ' + error.message);
+    // if(error.statusCode === 403) {
+    //   return res.status(403).json({ message: "Forbidden" });
+    // } else {
+    //   console.error('Error creating court', error); // Log the specific error
+    //   res.status(500).send('An error occurred: ' + error.message);
+    // }
   }
 });
 
