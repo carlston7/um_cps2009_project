@@ -112,35 +112,33 @@ app.post('/login', async (req, res) => {
   }
 });
 
-//Stripe Payment
-app.post('/payment', async (req, res) => {
+const payment_router = express.Router();
+
+payment_router.post("/topup", async (req, res) => {
   try {
-    const { email, paymentMethodId } = req.body;
+    const { amount } = req.body; // Make sure to send 'email' and 'amount' from the frontend
 
-    const user = await User.findOne({ email_address: email });
-    if (!user) {
-      return res.status(404).send('User not found');
-    }
+    // Additional logic to find user by email and check if user exists
 
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: 100,
-      currency: 'eur',
-      payment_method: paymentMethodId,
-      confirmation_method: 'automatic',
-      confirm: true,
-      return_url: "https://cps2009project.azurewebsites.net/", 
+    const session = await stripe.checkout.sessions.create({
+      line_items: [{
+        price_data: {
+          currency: "eur",
+          product_data: { name: "Balance Top-Up" },
+          unit_amount: amount * 100,
+        },
+        quantity: 1,
+      }],
+      payment_method_types: ["card"],
+      mode: "payment",
+      success_url: `https://cps2009project.azurewebsites.net/`,
+      cancel_url: `https://cps2009project.azurewebsites.net/topup`,
     });
 
-    if (paymentIntent.status === 'succeeded') {
-      user.credit += 1; // adjust later to match amount
-      await user.save();
-      res.status(200).json({ message: 'Payment successful, credit added to user', clientSecret: paymentIntent.client_secret });
-    } else {
-      res.status(400).json({ error: 'Payment failed' });
-    }
+    res.json({ url: session.url });
   } catch (error) {
-    console.error('Error processing payment:', error);
-    res.status(500).json({ error: 'An error occurred while processing the payment' });
+    console.error("Error creating checkout session", error);
+    res.status(500).send("Error creating checkout session");
   }
 });
 
@@ -152,8 +150,7 @@ app.post('/court', requireAdmin, async (req, res) => {
     res.status(201).json({ message: 'Success' });
   } catch (error) {
     if (error.statusCode === 403) {
-      //return res.status(403).json({ message: "Forbidden" });
-      return;
+      return res.status(403).json({ message: "Forbidden" });
     } else {
       console.error('Error creating court', error); // Log the specific error
       res.status(500).send('An error occurred: ' + error.message);
