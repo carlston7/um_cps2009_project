@@ -42,6 +42,7 @@ export const StripePaymentForm = () => {
 
     // Assuming apiCreatePaymentIntent correctly handles the creation and returns the clientSecret
     try {
+      const returnUrl = "https://cps2009project.azurewebsites.net/";
       const { data: { clientSecret } } = await apiCreatePaymentIntent(paymentMethod.id, returnUrl);
       console.log("client secret: ", clientSecret);
       
