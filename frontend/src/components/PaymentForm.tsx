@@ -4,7 +4,7 @@ import axios from 'axios'; // Assuming you're using axios for HTTP requests
 
 const StripePaymentForm = () => {
   const [amount, setAmount] = useState('');
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
 
   const handleSubmit = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
