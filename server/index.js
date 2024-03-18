@@ -115,7 +115,7 @@ app.post('/login', async (req, res) => {
 //Stripe Payment
 app.post('/payment', async (req, res) => {
   try {
-    const { email, paymentMethodId  } = req.body;
+    const { email, paymentMethodId, returnUrl} = req.body;
 
     // Retrieve the user from the database
     const user = await User.findOne({ email_address: email });
@@ -133,13 +133,14 @@ app.post('/payment', async (req, res) => {
       confirm: true,
       description: 'Buying 1 token',
       off_session: false,
+      return_url: returnUrl,
     });
 
     //update user's credit balance in db
     if (paymentIntent.status === 'succeeded') {
       user.credit += 1; // adjust later to match amount
       await user.save();
-      res.status(200).json({ message: 'Payment successful, credit added to user' });
+      res.status(200).json({ message: 'Payment successful, credit added to user', clientSecret: paymentIntent.client_secret });
     } else {
       res.status(400).json({ error: 'Payment failed' });
     }
