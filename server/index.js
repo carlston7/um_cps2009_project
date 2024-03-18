@@ -149,10 +149,10 @@ const { create_court } = require('./controllers/courtcontroller.js');
 // app.post('/court', requireAdmin, async (req, res) => {
 app.post('/court', async (req, res) => {
   try {
-    // if(req.headers['User-Type'] === 'admin') {
+    if(req.headers['User-Type'] === 'admin') {
       const court = await create_court(req.body);
       return res.status(201).json({ message: 'Success' });
-    // }
+    }
     // return res.status(403).json({ message: "Forbidden" });    
   } catch (error) {
     console.error('Error creating court', error); // Log the specific error
