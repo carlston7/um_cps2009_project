@@ -116,9 +116,11 @@ const payment_router = express.Router();
 
 payment_router.post("/topup", async (req, res) => {
   try {
-    const { amount } = req.body; // Make sure to send 'email' and 'amount' from the frontend
+    const { email, amount } = req.body;
 
-    // Additional logic to find user by email and check if user exists
+    if (!email || !amount) {
+      return res.status(400).send("Email and amount are required.");
+    }
 
     const session = await stripe.checkout.sessions.create({
       line_items: [{
@@ -140,7 +142,9 @@ payment_router.post("/topup", async (req, res) => {
     console.error("Error creating checkout session", error);
     res.status(500).send("Error creating checkout session");
   }
+  // update db later
 });
+
 const { requireAdmin } = require('./middleware/admin_authorization.js'); 
 
 app.post('/court', requireAdmin, async (req, res) => {
