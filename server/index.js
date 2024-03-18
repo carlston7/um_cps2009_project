@@ -115,28 +115,22 @@ app.post('/login', async (req, res) => {
 //Stripe Payment
 app.post('/payment', async (req, res) => {
   try {
-    const { email, paymentMethodId, returnUrl} = req.body;
+    const { email, paymentMethodId } = req.body;
 
-    // Retrieve the user from the database
     const user = await User.findOne({ email_address: email });
-
     if (!user) {
       return res.status(404).send('User not found');
     }
 
-    // Confirm payment with Stripe and create a charge
-    const paymentIntent  = await stripe.paymentIntents.create({
+    const paymentIntent = await stripe.paymentIntents.create({
       amount: 100,
       currency: 'eur',
       payment_method: paymentMethodId,
       confirmation_method: 'automatic',
       confirm: true,
-      description: 'Buying 1 token',
-      off_session: false,
-      return_url: returnUrl,
+      return_url: "https://cps2009project.azurewebsites.net/", 
     });
 
-    //update user's credit balance in db
     if (paymentIntent.status === 'succeeded') {
       user.credit += 1; // adjust later to match amount
       await user.save();
@@ -144,10 +138,10 @@ app.post('/payment', async (req, res) => {
     } else {
       res.status(400).json({ error: 'Payment failed' });
     }
-    } catch (error) {
-      console.error('Error processing payment:', error);
-      res.status(500).json({ error: 'An error occurred while processing the payment' });
-    }
+  } catch (error) {
+    console.error('Error processing payment:', error);
+    res.status(500).json({ error: 'An error occurred while processing the payment' });
+  }
 });
 
 const { requireAdmin } = require('./middleware/admin_authorization.js'); 
