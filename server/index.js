@@ -169,6 +169,19 @@ app.post('/court', async (req, res) => {
   }
 });
 
+const { edit_court } = require('./controllers/courtcontroller.js');
+
+app.patch('/court', async (req, res) => {
+  try {
+    const court = await edit_court(req.body);
+    res.status(201).json({ message: 'Court updated.' });
+  } catch (e) {
+    console.error('Error updating court', error);
+    res.status(500).send('An error occurred: ' + error.message);
+  }
+});
+
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
