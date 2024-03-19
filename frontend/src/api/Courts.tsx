@@ -38,7 +38,7 @@ export const updateCourt = async (data: CourtUpdateRequest) => {
         throw new Error('User email and password are required for this operation.');
     }
 
-    return axiosInstance.patch(`$/court`, data, {
+    return axiosInstance.patch(`/edit-court`, data, {
         headers: {
             'User-Email': userEmail,
             'User-Type': userType,
