@@ -14,7 +14,7 @@ exports.create_court = async (court_data) => {
 
 exports.edit_court = async (court_data) => {
     try{
-        const court = await courts.findOneAndReplace({_name: court_data.name},
+        const court = await Court.findOneAndReplace({_name: court_data.name},
             {dayPrice: court_data.dayPrice, nightPrice: court_data.nightPrice},
             {new: true});
         return court;
