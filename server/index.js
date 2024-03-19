@@ -171,7 +171,7 @@ app.post('/court', async (req, res) => {
 
 const { edit_court } = require('./controllers/courtcontroller.js');
 
-app.patch('/edit-court', async (req, res) => {
+app.patch('/court', async (req, res) => {
   try {
     const court = await edit_court(req.body);
     res.status(201).json({ message: 'Court updated.' });
