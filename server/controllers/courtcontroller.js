@@ -14,9 +14,13 @@ exports.create_court = async (court_data) => {
 
 exports.edit_court = async (court_data) => {
     try{
-        const court = await Court.findOneAndReplace({_name: court_data.name},
-            {dayPrice: court_data.dayPrice, nightPrice: court_data.nightPrice},
-            {new: true});
+        const court = await Court.findOneAndUpdate({name: court_data.name},
+            {dayPrice: court_data.dayPrice, nightPrice: court_data.nightPrice});
+        
+        if (!court) {
+            throw new Error('Court not found.');
+        }
+        
         return court;
     } catch (e) {
         console.error(e);
