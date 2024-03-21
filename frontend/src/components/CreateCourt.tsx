@@ -2,6 +2,7 @@ import React, { useState, ChangeEvent } from 'react';
 import { createCourt } from '../api/Courts';
 import { CourtCreateRequest } from '../models/Courts';
 import { containerStyle } from './ui/Background';
+import { toast } from 'react-toastify';
 
 export const CreateCourtForm: React.FC = () => {
     const [createFormData, setCreateFormData] = useState<CourtCreateRequest>({
@@ -23,10 +24,16 @@ export const CreateCourtForm: React.FC = () => {
         e.preventDefault();
         try {
             await createCourt(createFormData);
-            alert('Court created successfully!');
+            toast.success('Court created successfully!');
+            setCreateFormData({
+                name: '',
+                type: '',
+                dayPrice: 0,
+                nightPrice: 0,
+            });
 
         } catch (error) {
-            alert('Failed to create court.');
+            toast.error('Failed to create court.');
         }
     };
 
