@@ -177,8 +177,17 @@ const { edit_court } = require('./controllers/courtcontroller.js');
 
 app.patch('/court', async (req, res) => {
   try {
-    const court = await edit_court(req.body);
-    res.status(201).json({ message: 'Court updated.' });
+    const user = await User.findOne({ email_address: req.headers['user-email'] });
+    const valid_pwd = await bcrypt.compare(req.headers['user-password'], user.password);
+
+    if (req.headers['user-type'] !== 'admin' ||
+        req.headers['user-email'] !== 'admin@admin.admin' ||
+        !valid_pwd) {
+      res.status(403).json({ message: "Forbidden" });
+    } else {
+      const court = await edit_court(req.body);
+      res.status(201).json({ message: 'Court updated.' });
+    }
   } catch (e) {
     console.error('Error updating court', error);
     res.status(500).send('An error occurred: ' + error.message);
