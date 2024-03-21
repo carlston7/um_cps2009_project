@@ -1,11 +1,11 @@
 import React from 'react';
-import { StripePaymentForm } from '../components/PaymentForm';
+import Topup  from '../components/PaymentForm';
 
 const PaymentPage = () => {
   return (
       <div>
         <h1>..</h1>
-        <StripePaymentForm />
+        <Topup />
       </div>
   );
 };

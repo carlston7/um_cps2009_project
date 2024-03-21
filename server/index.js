@@ -112,53 +112,88 @@ app.post('/login', async (req, res) => {
   }
 });
 
-//Stripe Payment
-app.post('/payment', async (req, res) => {
+app.post("/topup", async (req, res) => {
   try {
-    const { email, paymentMethodId } = req.body;
+    const { email, amount } = req.body;
 
-    const user = await User.findOne({ email_address: email });
-    if (!user) {
-      return res.status(404).send('User not found');
+    if (!email || !amount) {
+      return res.status(400).send("Email and amount are required.");
     }
 
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: 100,
-      currency: 'eur',
-      payment_method: paymentMethodId,
-      confirmation_method: 'automatic',
-      confirm: true,
-      return_url: "https://cps2009project.azurewebsites.net/", 
+    const session = await stripe.checkout.sessions.create({
+      line_items: [{
+        price_data: {
+          currency: "eur",
+          product_data: { name: "Balance Top-Up" },
+          unit_amount: amount * 100,
+        },
+        quantity: 1,
+      }],
+      payment_method_types: ["card"],
+      mode: "payment",
+      success_url: `https://cps2009project.azurewebsites.net/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `https://cps2009project.azurewebsites.net/topup`,
     });
 
-    if (paymentIntent.status === 'succeeded') {
-      user.credit += 1; // adjust later to match amount
-      await user.save();
-      res.status(200).json({ message: 'Payment successful, credit added to user', clientSecret: paymentIntent.client_secret });
-    } else {
-      res.status(400).json({ error: 'Payment failed' });
-    }
+    res.json({ url: session.url });
   } catch (error) {
-    console.error('Error processing payment:', error);
-    res.status(500).json({ error: 'An error occurred while processing the payment' });
+    console.error("Error creating checkout session", error);
+    res.status(500).send("Error creating checkout session");
   }
+  // update db later
 });
 
-const { requireAdmin } = require('./middleware/admin_authorization.js'); 
+// const { requireAdmin } = require('./middleware/admin_authorization.js'); 
+const { create_court } = require('./controllers/courtcontroller.js');
 
-//app.post('/court', requireAdmin, async (req, res) => {
-  app.post('/court', async (req, res) => {
+// app.post('/court', requireAdmin, async (req, res) => {
+app.post('/court', async (req, res) => {
   try {
-    if(req.header['User-Type']) {
+    // const court = await create_court(req.body);
+    // res.status(201).json({ message: 'Success' });
+    if(req.headers['user-type'] !== 'admin') {
+      res.status(403).json({ message: "Forbidden" });
+    } else {
       const court = await create_court(req.body);
-      return res.status(201).json({ message: 'Success' });
-    }
-    return res.status(403).json({ message: "Forbidden" });   
+      res.status(201).json({ message: 'Success' });
+    }    
   } catch (error) {
     console.error('Error creating court', error); // Log the specific error
     res.status(500).send('An error occurred: ' + error.message);
+    // if(error.statusCode === 403) {
+    //   return res.status(403).json({ message: "Forbidden" });
+    // } else {
+    //   console.error('Error creating court', error); // Log the specific error
+    //   res.status(500).send('An error occurred: ' + error.message);
+    // }
   }
 });
+
+const { edit_court } = require('./controllers/courtcontroller.js');
+
+app.patch('/court', async (req, res) => {
+  try {
+    const court = await edit_court(req.body);
+    res.status(201).json({ message: 'Court updated.' });
+  } catch (e) {
+    console.error('Error updating court', error);
+    res.status(500).send('An error occurred: ' + error.message);
+  }
+});
+
+const { get_available_courts } = require('./controllers/bookingcontroller.js');
+
+app.get('/courts', async (req, res) => {
+  try {
+    const courts = await get_available_courts(req.query.dateTime);
+
+    res.status(201).json(courts);
+  } catch (e) {
+    console.error('Error getting courts', error);
+    res.status(500).send('An error occurred: ' + error.message);
+  }
+});
+
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('*', function (req, res) {

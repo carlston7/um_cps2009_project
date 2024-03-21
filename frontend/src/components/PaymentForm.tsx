@@ -1,87 +1,40 @@
 import React, { useState } from 'react';
-import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import { apiCreatePaymentIntent } from '../api/Payment'; 
-import { Button } from './ui/button';
-import { toast } from 'react-toastify';
-import { Link, useNavigate } from 'react-router-dom';
-import { containerStyle } from './ui/Background'; 
+import axiosInstance from '../api/AxiosInstance';
+import { containerStyle } from './ui/Background';
 
-export const StripePaymentForm = () => {
-  const stripe = useStripe();
-  const elements = useElements();
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+const TopUp = () => {
+  const [amount, setAmount] = useState('');
 
-  const handleSubmit = async (event: { preventDefault: () => void; }) => {
+  const handleTopUp = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
-    if (!stripe || !elements) {
-      toast.error('Stripe has not been properly initialized.');
-      return;
-    }
-
-    setLoading(true);
-
-    const cardElement = elements.getElement(CardElement);
-    if (!cardElement) {
-      toast.error('Payment failed: Unable to find card details');
-      setLoading(false);
-      return;
-    }
-  
-    const { error: paymentMethodError, paymentMethod } = await stripe.createPaymentMethod({
-      type: 'card',
-      card: cardElement,
-    });
-  
-    if (paymentMethodError) {
-      console.error('[error]', paymentMethodError);
-      toast.error(`Payment failed: ${paymentMethodError.message}`);
-      setLoading(false);
-      return; // Early return on error
-    }
-
-    // Assuming apiCreatePaymentIntent correctly handles the creation and returns the clientSecret
     try {
-      const { data: { clientSecret } } = await apiCreatePaymentIntent(paymentMethod.id, 'https://example.com/return_url');
-      console.log("client secret: ", clientSecret);
-      
-      const { error: confirmationError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: paymentMethod.id,
+      const { data } = await axiosInstance.post('/topup', {
+        email: localStorage.getItem('userEmail'), 
+        amount: parseFloat(amount),
       });
-  
-      if (confirmationError) {
-        console.error('[confirmError]', confirmationError);
-        toast.error(`Payment confirmation failed: ${confirmationError.message}`);
-        setLoading(false);
-      } else if (paymentIntent && paymentIntent.status === 'succeeded') {
-        console.log('[PaymentIntent]', paymentIntent);
-        toast.success('Payment successful');
-        navigate('/'); // Navigate to home or success page
-        setLoading(false);
-      } else {
-        // Handle other paymentIntent statuses as needed (requires_action, processing, etc.)
-        toast.error('Payment process was not successful. Please try again or contact support if this issue persists.');
-        setLoading(false);
+      if (data.url) {
+        window.location.href = data.url; // Redirect user to Stripe Checkout
       }
     } catch (error) {
-      toast.error('Payment process failed');
-      console.error(error);
-      setLoading(false);
+      console.error('Error during top-up:', error);
     }
   };
-  
+
   return (
     <div style={containerStyle}>
-      <h2 style={{ textAlign: 'center' }}>Payment</h2>
-      <form onSubmit={handleSubmit}>
-        <div style={{ padding: '10px', margin: '10px 0', border: '1px solid #ccc', borderRadius: '4px' }}>
-          <CardElement />
-        </div>
-        <Button type="submit" disabled={!stripe || loading} style={{ width: '100%', marginTop: '20px' }}>
-          {loading ? 'Processing...' : 'Pay'}
-        </Button>
-        <p style={{ textAlign: 'center', marginTop: '20px' }}>Need help? <Link to="/help">Contact us</Link></p>
+      <h2>Top Up</h2>
+      <form onSubmit={handleTopUp}>
+        <input
+          type="number"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          placeholder="Enter amount"
+          required
+        />
+        <button type="submit">Top Up</button>
       </form>
     </div>
   );
 };
+
+export default TopUp;
