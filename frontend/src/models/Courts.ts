@@ -6,10 +6,8 @@ export interface Court {
     nightPrice: number;
 }
 export interface DateTimeSelection {
-    date: string;
-    time: string;
+    dateTime: string;
 }
-
 export interface CourtCreateRequest {
     name: string;
     type: string;

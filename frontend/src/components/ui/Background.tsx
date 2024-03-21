@@ -1,5 +1,5 @@
 import React, { CSSProperties } from 'react';
-import backgroundImage from '../../imgs/background.webp';
+import backgroundImage from '../../imgs/seamless.avif';
 
 export const containerStyle: CSSProperties = {
     display: 'flex',

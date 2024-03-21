@@ -8,8 +8,12 @@ export const ViewCourtPage = () => {
     const [courts, setCourts] = useState<Court[]>([]);
 
     const handleDateTimeSelected = async (dateTime: DateTimeSelection) => {
-        const fetchedCourts = await fetchCourts(dateTime);
-        setCourts(fetchedCourts);
+        try {
+            const courtsData = await fetchCourts(dateTime);
+            setCourts(courtsData); // Ensure this is an array
+        } catch (error) {
+            console.error('Error fetching courts:', error);
+        }
     };
 
     return (

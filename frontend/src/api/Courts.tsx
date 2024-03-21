@@ -49,13 +49,13 @@ export const updateCourt = async (data: CourtUpdateRequest) => {
 
 export const fetchCourts = async (dateTime: DateTimeSelection): Promise<Court[]> => {
     try {
+        console.log("dateTime: ", dateTime);
         const response = await axiosInstance.get<Court[]>('/courts', {
             params: {
-                date: dateTime.date,
-                time: dateTime.time,
+                dateTime: dateTime.dateTime,
             },
         });
-    return response.data;
+        return response.data;
     } catch (error) {
         console.error('Error fetching courts:', error);
         throw error;

@@ -11,7 +11,8 @@ export const DateTimeSelector: React.FC<Props> = ({ onDateTimeSelected }) => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onDateTimeSelected({ date, time });
+        const dateTimeIso = `${date}T${time}:00`;
+        onDateTimeSelected({ dateTime: dateTimeIso });
     };
 
     const hours = [];

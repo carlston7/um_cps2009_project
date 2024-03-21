@@ -1,54 +1,66 @@
 import React from 'react';
-import AiGeneratedFamilyPlayingTennis from '../imgs/homepage.webp';
+import { Link as RouterLink } from 'react-router-dom';
 import { CSSProperties } from 'react';
+import courtPatternImage from '../imgs/court.jpg';
+
+const containerStyle: CSSProperties = {
+    textAlign: 'center', // Centers the text and image
+    paddingTop: '20px', // Provides some spacing at the top
+};
+
+const textStyle: CSSProperties = {
+    display: 'inline-block', // Allows the text block to fit content width
+    backgroundColor: '#097969', // Background color of the text block
+    color: 'white',
+    padding: '2rem',
+    borderRadius: '10px', // Optional: adds rounded corners to the text block
+    marginBottom: '20px', // Space between the text block and the image
+};
 
 const imageStyle: CSSProperties = {
     maxWidth: '100%',
     height: 'auto',
     display: 'block',
-    margin: '20px auto',
+    margin: '0 auto', // Centers the image
     transition: 'transform 0.5s ease',
 };
 
-const containerStyle: CSSProperties = {
-    background: 'linear-gradient(to right, #097969, #209e61)', 
-    textAlign: 'center',
-    maxWidth: '800px',
-    margin: '0 auto',
-    padding: '20px',
-    borderRadius: '8px',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-    color: 'white',
+const titleStyle: CSSProperties = {
+    fontWeight: 'bold',
+    fontSize: '2.5rem',
+    marginBottom: '0.5rem',
 };
 
-const headerStyle: CSSProperties = {
-    ...containerStyle,
-    marginBottom: '20px',
+const paragraphStyle: CSSProperties = {
+    marginBottom: '2rem',
 };
 
-const Home = () => {
+const loginLinkStyle: CSSProperties = {
+    color: '#FFD700',
+    fontWeight: 'bold',
+    textDecoration: 'none',
+};
+
+export const Home = () => {
     return (
-        <div>
-            <div>
-                <h1 style={headerStyle}>Welcome to Our Family Tennis Club!</h1>
-            </div>
-            <div style={containerStyle}>
-                <p>
+        <div style={containerStyle}>
+            <div style={textStyle}>
+                <h1 style={titleStyle}>Welcome to Our Family Tennis Club!</h1>
+                <p style={paragraphStyle}>
                     Tennis is a social sport available for players of all ages and our
-                    club is present to provide you with the best courts to best suit your needs.
+                    club is present to provide you with the best courts to suit your needs.
                     Book your court and come join us at cps2009project, we can't wait to have you!
                 </p>
+                <RouterLink to
+                    ="/login" style={loginLinkStyle}>Login</RouterLink>
             </div>
-
             <img
-                src={AiGeneratedFamilyPlayingTennis}
-                alt="Family playing tennis"
+                src={courtPatternImage}
+                alt="Tennis court"
                 style={imageStyle}
                 onMouseOver={e => (e.currentTarget.style.transform = 'scale(1.05)')}
-                onMouseOut={e => (e.currentTarget.style.transform = 'scale(1)')} 
+                onMouseOut={e => (e.currentTarget.style.transform = 'scale(1)')}
             />
         </div>
     );
 };
-
-export default Home;
