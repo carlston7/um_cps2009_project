@@ -149,9 +149,13 @@ const { create_court } = require('./controllers/courtcontroller.js');
 // app.post('/court', requireAdmin, async (req, res) => {
 app.post('/court', async (req, res) => {
   try {
+    const user = await User.findOne({ email_address: req.headers['user-email'] });
+    const valid_pwd = await bcrypt.compare(req.headers['user-password'], user.password);
     // const court = await create_court(req.body);
     // res.status(201).json({ message: 'Success' });
-    if(req.headers['user-type'] !== 'admin') {
+    if (req.headers['user-type'] !== 'admin' ||
+        req.headers['user-email'] !== 'admin@admin.admin' ||
+        !valid_pwd) {
       res.status(403).json({ message: "Forbidden" });
     } else {
       const court = await create_court(req.body);
