@@ -14,13 +14,17 @@ export const CourtsDisplay: React.FC<Props> = ({ courts }) => {
     }
     return (
         <div>
-            {courts.map((court) => (
-                <div key={court.id}>
-                    <h3>{court.name}</h3>
-                    <p>Day Price: ${court.dayPrice}</p>
-                    <p>Night Price: ${court.nightPrice}</p>
-                </div>
-            ))}
+            {courts.map((court) => {
+                const dayPrice = typeof court.dayPrice === 'object' ? court.dayPrice.$numberDecimal : court.dayPrice;
+                const nightPrice = typeof court.nightPrice === 'object' ? court.nightPrice.$numberDecimal : court.nightPrice;
+                return (
+                    <div key={court.id}>
+                        <h3>{court.name}</h3>
+                        <p>Day Price: ${dayPrice}</p>
+                        <p>Night Price: ${nightPrice}</p>
+                    </div>
+                );
+            })}
         </div>
     );
 };

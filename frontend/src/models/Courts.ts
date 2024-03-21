@@ -2,9 +2,10 @@ export interface Court {
     id: string
     name: string;
     type: string
-    dayPrice: number;
-    nightPrice: number;
+    dayPrice: number | { $numberDecimal: string };
+    nightPrice: number | { $numberDecimal: string };
 }
+
 export interface DateTimeSelection {
     dateTime: string;
 }
