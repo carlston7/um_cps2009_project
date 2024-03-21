@@ -43,31 +43,37 @@ export default function TopBar() {
     };
     console.log("isAdmin: " + isAdmin);
     return (
-        <AppBar position="static" sx={{ backgroundImage: 'linear-gradient(to right, #097969, #209e61)' }}>
-            <Toolbar>
-                <TopbarLink to="/" text="Home" />
-                <TopbarLink to="/view-courts" text="View Courts" />
-                {isAdmin && (<>
-                    <TopbarLink to="/new-court" text="Create Court" />
-                    <TopbarLink to="/edit-court" text="Edit Court" />
-                </>)}
-                {isAuthenticated && (
-                    <>
-                        <TopbarLink to="/topup" text="Topup" />
-
-                        <IconButton onClick={handleLogout} color="inherit">
-                            <Logout />
-                        </IconButton>
-                    </>
-                )}
-                {!isAuthenticated && (
-                    <>
-                        <TopbarLink to="/signup" text="Sign Up" />
-                        <TopbarLink to="/login" text="Login" />
-                    </>
-                )}
-                <Box flexGrow={1} />
-            </Toolbar>
-        </AppBar>
+        <>
+            <AppBar position="static" sx={{ backgroundImage: 'linear-gradient(to right, #097969, #209e61)' }}>
+                <Toolbar>
+                    <TopbarLink to="/" text="Home" />
+                    <TopbarLink to="/view-courts" text="View Courts" />
+                    {isAdmin && (
+                        <>
+                            <TopbarLink to="/new-court" text="Create Court" />
+                            <TopbarLink to="/edit-court" text="Edit Court" />
+                        </>
+                    )}
+                    {isAuthenticated && (
+                        <>
+                            <TopbarLink to="/topup" text="Topup" />
+                            <IconButton onClick={handleLogout} color="inherit">
+                                <Logout />
+                            </IconButton>
+                        </>
+                    )}
+                    {!isAuthenticated && (
+                        <>
+                            <TopbarLink to="/signup" text="Sign Up" />
+                            <TopbarLink to="/login" text="Login" />
+                        </>
+                    )}
+                    <Box flexGrow={1} />
+                </Toolbar>
+            </AppBar>
+            {/* Add a Box with height as padding below the AppBar */}
+            <Box height="20px" />
+        </>
     );
 }
+

@@ -3,8 +3,7 @@ import Topup  from '../components/PaymentForm';
 
 const PaymentPage = () => {
   return (
-      <div>
-        <h1>..</h1>
+    <div>
         <Topup />
       </div>
   );

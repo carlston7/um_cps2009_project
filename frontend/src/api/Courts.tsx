@@ -1,4 +1,4 @@
-import { Court, CourtCreateRequest, CourtUpdateRequest, TimeSlot } from '../models/Courts';
+import { Court, CourtCreateRequest, CourtUpdateRequest, DateTimeSelection } from '../models/Courts';
 import axiosInstance from './AxiosInstance';
 
 export const createCourt = async (data: CourtCreateRequest) => {
@@ -47,12 +47,17 @@ export const updateCourt = async (data: CourtUpdateRequest) => {
     });
 };
 
-export const getCourts = async (): Promise<Court[]> => {
-    const response = await axiosInstance.get(`/courts`);
+export const fetchCourts = async (dateTime: DateTimeSelection): Promise<Court[]> => {
+    try {
+        const response = await axiosInstance.get<Court[]>('/courts', {
+            params: {
+                date: dateTime.date,
+                time: dateTime.time,
+            },
+        });
     return response.data;
-};
-
-export const getCourtAvailability = async (courtId: string, date: string): Promise<TimeSlot[]> => {
-    const response = await axiosInstance.get(`/court-availability`, { params: { courtId, date } });
-    return response.data;
+    } catch (error) {
+        console.error('Error fetching courts:', error);
+        throw error;
+    }
 };

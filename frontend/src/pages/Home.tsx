@@ -29,7 +29,6 @@ const headerStyle: CSSProperties = {
 const Home = () => {
     return (
         <div>
-            <h1>.</h1>
             <div>
                 <h1 style={headerStyle}>Welcome to Our Family Tennis Club!</h1>
             </div>
