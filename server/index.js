@@ -181,6 +181,19 @@ app.patch('/court', async (req, res) => {
   }
 });
 
+const { get_available_courts } = require('./controllers/bookingcontroller.js');
+
+app.get('/courts', async (req, res) => {
+  try {
+    const courts = await get_available_courts(req.query.dateTime);
+
+    res.status(201).json(courts);
+  } catch (e) {
+    console.error('Error getting courts', error);
+    res.status(500).send('An error occurred: ' + error.message);
+  }
+});
+
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('*', function (req, res) {
