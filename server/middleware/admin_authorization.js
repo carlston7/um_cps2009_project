@@ -6,7 +6,6 @@
     // }
     
     // Check if user is an admin
-
 //     if (req.header('user-type') !== 'admin') {
 //         const error = new Error("Forbidden");
 //         error.statusCode = 403;

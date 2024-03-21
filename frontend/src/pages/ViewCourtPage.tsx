@@ -1,13 +1,25 @@
-import React from 'react';
-import CourtsComponent from '../components/CourtList';
+import React, { useState } from 'react';
+import { DateTimeSelector } from '../components/DateTimeSelector';
+import { CourtsDisplay } from '../components/DisplayCourts';
+import { fetchCourts } from '../api/Courts';
+import { Court, DateTimeSelection } from '../models/Courts';
 
-const ViewCourtPage = () => {
+export const ViewCourtPage = () => {
+    const [courts, setCourts] = useState<Court[]>([]);
+
+    const handleDateTimeSelected = async (dateTime: DateTimeSelection) => {
+        try {
+            const courtsData = await fetchCourts(dateTime);
+            setCourts(courtsData); // Ensure this is an array
+        } catch (error) {
+            console.error('Error fetching courts:', error);
+        }
+    };
+
     return (
         <div>
-            <h1>Courts:</h1>
-            <CourtsComponent />
+            <DateTimeSelector onDateTimeSelected={handleDateTimeSelected} />
+            <CourtsDisplay courts={courts} />
         </div>
     );
 };
-
-export default ViewCourtPage;

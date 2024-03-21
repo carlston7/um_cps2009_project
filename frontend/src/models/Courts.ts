@@ -1,14 +1,13 @@
-export interface TimeSlot {
-    index: number;
-}
-
 export interface Court {
-    id: string;
+    id: string
     name: string;
+    type: string
     dayPrice: number;
     nightPrice: number;
 }
-
+export interface DateTimeSelection {
+    dateTime: string;
+}
 export interface CourtCreateRequest {
     name: string;
     type: string;
