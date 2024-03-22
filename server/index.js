@@ -157,6 +157,10 @@ app.post('/webhook', express.json(), async (request, response) => {
         return response.status(404).send('User not found');
       }
 
+      if (isNaN(amountPaid)) {
+        return response.status(400).send("Invalid amount received");
+      }
+
       // Update user's credit in the database
       user.credit += parseFloat(amountPaid);
       await user.save();
