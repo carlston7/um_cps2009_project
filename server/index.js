@@ -148,7 +148,7 @@ app.post('/webhook', express.json(), async (request, response) => {
 
   // Handle the event
   if (event.type === 'charge.succeeded') {
-    const amountPaid = event.data.object.amount;
+    const amountPaid = event.data.object.amount/100;
     const email = event.data.object.email; // Get email from the event data
 
     try {
@@ -158,7 +158,7 @@ app.post('/webhook', express.json(), async (request, response) => {
       }
 
       // Update user's credit in the database
-      user.credit += parseInt(amountPaid);
+      user.credit += parseFloat(amountPaid);
       await user.save();
       console.log("Successfully topped up credit in db");
 
