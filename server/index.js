@@ -143,7 +143,7 @@ app.post("/topup", async (req, res) => {
   // update db later
 });
 
-app.post('/webhook', express.json({ type: 'application/json' }), async (request, response) => {
+app.post('/webhook', express.json(), async (request, response) => {
   const event = request.body;
 
   // Handle the event
@@ -171,6 +171,7 @@ app.post('/webhook', express.json({ type: 'application/json' }), async (request,
     response.status(200).send('Unhandled event type');
   }
 });
+
 
 
 // const { requireAdmin } = require('./middleware/admin_authorization.js'); 
