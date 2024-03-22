@@ -160,6 +160,7 @@ app.post('/webhook', express.json({ type: 'application/json' }), async (request,
       // Update user's credit in the database
       user.credit += amountPaid;
       await user.save();
+      console.log("Successfully topped up credit in db");
 
       response.status(200).send('User credit updated successfully');
     } catch (error) {
