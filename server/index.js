@@ -158,7 +158,7 @@ app.post('/webhook', express.json(), async (request, response) => {
       }
 
       // Update user's credit in the database
-      user.credit += amountPaid;
+      user.credit += parseInt(amountPaid);
       await user.save();
       console.log("Successfully topped up credit in db");
 
