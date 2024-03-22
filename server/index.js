@@ -149,7 +149,7 @@ app.post('/webhook', express.json({ type: 'application/json' }), async (request,
   // Handle the event
   if (event.type === 'payment_intent.succeeded') {
     const amountPaid = event.data.object.amount / 100; // Convert amount to euro
-    const email = event.data.object.customer_email; // Get email from the event data
+    const email = event.data.object.email; // Get email from the event data
 
     try {
       const user = await User.findOne({ email_address: email });
