@@ -147,7 +147,7 @@ app.post('/webhook', express.json(), async (request, response) => {
   const event = request.body;
 
   // Handle the event
-  if (event.type === 'payment_intent.succeeded') {
+  if (event.type === 'charge.succeeded') {
     const amountPaid = event.data.object.amount / 100; // Convert amount to euro
     const email = event.data.object.email; // Get email from the event data
 
