@@ -143,6 +143,35 @@ app.post("/topup", async (req, res) => {
   // update db later
 });
 
+app.post('/webhook', express.json({ type: 'application/json' }), async (request, response) => {
+  const event = request.body;
+
+  // Handle the event
+  if (event.type === 'payment_intent.succeeded') {
+    const amountPaid = event.data.object.amount / 100; // Convert amount to euro
+    const email = event.data.object.customer_email; // Get email from the event data
+
+    try {
+      const user = await User.findOne({ email_address: email });
+      if (!user) {
+        return response.status(404).send('User not found');
+      }
+
+      // Update user's credit in the database
+      user.credit += amountPaid;
+      await user.save();
+
+      response.status(200).send('User credit updated successfully');
+    } catch (error) {
+      console.error('Error updating user credit:', error);
+      response.status(500).send('An error occurred while updating user credit');
+    }
+  } else {
+    response.status(200).send('Unhandled event type');
+  }
+});
+
+
 // const { requireAdmin } = require('./middleware/admin_authorization.js'); 
 const { create_court } = require('./controllers/courtcontroller.js');
 
