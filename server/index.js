@@ -163,9 +163,14 @@ app.post('/webhook', express.json(), async (request, response) => {
 
       // Update user's credit in the database
       console.log(amountPaid);
-      User.credit += amountPaid;
-      await User.save();
-      console.log("Successfully topped up credit in db");
+      const updateDocument = {
+        $inc: {
+            credit: amountPaid // This will increment the numericField by amountPaid
+        }
+    };
+    const result = await collection.updateOne(user, updateDocument);
+    console.log(`${result.modifiedCount} document(s) updated`);
+    console.log("Successfully topped up credit in db");
 
       response.status(200).send('User credit updated successfully');
     } catch (error) {
