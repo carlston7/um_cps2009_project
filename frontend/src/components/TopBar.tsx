@@ -75,11 +75,12 @@ export default function TopBar() {
                         open={Boolean(anchorEl)}
                         onClose={handleMenuClose}
                     >
+                        <MenuItem key="help" onClick={handleMenuClose} component={RouterLink} to="/help">Help</MenuItem>
                         {!isAuthenticated ? [
                             <MenuItem key="signup" onClick={handleMenuClose} component={RouterLink} to="/signup">Sign Up</MenuItem>,
                             <MenuItem key="login" onClick={handleMenuClose} component={RouterLink} to="/login">Login</MenuItem>
                         ] : [
-                            <MenuItem key="help" onClick={handleMenuClose} component={RouterLink} to="/help">Help</MenuItem>,
+                                <MenuItem key="topup" onClick={handleMenuClose} component={RouterLink} to="/topup">topup</MenuItem>,
                             <MenuItem key="logout" onClick={handleLogout}>
                                 Logout
                                 <Logout fontSize="small" />

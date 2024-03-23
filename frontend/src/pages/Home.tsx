@@ -56,7 +56,7 @@ export const Home = () => {
     return (
         <div style={containerStyle}>
             <div style={textStyle}>
-                <h1 style={titleStyle}>Welcome to Our Family Tennis Club!</h1>
+                <h1 style={titleStyle}>CPS2009 Tennis Facility</h1>
                 <p style={paragraphStyle}>
                     Tennis is a social sport available for players of all ages and our
                     club is present to provide you with the best courts to suit your needs.
