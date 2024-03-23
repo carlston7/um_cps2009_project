@@ -148,11 +148,11 @@ app.post('/webhook', express.json(), async (request, response) => {
 
   // Handle the event
   if (event.type === 'charge.succeeded') {
-    const amountPaid = event.data.object.amount;
+    const amountPaid = event.data.object.amount/100;
     const email = event.data.object.email; // Get email from the event data
 
     try {
-      let user = await User.findOne({ email_address: email });
+      const user = await User.findOne({ email_address: email });
       if (!user) {
         return response.status(404).send('User not found');
       }
@@ -163,8 +163,8 @@ app.post('/webhook', express.json(), async (request, response) => {
 
       // Update user's credit in the database
       console.log(amountPaid);
-      user.credit += amountPaid;
-      await user.save();
+      User.credit += amountPaid;
+      await User.save();
       console.log("Successfully topped up credit in db");
 
       response.status(200).send('User credit updated successfully');
