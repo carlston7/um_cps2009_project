@@ -17,43 +17,66 @@ function getCourtTypeColor(type: string): string {
 
 interface Props {
     courts: Court[];
+    currentTime: string;
 }
 
-export const CourtsDisplay: React.FC<Props> = ({ courts }) => {
+export const CourtsDisplay: React.FC<Props> = ({ courts, currentTime }) => {
     if (!Array.isArray(courts)) {
         console.error('courts is not an array', courts);
         toast.error("No courts available for this date and time");
         return <div>No courts available for this date and time.</div>;
     }
 
-    const courtItemStyle = (type: string): CSSProperties => ({
-        display: 'flex',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        padding: '10px',
-        margin: '10px 0',
-        borderRadius: '4px',
-        background: getCourtTypeColor(type),
-        color: 'white', // assuming you want the text to be white
-        width: '100%', // Ensure the item takes full width of its container
-    });
+    const isNightTime = (time: string) => {
+        return parseInt(time.split(':')[0], 10) >= 18;
+    };
+    const tableStyle: CSSProperties = {
+        width: '50%',
+        tableLayout: 'fixed', 
+        margin: 'auto',
+    };
 
+    const cellStyle: CSSProperties = {
+        textAlign: 'center',
+        padding: '10px', 
+        borderBottom: '1px solid #ddd', 
+    };
+    const getRowStyle = (type: string): CSSProperties => ({
+        background: getCourtTypeColor(type),
+        color: 'white', 
+        textAlign: 'center',
+        width: '100%',
+    });
+    const getPriceValue = (price: number | { $numberDecimal: string }): string => {
+        if (typeof price === 'number') {
+          return price.toString();
+        } else if (price && typeof price.$numberDecimal === 'string') {
+          return price.$numberDecimal;
+        }
+        return '-1'; 
+      };
     return (
-        <div>
-            {courts.map((court) => {
-                const courtType = Array.isArray(court.type) ? court.type[0] : court.type;
-                const dayPrice = typeof court.dayPrice === 'object' ? court.dayPrice.$numberDecimal : court.dayPrice;
-                const nightPrice = typeof court.nightPrice === 'object' ? court.nightPrice.$numberDecimal : court.nightPrice;
-                console.log(courtType);
-                return (
-                    <div key={court.id} style={courtItemStyle(courtType)}>
-                        <span>{court.name}</span>
-                        <span>Type: {court.type}</span>
-                        <span>Day Price: ${dayPrice}</span>
-                        <span>Night Price: ${nightPrice}</span>
-                    </div>
-                );
-            })}
-        </div>
+        <table style={tableStyle}>
+            <thead>
+                <tr>
+                    <th style={cellStyle}>Court Name</th>
+                    <th style={cellStyle}>Type</th>
+                    <th style={cellStyle}>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {courts.map((court) => {
+                    const courtType = Array.isArray(court.type) ? court.type[0] : court.type;
+                    const displayPrice = getPriceValue(isNightTime(currentTime) ? court.nightPrice : court.dayPrice);
+                    return (
+                        <tr key={court.id} style={getRowStyle(courtType)}>
+                            <td style={cellStyle}>{court.name}</td>
+                            <td style={cellStyle}>{court.type}</td>
+                            <td style={cellStyle}>${displayPrice}</td>
+                        </tr>
+                    );
+                })}
+            </tbody>
+        </table>
     );
 };

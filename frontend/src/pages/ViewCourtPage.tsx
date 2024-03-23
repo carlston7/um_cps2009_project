@@ -6,11 +6,15 @@ import { Court, DateTimeSelection } from '../models/Courts';
 
 export const ViewCourtPage = () => {
     const [courts, setCourts] = useState<Court[]>([]);
+    const [selectedTime, setSelectedTime] = useState('');
+
 
     const handleDateTimeSelected = async (dateTime: DateTimeSelection) => {
         try {
             const courtsData = await fetchCourts(dateTime);
-            setCourts(courtsData); // Ensure this is an array
+            setCourts(courtsData); 
+            const time = new Date(dateTime.dateTime).toTimeString().substring(0, 5);
+            setSelectedTime(time);
         } catch (error) {
             console.error('Error fetching courts:', error);
         }
@@ -19,7 +23,7 @@ export const ViewCourtPage = () => {
     return (
         <div>
             <DateTimeSelector onDateTimeSelected={handleDateTimeSelected} />
-            <CourtsDisplay courts={courts} />
+            <CourtsDisplay courts={courts} currentTime={selectedTime}/>
         </div>
     );
 };

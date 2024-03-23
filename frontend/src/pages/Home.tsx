@@ -1,7 +1,10 @@
-import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
+import {Link as RouterLink}  from 'react-router-dom';
 import { CSSProperties } from 'react';
 import courtPatternImage from '../imgs/court.jpg';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const containerStyle: CSSProperties = {
     textAlign: 'center', // Centers the text and image
@@ -40,8 +43,16 @@ const loginLinkStyle: CSSProperties = {
     fontWeight: 'bold',
     textDecoration: 'none',
 };
-
 export const Home = () => {
+    const { isAuthenticated, logout } = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout();
+        toast.success('Logged out successfully');
+        navigate('/');
+    };
+
     return (
         <div style={containerStyle}>
             <div style={textStyle}>
@@ -51,8 +62,11 @@ export const Home = () => {
                     club is present to provide you with the best courts to suit your needs.
                     Book your court and come join us at cps2009project, we can't wait to have you!
                 </p>
-                <RouterLink to
-                    ="/login" style={loginLinkStyle}>Login</RouterLink>
+                {!isAuthenticated ? (
+                    <RouterLink to="/login" style={loginLinkStyle}>Login</RouterLink>
+                ) : (
+                    <a href="#logout" style={loginLinkStyle} onClick={handleLogout}>Logout</a>
+                )}
             </div>
             <img
                 src={courtPatternImage}

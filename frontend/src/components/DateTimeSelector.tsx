@@ -5,9 +5,18 @@ import { containerStyle } from './ui/Background';
 interface Props {
     onDateTimeSelected: (dateTime: DateTimeSelection) => void;
 }
+
 export const DateTimeSelector: React.FC<Props> = ({ onDateTimeSelected }) => {
     const [date, setDate] = useState('');
     const [time, setTime] = useState('09:00');
+
+    // Get today's date in YYYY-MM-DD format
+    const today = new Date().toISOString().split('T')[0];
+
+    // Calculate the max date (one month in advance from today)
+    const maxDate = new Date();
+    maxDate.setMonth(maxDate.getMonth() + 1);
+    const maxDateValue = maxDate.toISOString().split('T')[0];
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -27,6 +36,8 @@ export const DateTimeSelector: React.FC<Props> = ({ onDateTimeSelected }) => {
                     Date:
                     <input
                         type="date"
+                        min={today} // Set the min attribute to today's date
+                        max={maxDateValue} // Set the max attribute to one month in advance
                         value={date}
                         onChange={(e) => setDate(e.target.value)}
                         required
@@ -46,6 +57,7 @@ export const DateTimeSelector: React.FC<Props> = ({ onDateTimeSelected }) => {
                         ))}
                     </select>
                 </label>
+                <p>Kindly note that price for use during the day and price for use during night differ</p>
                 <button type="submit">Check Availability</button>
             </form>
         </div>
