@@ -152,7 +152,7 @@ app.post('/webhook', express.json(), async (request, response) => {
     const email = event.data.object.email; // Get email from the event data
 
     try {
-      const user = await User.findOne({ email_address: email });
+      let user = await User.findOne({ email_address: email });
       if (!user) {
         return response.status(404).send('User not found');
       }
