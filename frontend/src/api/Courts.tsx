@@ -61,3 +61,7 @@ export const fetchCourts = async (dateTime: DateTimeSelection): Promise<Court[]>
         throw error;
     }
 };
+
+export const bookCourt = {
+
+};
