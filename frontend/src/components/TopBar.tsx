@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
-import { Logout } from "@mui/icons-material";
-import { AppBar, Box, IconButton, Toolbar, Typography, Link } from "@mui/material";
 import { toast } from 'react-toastify';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
+import { Logout, Menu as MenuIcon } from "@mui/icons-material";
+import { AppBar, Box, IconButton, Toolbar, Typography, Link, Menu, MenuItem } from "@mui/material";
 
 interface TopbarLinkProps {
     to: string;
@@ -32,41 +32,64 @@ const TopbarLink: React.FC<TopbarLinkProps> = ({ to, text, external = false }) =
 };
 
 export default function TopBar() {
-    const { isAuthenticated, isAdmin, logout } = useContext(AuthContext); 
+    const { isAuthenticated, isAdmin, logout } = useContext(AuthContext);
     const navigate = useNavigate();
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+    const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
 
     const handleLogout = () => {
+        handleMenuClose();
         logout();
         toast.success('Logged out successfully');
         localStorage.clear();
         navigate('/');
     };
-    console.log("isAdmin: " + isAdmin);
-    return (
-        <AppBar position="static" sx={{ backgroundImage: 'linear-gradient(to right, #097969, #209e61)' }}>
-            <Toolbar>
-                <TopbarLink to="/" text="Home" />
-                {isAdmin && (<>
-                    <TopbarLink to="/new-court" text="Create Court" />
-                    <TopbarLink to="/edit-court" text="Edit Court" />
-                </>)}
-                {isAuthenticated && (
-                    <>
-                        <TopbarLink to="/topup" text="Topup" />
 
-                        <IconButton onClick={handleLogout} color="inherit">
-                            <Logout />
-                        </IconButton>
-                    </>
-                )}
-                {!isAuthenticated && (
-                    <>
-                        <TopbarLink to="/signup" text="Sign Up" />
-                        <TopbarLink to="/login" text="Login" />
-                    </>
-                )}
-                <Box flexGrow={1} />
-            </Toolbar>
-        </AppBar>
+    return (
+        <>
+            <AppBar position="static" sx={{ backgroundImage: 'linear-gradient(to right, #097969, #209e61)' }}>
+                <Toolbar>
+                    <TopbarLink to="/" text="Home" />
+                    <TopbarLink to="/view-courts" text="View Courts" />
+                    {isAdmin && [
+                        <TopbarLink key="new-court" to="/new-court" text="Create Court" />,
+                        <TopbarLink key="edit-court" to="/edit-court" text="Edit Court" />
+                    ]}
+                    <Box flexGrow={1} />
+                    <IconButton
+                        color="inherit"
+                        aria-label="menu"
+                        onClick={handleMenuClick}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <Menu
+                        anchorEl={anchorEl}
+                        open={Boolean(anchorEl)}
+                        onClose={handleMenuClose}
+                    >
+                        <MenuItem key="help" onClick={handleMenuClose} component={RouterLink} to="/help">Help</MenuItem>
+                        {!isAuthenticated ? [
+                            <MenuItem key="signup" onClick={handleMenuClose} component={RouterLink} to="/signup">Sign Up</MenuItem>,
+                            <MenuItem key="login" onClick={handleMenuClose} component={RouterLink} to="/login">Login</MenuItem>
+                        ] : [
+                                <MenuItem key="topup" onClick={handleMenuClose} component={RouterLink} to="/topup">topup</MenuItem>,
+                            <MenuItem key="logout" onClick={handleLogout}>
+                                Logout
+                                <Logout fontSize="small" />
+                            </MenuItem>
+                        ]}
+                    </Menu>
+                </Toolbar>
+            </AppBar>
+            <Box height="20px" />
+        </>
     );
 }

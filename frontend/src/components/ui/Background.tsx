@@ -1,7 +1,10 @@
 import React, { CSSProperties } from 'react';
-import backgroundImage from '../../imgs/background.webp';
+import backgroundImage from '../../imgs/seamless.avif';
 
 export const containerStyle: CSSProperties = {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     background: 'linear-gradient(to right, #097969, #209e61)',
     textAlign: 'center',
     maxWidth: '400px',
@@ -10,6 +13,7 @@ export const containerStyle: CSSProperties = {
     borderRadius: '8px',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
     color: 'white',
+    flexDirection: 'column',
 };
 
 

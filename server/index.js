@@ -112,59 +112,142 @@ app.post('/login', async (req, res) => {
   }
 });
 
-//Stripe Payment
-app.post('/payment', async (req, res) => {
+app.post("/topup", async (req, res) => {
   try {
-    const { email, paymentMethodId, returnUrl} = req.body;
+    const { email, amount } = req.body;
 
-    // Retrieve the user from the database
-    const user = await User.findOne({ email_address: email });
-
-    if (!user) {
-      return res.status(404).send('User not found');
+    if (!email || !amount) {
+      return res.status(400).send("Email and amount are required.");
     }
 
-    // Confirm payment with Stripe and create a charge
-    const paymentIntent  = await stripe.paymentIntents.create({
-      amount: 100,
-      currency: 'eur',
-      payment_method: paymentMethodId,
-      confirmation_method: 'automatic',
-      confirm: true,
-      description: 'Buying 1 token',
-      off_session: false,
-      return_url: returnUrl,
+    const session = await stripe.checkout.sessions.create({
+      line_items: [{
+        price_data: {
+          currency: "eur",
+          product_data: { name: "Balance Top-Up" },
+          unit_amount: amount * 100,
+        },
+        quantity: 1,
+      }],
+      payment_method_types: ["card"],
+      mode: "payment",
+      success_url: `https://cps2009project.azurewebsites.net/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `https://cps2009project.azurewebsites.net/topup`,
     });
 
-    //update user's credit balance in db
-    if (paymentIntent.status === 'succeeded') {
-      user.credit += 1; // adjust later to match amount
-      await user.save();
-      res.status(200).json({ message: 'Payment successful, credit added to user', clientSecret: paymentIntent.client_secret });
-    } else {
-      res.status(400).json({ error: 'Payment failed' });
-    }
-    } catch (error) {
-      console.error('Error processing payment:', error);
-      res.status(500).json({ error: 'An error occurred while processing the payment' });
-    }
+    res.json({ url: session.url });
+  } catch (error) {
+    console.error("Error creating checkout session", error);
+    res.status(500).send("Error creating checkout session");
+  }
+  // update db later
 });
 
-const { requireAdmin } = require('./middleware/admin_authorization.js'); 
+app.post('/webhook', express.json(), async (request, response) => {
+  const event = request.body;
 
-app.post('/court', requireAdmin, async (req, res) => {
-  try {
-    const court = await create_court(req.body);
-    res.status(201).json({ message: 'Success' });
-  } catch (error) {
-    if (error.statusCode === 403) {
-      return res.status(403).json({ message: "Forbidden" });
-    } else {
-      console.error('Error creating court', error); // Log the specific error
-      res.status(500).send('An error occurred: ' + error.message);
+  // Handle the event
+  if (event.type === 'charge.succeeded') {
+    const amountPaid = event.data.object.amount/100;
+    const email = event.data.object.email; // Get email from the event data
+
+    try {
+      const user = await User.findOne({ email_address: email });
+      if (!user) {
+        return response.status(404).send('User not found');
+      }
+
+      if (isNaN(amountPaid)) {
+        return response.status(400).send("Invalid amount received");
+      }
+
+      // Update user's credit in the database
+      console.log(amountPaid);
+      const updateDocument = {
+        $inc: {
+            credit: amountPaid // This will increment the numericField by amountPaid
+        }
+    };
+    const result = await User.updateOne(user, updateDocument);
+    console.log(`${result.modifiedCount} document(s) updated`);
+    console.log("Successfully topped up credit in db");
+
+      response.status(200).send('User credit updated successfully');
+    } catch (error) {
+      console.error('Error updating user credit:', error);
+      response.status(500).send('An error occurred while updating user credit');
     }
+  } else {
+    response.status(200).send('Unhandled event type');
   }
 });
+
+
+
+// const { requireAdmin } = require('./middleware/admin_authorization.js'); 
+const { create_court } = require('./controllers/courtcontroller.js');
+
+// app.post('/court', requireAdmin, async (req, res) => {
+app.post('/court', async (req, res) => {
+  try {
+    const user = await User.findOne({ email_address: req.headers['user-email'] });
+    const valid_pwd = await bcrypt.compare(req.headers['user-password'], user.password);
+    // const court = await create_court(req.body);
+    // res.status(201).json({ message: 'Success' });
+    if (req.headers['user-type'] !== 'admin' ||
+        req.headers['user-email'] !== 'admin@admin.admin' ||
+        !valid_pwd) {
+      res.status(403).json({ message: "Forbidden" });
+    } else {
+      const court = await create_court(req.body);
+      res.status(201).json({ message: 'Success' });
+    }    
+  } catch (error) {
+    console.error('Error creating court', error); // Log the specific error
+    res.status(500).send('An error occurred: ' + error.message);
+    // if(error.statusCode === 403) {
+    //   return res.status(403).json({ message: "Forbidden" });
+    // } else {
+    //   console.error('Error creating court', error); // Log the specific error
+    //   res.status(500).send('An error occurred: ' + error.message);
+    // }
+  }
+});
+
+const { edit_court } = require('./controllers/courtcontroller.js');
+
+app.patch('/court', async (req, res) => {
+  try {
+    const user = await User.findOne({ email_address: req.headers['user-email'] });
+    const valid_pwd = await bcrypt.compare(req.headers['user-password'], user.password);
+
+    if (req.headers['user-type'] !== 'admin' ||
+        req.headers['user-email'] !== 'admin@admin.admin' ||
+        !valid_pwd) {
+      res.status(403).json({ message: "Forbidden" });
+    } else {
+      const court = await edit_court(req.body);
+      res.status(201).json({ message: 'Court updated.' });
+    }
+  } catch (e) {
+    console.error('Error updating court', error);
+    res.status(500).send('An error occurred: ' + error.message);
+  }
+});
+
+const { get_available_courts } = require('./controllers/bookingcontroller.js');
+
+app.get('/courts', async (req, res) => {
+  try {
+    const courts = await get_available_courts(req.query.dateTime);
+
+    res.status(201).json(courts);
+  } catch (e) {
+    console.error('Error getting courts', error);
+    res.status(500).send('An error occurred: ' + error.message);
+  }
+});
+
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('*', function (req, res) {

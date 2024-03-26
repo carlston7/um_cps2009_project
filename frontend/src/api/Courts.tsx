@@ -1,7 +1,5 @@
-import { Court, CourtCreateRequest, CourtUpdateRequest, TimeSlot } from '../models/Courts';
+import { Court, CourtCreateRequest, CourtUpdateRequest, DateTimeSelection } from '../models/Courts';
 import axiosInstance from './AxiosInstance';
-
-
 
 export const createCourt = async (data: CourtCreateRequest) => {
     const userType = localStorage.getItem('userType');
@@ -16,7 +14,7 @@ export const createCourt = async (data: CourtCreateRequest) => {
         console.error('User email and password not found.');
         throw new Error('User email and password are required for this operation.');
     }
-
+    console.log("User-Email: ", userEmail, "User-Type: ", userType, "User-Password: ", userPassword);
     return axiosInstance.post(`/court`, data, {
         headers: {
             'User-Email': userEmail,
@@ -40,7 +38,7 @@ export const updateCourt = async (data: CourtUpdateRequest) => {
         throw new Error('User email and password are required for this operation.');
     }
 
-    return axiosInstance.patch(`$/court`, data, {
+    return axiosInstance.patch(`/court`, data, {
         headers: {
             'User-Email': userEmail,
             'User-Type': userType,
@@ -49,12 +47,17 @@ export const updateCourt = async (data: CourtUpdateRequest) => {
     });
 };
 
-export const getCourts = async (): Promise<Court[]> => {
-    const response = await axiosInstance.get(`/courts`);
-    return response.data;
-};
-
-export const getCourtAvailability = async (courtId: string, date: string): Promise<TimeSlot[]> => {
-    const response = await axiosInstance.get(`/court-availability`, { params: { courtId, date } });
-    return response.data;
+export const fetchCourts = async (dateTime: DateTimeSelection): Promise<Court[]> => {
+    try {
+        console.log("dateTime: ", dateTime);
+        const response = await axiosInstance.get<Court[]>('/courts', {
+            params: {
+                dateTime: dateTime.dateTime,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching courts:', error);
+        throw error;
+    }
 };

@@ -4,8 +4,6 @@ import { CourtUpdateRequest } from '../models/Courts';
 import { containerStyle } from './ui/Background';
 
 export const EditCourtForm: React.FC = () => {
-
-    // Using Partial<CourtUpdateRequest> to allow for partial updates
     const [updateFormData, setUpdateFormData] = useState<Partial<CourtUpdateRequest>>({});
 
     const handleUpdateChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -17,7 +15,6 @@ export const EditCourtForm: React.FC = () => {
 
     const handleUpdateSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Assuming you have logic to identify the court to be updated from the updateFormData
         try {
             await updateCourt(updateFormData as CourtUpdateRequest);
             alert('Court updated successfully!');
