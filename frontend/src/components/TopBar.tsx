@@ -80,7 +80,7 @@ export default function TopBar() {
                             <MenuItem key="signup" onClick={handleMenuClose} component={RouterLink} to="/signup">Sign Up</MenuItem>,
                             <MenuItem key="login" onClick={handleMenuClose} component={RouterLink} to="/login">Login</MenuItem>
                         ] : [
-                                <MenuItem key="topup" onClick={handleMenuClose} component={RouterLink} to="/topup">topup</MenuItem>,
+                                <MenuItem key="Profile" onClick={handleMenuClose} component={RouterLink} to="/profile">View Profile</MenuItem>,
                             <MenuItem key="logout" onClick={handleLogout}>
                                 Logout
                                 <Logout fontSize="small" />

@@ -53,6 +53,9 @@ app.post('/signup', async (req, res) => {
         email: user.email_address,
         type: user.type,
         password: req.body.password,
+        credit: user.credit,
+        name: user.name,
+        surname: user.surname,
       });
     }    
   }catch(e){
@@ -101,6 +104,9 @@ app.post('/login', async (req, res) => {
           email: user.email_address,
           type: user.type,
           password: req.body.password,
+          credit: user.credit,
+          name: user.name,
+          surname: user.surname,
         });
       } res.status(401).send('Invalid password');
     } else {
