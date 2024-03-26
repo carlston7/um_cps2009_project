@@ -146,7 +146,6 @@ app.post("/topup", async (req, res) => {
     console.error("Error creating checkout session", error);
     res.status(500).send("Error creating checkout session");
   }
-  // update db later
 });
 
 app.post('/webhook', express.json(), async (request, response) => {

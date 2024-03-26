@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { containerStyle } from './ui/Background';
 
 const ProfileInformation = () => {
     // Hook to navigate programmatically
@@ -18,7 +19,7 @@ const ProfileInformation = () => {
     };
 
     return (
-        <div className="container profile-page">
+        <div className="container profile-page" style={containerStyle}>
             <h2>User Profile</h2>
             <div className="user-info">
                 <p><strong>Email:</strong> {userEmail}</p>
