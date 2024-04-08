@@ -21,8 +21,6 @@ const TopUp = () => {
         const userPassword = localStorage.getItem('userPassword');
         if (userEmail && userPassword) {
           await apiLogin({ email: userEmail, password: userPassword });
-          // Optionally, inform the user about the credit update
-          toast.success("Credit has been updated successfully.");
         }
       }
     } catch (error) {
