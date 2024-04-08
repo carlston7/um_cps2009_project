@@ -1,5 +1,5 @@
 export interface Court {
-    id: string
+    _id: string
     name: string;
     type: string
     dayPrice: number | { $numberDecimal: string };
