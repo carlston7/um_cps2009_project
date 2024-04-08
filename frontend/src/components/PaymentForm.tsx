@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import axiosInstance from '../api/AxiosInstance';
 import { containerStyle } from './ui/Background';
 import { apiLogin } from '../api/Login';
-import { toast } from 'react-toastify';
 
 const TopUp = () => {
   const [amount, setAmount] = useState('');
