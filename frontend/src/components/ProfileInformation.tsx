@@ -29,6 +29,7 @@ const ProfileInformation = () => {
                 <p><strong>Type:</strong> {userType}</p>
             </div>
             <button onClick={handleTopUp} className="btn btn-primary">Top Up Credit</button>
+            <button onClick={() => navigate('/edit-profile')} className="btn btn-secondary">Edit Profile</button>
         </div>
     );
 };

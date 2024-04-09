@@ -39,11 +39,12 @@ export const CreateCourtForm: React.FC = () => {
 
     return (
         <div style={containerStyle}>
-            <h2 style={{ textAlign: 'center' }}>Create Court</h2>
+            <h2 style={{ textAlign: 'center' }}>Create a Court</h2>
             <form onSubmit={handleCreateSubmit}>
                 <div style={{ position: 'relative' }}>
-                    <label>Name:</label>
+                    <label htmlFor="nameInput">Name:</label>
                     <input
+                        id="nameInput"
                         type="text"
                         name="name"
                         value={createFormData.name}
@@ -53,8 +54,9 @@ export const CreateCourtForm: React.FC = () => {
                     />
                 </div>
                 <div style={{ position: 'relative' }}>
-                    <label>Type:</label>
+                    <label htmlFor="typeInput">Type:</label>
                     <select
+                        id="typeInput"
                         name="type"
                         value={createFormData.type}
                         onChange={handleCreateChange}
@@ -68,8 +70,9 @@ export const CreateCourtForm: React.FC = () => {
                     </select>
                 </div>
                 <div style={{ position: 'relative' }}>
-                    <label>Day Price:</label>
+                    <label htmlFor="dayPriceInput">Day Price:</label>
                     <input
+                        id="dayPriceInput"
                         type="number"
                         name="dayPrice"
                         value={createFormData.dayPrice}
@@ -79,8 +82,9 @@ export const CreateCourtForm: React.FC = () => {
                     />
                 </div>
                 <div>
-                    <label>Night Price:</label>
+                    <label htmlFor="nightPriceInput">Night Price:</label>
                     <input
+                        id="nightPriceInput"
                         type="number"
                         name="nightPrice"
                         value={createFormData.nightPrice}

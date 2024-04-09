@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import axiosInstance from '../api/AxiosInstance';
 import { containerStyle } from './ui/Background';
 import { apiLogin } from '../api/Login';
-import { toast } from 'react-toastify';
 
 const TopUp = () => {
   const [amount, setAmount] = useState('');
@@ -21,8 +20,6 @@ const TopUp = () => {
         const userPassword = localStorage.getItem('userPassword');
         if (userEmail && userPassword) {
           await apiLogin({ email: userEmail, password: userPassword });
-          // Optionally, inform the user about the credit update
-          toast.success("Credit has been updated successfully.");
         }
       }
     } catch (error) {

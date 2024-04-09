@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { DateTimeSelection } from '../models/Courts';
 import { containerStyle } from './ui/Background';
+import { useCourt } from '../context/CourtContext';
 
 interface Props {
     onDateTimeSelected: (dateTime: DateTimeSelection) => void;
@@ -9,7 +10,7 @@ interface Props {
 export const DateTimeSelector: React.FC<Props> = ({ onDateTimeSelected }) => {
     const [date, setDate] = useState('');
     const [time, setTime] = useState('09:00');
-
+    const { setBookingDate, setBookingTime } = useCourt();
     // Get today's date in YYYY-MM-DD format
     const today = new Date().toISOString().split('T')[0];
 
@@ -22,6 +23,8 @@ export const DateTimeSelector: React.FC<Props> = ({ onDateTimeSelected }) => {
         e.preventDefault();
         const dateTimeIso = `${date}T${time}:00`;
         onDateTimeSelected({ dateTime: dateTimeIso });
+        setBookingDate(date);
+        setBookingTime(time);
     };
 
     const hours = [];

@@ -15,6 +15,9 @@ import EditCourtPage from './pages/EditCourtPage';
 import CreateCourtPage from './pages/CreateCourtPage';
 import { ViewCourtPage } from './pages/ViewCourtPage';
 import ProfilePage from './pages/ProfilePage';
+import BookCourtPage from './pages/BookCourtPage';
+import { CourtProvider } from './context/CourtContext';
+import EditProfilePage from './pages/EditProfilePage';
 
 const stripePromise = loadStripe('pk_test_51Ot7JOJ6A0BJ3zLkdnlqc78i8dmfxVLBrGT2wwX7iQ2iGlmpriFXMVZwYYyy6UKf42Y6jCrZCsuWOpAOpt2cEQwa00PAbI230Y'); 
 
@@ -26,11 +29,14 @@ const App = () => {
         <ToastContainer />
         <TopBar />
         <Background />
+          <CourtProvider>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/edit-court" element={<EditCourtPage />} />
           <Route path="/view-courts" element={<ViewCourtPage/>} />
           <Route path="/new-court" element={<CreateCourtPage />} />
+              <Route path="/edit-profile" element={<EditProfilePage />} />
+              <Route path="/book-court" element={<BookCourtPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/topup" element={ <PaymentPage />}/>
@@ -38,6 +44,7 @@ const App = () => {
           <Route path="/profile" element={ <ProfilePage/>}/>
           {/* Add more routes as needed */}
         </Routes>
+          </CourtProvider>
       </BrowserRouter>
     </ColorModeProvider>
     </Elements>
