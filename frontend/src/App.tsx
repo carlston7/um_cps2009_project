@@ -16,7 +16,7 @@ import CreateCourtPage from './pages/CreateCourtPage';
 import { ViewCourtPage } from './pages/ViewCourtPage';
 import ProfilePage from './pages/ProfilePage';
 
-const stripePromise = loadStripe('pk_live_51Ot7JOJ6A0BJ3zLkdnlqc78i8dmfxVLBrGT2wwX7iQ2iGlmpriFXMVZwYYyy6UKf42Y6jCrZCsuWOpAOpt2cEQwa00PAbI230Y'); 
+const stripePromise = loadStripe('pk_test_51Ot7JOJ6A0BJ3zLkdnlqc78i8dmfxVLBrGT2wwX7iQ2iGlmpriFXMVZwYYyy6UKf42Y6jCrZCsuWOpAOpt2cEQwa00PAbI230Y'); 
 
 const App = () => {
   return (
