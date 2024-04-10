@@ -160,27 +160,28 @@ app.post("/success", async (req, res) => {
       console.log("Session:", session);
       const user = await User.findOne({ email_address: req.body.email });
       console.log("UserFound:", user);
+      console.log("Email: ", req.body.email);
       const amountPaid = session.amount_total/100
       console.log("amountPaid:", amountPaid);
       
       if (!user) {
-        return response.status(404).send('User not found');
+        return res.status(404).send('User not found');
       }
 
       if (isNaN(amountPaid)) {
-        return response.status(400).send("Invalid amount received");
+        return res.status(400).send("Invalid amount received");
       }
       // ------------------ Query to see if session exists in database
       result_session = await getStripeSessionsBySessionID(session_id);
       console.log("result_sesion:", result_session);
       // ------------------ Check if payment is successful && session is not duplicated
-      if (session.payment_status === "paid" && result_session.result == []) {
+      if (session.payment_status === "paid" && result_session.result.length == 0) {
         console.log("Successfull Payment");
 
         // ------------------ Add new Session
         saveStripeSession({
           session_id: session_id,
-          email_new: user.email, // if fails somewhere here convert to user.email
+          email_new: req.body.email, // if fails somewhere here convert to user.email
           amount_new: session.amount_total / 100,
         });
         console.log("Stripe session saved to db");
@@ -192,19 +193,19 @@ app.post("/success", async (req, res) => {
         // ------------------ Update Balance
         console.log("Updating one");
         const result = await User.updateOne(user, updateDocument);
-        user_queries.updateUserBalance(email, session.amount_total / 100);
+        user_queries.updateUserBalance(req.body.email, session.amount_total / 100);
 
         console.log(`${result.modifiedCount} document(s) updated`);
         console.log("Successfully topped up credit in db");
     
-        response.status(200).send('User credit updated successfully');
+        res.status(200).send('User credit updated successfully');
 
         return res.json({ success: true });
         // ------------------ Payment Not Successfull
       } else {
         console.error("Failed Payment");
 
-        return res.status(420).json({ success: false });
+        return res.status(409).json({ success: false });
       }
     } catch (error) {
       console.error("Error handling successful payment", error);
