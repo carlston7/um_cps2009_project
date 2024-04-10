@@ -153,7 +153,7 @@ const { getStripeSessionsBySessionID, saveStripeSession} = require('./controller
 
 app.post("/success", async (req, res) => {
     try {
-      const session_id = req.body;
+      const session_id = req.body.session_id;
       console.log("Session_id:", session_id);
       const session = await stripe.checkout.sessions.retrieve(session_id);
       console.log("Session:", session);
