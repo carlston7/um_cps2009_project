@@ -14,7 +14,7 @@ const TopUp = () => {
     const session_id = searchParams.get('session_id');
     
     if (session_id) {
-      axiosInstance.post('/success', { session_id })
+      axiosInstance.post('/success', { session_id, email: localStorage.getItem('userEmail') })
         .then(({ data }) => {
           toast.success("Balance updated successfully");
           console.log('Balance updated successfully:', data);
