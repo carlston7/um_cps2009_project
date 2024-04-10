@@ -148,10 +148,7 @@ app.post("/topup", async (req, res) => {
   }
 });
 
-app.post(
-  "/success",
-  server_functions.authenticateToken,
-  async (req, res) => {
+app.post("/success", async (req, res) => {
     try {
       const session_id = req.body;
       const session = await stripe.checkout.sessions.retrieve(session_id);
