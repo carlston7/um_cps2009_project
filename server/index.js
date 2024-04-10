@@ -158,7 +158,7 @@ app.post("/success", async (req, res) => {
       console.log("Session_id:", session_id);
       const session = await stripe.checkout.sessions.retrieve(session_id);
       console.log("Session:", session);
-      const user = await User.findOne({ email_address: req.user.email });
+      const user = await User.findOne({ email_address: req.body.email });
       console.log("UserFound:", user);
       const amountPaid = session.amount_total/100
       console.log("amountPaid:", amountPaid);
