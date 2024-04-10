@@ -181,19 +181,14 @@ app.post("/success", async (req, res) => {
         // ------------------ Add new Session
         saveStripeSession({
           session_id: session_id,
-          email_new: req.body.email, // if fails somewhere here convert to user.email
+          email_new: req.body.email, 
           amount_new: session.amount_total / 100,
         });
         console.log("Stripe session saved to db");
-        const updateDocument = {
-          $inc: {
-              credit: amountPaid // This will increment the numericField by amountPaid
-          }
-        }
+
         // ------------------ Update Balance
         console.log("Updating one");
-        const result = await User.updateOne(user, updateDocument);
-        user_queries.updateUserBalance(req.body.email, session.amount_total / 100);
+        const result = await User.updateOne(user, {credit: amountPaid});
 
         console.log(`${result.modifiedCount} document(s) updated`);
         console.log("Successfully topped up credit in db");
