@@ -1,10 +1,31 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axiosInstance from '../api/AxiosInstance';
 import { containerStyle } from './ui/Background';
-import { apiLogin } from '../api/Login';
+import { useNavigate } from 'react-router-dom';
 
 const TopUp = () => {
   const [amount, setAmount] = useState('');
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  // Check for session_id in the URL query parameters
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const session_id = searchParams.get('session_id');
+    
+    if (session_id) {
+      // Assuming you meant to call `/success` to update user's balance
+      axiosInstance.post('/success', { session_id })
+        .then(({ data }) => {
+          // Handle success, such as redirecting the user or showing a success message
+          console.log('Balance updated successfully:', data);
+          // Redirect the user as needed, for example, back to their profile or dashboard
+          navigate('/dashboard'); // Adjust the path as necessary
+        })
+        .catch(error => {
+          console.error('Error updating balance with session_id:', error);
+        });
+    }
+  }, [navigate]);
 
   const handleTopUp = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
@@ -14,13 +35,8 @@ const TopUp = () => {
         amount: parseFloat(amount),
       });
       if (data.url) {
-        window.location.href = data.url; // Redirect user to Stripe Checkout
-
-        const userEmail = localStorage.getItem('userEmail');
-        const userPassword = localStorage.getItem('userPassword');
-        if (userEmail && userPassword) {
-          await apiLogin({ email: userEmail, password: userPassword });
-        }
+        // Redirect user to Stripe Checkout
+        window.location.href = data.url;
       }
     } catch (error) {
       console.error('Error during top-up:', error);
