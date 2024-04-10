@@ -175,7 +175,7 @@ app.post("/success", async (req, res) => {
       result_session = await getStripeSessionsBySessionID(session_id);
       console.log("result_sesion:", result_session);
       // ------------------ Check if payment is successful && session is not duplicated
-      if (session.payment_status === "paid" && result_session.result.length == 0) {
+      if (session.payment_status === "paid" && (!result_session || !result_session.result || result_session.result.length === 0)) {
         console.log("Successfull Payment");
 
         // ------------------ Add new Session
