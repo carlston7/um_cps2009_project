@@ -148,16 +148,16 @@ app.post("/topup", async (req, res) => {
   }
 });
 
-app.post('/webhook', express.json(), async (request, response) => {
-  const event = request.body;
-
-  // Handle the event
-  if (event.type === 'charge.succeeded') {
-    const amountPaid = event.data.object.amount/100;
-    const email = event.data.object.email; // Get email from the event data
-
+payment_router.post(
+  "/success",
+  server_functions.authenticateToken,
+  async (req, res) => {
     try {
-      const user = await User.findOne({ email_address: email });
+      const session_id = req.body;
+      const session = await stripe.checkout.sessions.retrieve(session_id);
+      const user = await User.findOne({ email_address: req.user.email });
+      const amountPaid = session.amount_total/100
+
       if (!user) {
         return response.status(404).send('User not found');
       }
@@ -165,28 +165,49 @@ app.post('/webhook', express.json(), async (request, response) => {
       if (isNaN(amountPaid)) {
         return response.status(400).send("Invalid amount received");
       }
+      // ------------------ Query to see if session exists in database
+      result_session = await stripe_queries.retrieveStripe(session_id);
+      
+      // ------------------ Check if payment is successful && session is not duplicated
+      if (session.payment_status === "paid" && result_session.result == false) {
+        console.log("Successfull Payment");
 
-      // Update user's credit in the database
-      console.log(amountPaid);
-      const updateDocument = {
-        $inc: {
-            credit: amountPaid // This will increment the numericField by amountPaid
+        // ------------------ Add new Session
+        stripe_queries.registerStripe({
+          session_id: session_id,
+          email_new: email,
+          amount_new: session.amount_total / 100,
+        });
+        console.log(amountPaid);
+        const updateDocument = {
+          $inc: {
+              credit: amountPaid // This will increment the numericField by amountPaid
+          }
         }
-    };
-    const result = await User.updateOne(user, updateDocument);
-    console.log(`${result.modifiedCount} document(s) updated`);
-    console.log("Successfully topped up credit in db");
+        // ------------------ Update Balance
+        const result = await User.updateOne(user, updateDocument);
+        user_queries.updateUserBalance(email, session.amount_total / 100);
 
-      response.status(200).send('User credit updated successfully');
+        console.log(`${result.modifiedCount} document(s) updated`);
+        console.log("Successfully topped up credit in db");
+    
+        response.status(200).send('User credit updated successfully');
+
+        return res.json({ success: true });
+        // ------------------ Payment Not Successfull
+      } else {
+        console.log("Failed Payment");
+
+        return res.json({ success: false });
+      }
     } catch (error) {
-      console.error('Error updating user credit:', error);
-      response.status(500).send('An error occurred while updating user credit');
+      console.error("Error handling successful payment");
+      return res
+        .status(500)
+        .json({ error: "Failed to handle successful payment" });
     }
-  } else {
-    response.status(200).send('Unhandled event type');
   }
-});
-
+);
 
 
 // const { requireAdmin } = require('./middleware/admin_authorization.js'); 
