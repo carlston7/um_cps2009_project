@@ -148,6 +148,9 @@ app.post("/topup", async (req, res) => {
   }
 });
 
+
+const { getStripeSessionsBySessionID, saveStripeSession} = require('./controllers/stripe.js');
+
 app.post("/success", async (req, res) => {
     try {
       const session_id = req.body;
@@ -163,14 +166,14 @@ app.post("/success", async (req, res) => {
         return response.status(400).send("Invalid amount received");
       }
       // ------------------ Query to see if session exists in database
-      result_session = await stripe_queries.retrieveStripe(session_id);
+      result_session = await getStripeSessionsBySessionID(session_id);
       
       // ------------------ Check if payment is successful && session is not duplicated
       if (session.payment_status === "paid" && result_session.result == false) {
         console.log("Successfull Payment");
 
         // ------------------ Add new Session
-        stripe_queries.registerStripe({
+        saveStripeSession({
           session_id: session_id,
           email_new: email,
           amount_new: session.amount_total / 100,
@@ -182,6 +185,7 @@ app.post("/success", async (req, res) => {
           }
         }
         // ------------------ Update Balance
+        console.log("Updating one");
         const result = await User.updateOne(user, updateDocument);
         user_queries.updateUserBalance(email, session.amount_total / 100);
 
