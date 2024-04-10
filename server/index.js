@@ -137,8 +137,8 @@ app.post("/topup", async (req, res) => {
       }],
       payment_method_types: ["card"],
       mode: "payment",
-      success_url: `https://cps2009project.azurewebsites.net/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `https://cps2009project.azurewebsites.net/success?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `https://cps2009project.azurewebsites.net/topup?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `https://cps2009project.azurewebsites.net/topup?session_id={CHECKOUT_SESSION_ID}`,
     });
 
     res.json({ url: session.url });
