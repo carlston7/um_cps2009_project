@@ -179,18 +179,12 @@ app.post("/success", async (req, res) => {
         console.log("Successfull Payment");
 
         // ------------------ Add new Session
-        saveStripeSession({
-          session_id: session_id,
-          email_new: req.body.email, 
-          amount_new: session.amount_total / 100,
-        });
+        await saveStripeSession(session_id, req.body.email, session.amount_total / 100);
         console.log("Stripe session saved to db");
 
         // ------------------ Update Balance
         console.log("Updating one");
-        const result = await User.updateOne(user, {credit: amountPaid});
-
-        console.log(`${result.modifiedCount} document(s) updated`);
+        await User.updateOne({ _id: user._id }, { $inc: { credit: amountPaid } });
         console.log("Successfully topped up credit in db");
     
         res.status(200).send('User credit updated successfully');
