@@ -174,13 +174,13 @@ app.post("/success", async (req, res) => {
       result_session = await getStripeSessionsBySessionID(session_id);
       console.log("result_sesion:", result_session);
       // ------------------ Check if payment is successful && session is not duplicated
-      if (session.payment_status === "paid" && result_session.result == false) {
+      if (session.payment_status === "paid" && result_session.result == []) {
         console.log("Successfull Payment");
 
         // ------------------ Add new Session
         saveStripeSession({
           session_id: session_id,
-          email_new: email,
+          email_new: user.email, // if fails somewhere here convert to user.email
           amount_new: session.amount_total / 100,
         });
         console.log("Stripe session saved to db");
@@ -202,9 +202,9 @@ app.post("/success", async (req, res) => {
         return res.json({ success: true });
         // ------------------ Payment Not Successfull
       } else {
-        console.log("Failed Payment");
+        console.error("Failed Payment");
 
-        return res.json({ success: false });
+        return res.status(420).json({ success: false });
       }
     } catch (error) {
       console.error("Error handling successful payment", error);
