@@ -148,7 +148,7 @@ app.post("/topup", async (req, res) => {
   }
 });
 
-payment_router.post(
+app.post(
   "/success",
   server_functions.authenticateToken,
   async (req, res) => {
