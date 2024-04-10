@@ -3,6 +3,7 @@ import axiosInstance from '../api/AxiosInstance';
 import { containerStyle } from './ui/Background';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { apiLogin } from '../api/Login';
 
 const TopUp = () => {
   const [amount, setAmount] = useState('');
@@ -15,10 +16,21 @@ const TopUp = () => {
     
     if (session_id) {
       axiosInstance.post('/success', { session_id, email: localStorage.getItem('userEmail') })
-        .then(({ data }) => {
+        .then(async ({ data }) => { // Mark this function as async
           toast.success("Balance updated successfully");
           console.log('Balance updated successfully:', data);
-          navigate('/profile'); 
+          // Now call apiLogin to refresh user details including balance
+          try {
+            const email = localStorage.getItem('userEmail');
+            const password = localStorage.getItem('userPassword'); // Assuming password is stored, which is not recommended
+            if (email && password) {
+              await apiLogin({ email, password }); // Update the user's session details
+              toast.success("User details updated");
+            }
+          } catch (loginError) {
+            console.error('Error updating user details:', loginError);
+          }
+          navigate('/profile'); // Navigate after updating details
         })
         .catch(error => {
           console.error('Error updating balance with session_id:', error);
