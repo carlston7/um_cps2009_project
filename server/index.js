@@ -154,10 +154,14 @@ const { getStripeSessionsBySessionID, saveStripeSession} = require('./controller
 app.post("/success", async (req, res) => {
     try {
       const session_id = req.body;
+      console.log("Session_id:", session_id);
       const session = await stripe.checkout.sessions.retrieve(session_id);
+      console.log("Session:", session);
       const user = await User.findOne({ email_address: req.user.email });
+      console.log("UserFound:", user);
       const amountPaid = session.amount_total/100
-
+      console.log("amountPaid:", amountPaid);
+      
       if (!user) {
         return response.status(404).send('User not found');
       }
@@ -167,7 +171,7 @@ app.post("/success", async (req, res) => {
       }
       // ------------------ Query to see if session exists in database
       result_session = await getStripeSessionsBySessionID(session_id);
-      
+      console.log("result_sesion:", result_session);
       // ------------------ Check if payment is successful && session is not duplicated
       if (session.payment_status === "paid" && result_session.result == false) {
         console.log("Successfull Payment");
@@ -178,7 +182,7 @@ app.post("/success", async (req, res) => {
           email_new: email,
           amount_new: session.amount_total / 100,
         });
-        console.log(amountPaid);
+        console.log("Stripe session saved to db");
         const updateDocument = {
           $inc: {
               credit: amountPaid // This will increment the numericField by amountPaid
@@ -202,7 +206,7 @@ app.post("/success", async (req, res) => {
         return res.json({ success: false });
       }
     } catch (error) {
-      console.error("Error handling successful payment");
+      console.error("Error handling successful payment", error);
       return res
         .status(500)
         .json({ error: "Failed to handle successful payment" });
