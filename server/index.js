@@ -302,7 +302,9 @@ app.post('/book-court', async (req, res) => {
     res.status(500).send('An error occurred: ' + error.message);
   }
 });
+
 const { get_courts } = require('./controllers/courtcontroller.js');
+
 app.get('/courts-all', async (req, res) => {
   try {
     const courts = await get_courts();
