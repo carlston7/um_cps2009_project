@@ -42,3 +42,23 @@ exports.get_courts = async () => {
         throw new Error('A problem was encountered while getting courts.');
     }
 };
+
+exports.get_court_price = async (court_name, time_booking) => {
+    try{
+        const court = await Court.findOne({ name: court_name });
+        
+        if (!court) {
+            throw new Error('Court not found.');
+        }
+
+        if (time_booking >= 18)
+        {
+            return court.nightPrice;
+        } else {
+            return court.dayPrice;
+        }        
+    } catch (e) {
+        console.error(e);
+        throw new Error('A problem was encountered while getting the price of the court.');
+    }
+};
