@@ -108,7 +108,10 @@ app.post('/login', async (req, res) => {
           name: user.name,
           surname: user.surname,
         });
-      } res.status(401).send('Invalid password');
+      }
+      else {
+        res.status(401).send('Invalid password');
+      }
     } else {
       res.status(401).send('Invalid email address');
     }

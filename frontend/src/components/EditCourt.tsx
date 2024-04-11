@@ -3,6 +3,7 @@ import { updateCourt } from '../api/Courts';
 import { Court, CourtUpdateRequest } from '../models/Courts';
 import { containerStyle } from './ui/Background';
 import { useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 function isDecimal(value: any): value is { $numberDecimal: string } {
     return value && typeof value === 'object' && '$numberDecimal' in value;
@@ -32,9 +33,9 @@ export const EditCourtForm: React.FC = () => {
         e.preventDefault();
         try {
             await updateCourt(updateFormData as CourtUpdateRequest);
-            alert('Court updated successfully!');
+            toast.success('Court updated successfully!');
         } catch (error) {
-            alert('Failed to update court.');
+            toast.error('Failed to update court.');
         }
     };
 
