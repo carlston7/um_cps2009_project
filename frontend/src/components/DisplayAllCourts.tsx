@@ -64,7 +64,7 @@ export const DisplayAllCourts: React.FC<Props> = ({ courts }) => {
         setDayPrice(dayPrice);
         setNightPrice(nightPrice);
         selectCourt(court);
-        navigate('/edit-court');
+        navigate('/edit-court', { state: { court } });
     };
     return (
         <table style={tableStyle}>
