@@ -270,6 +270,24 @@ app.get('/courts', async (req, res) => {
   }
 });
 
+const { create_booking } = require('./controllers/bookingcontroller.js');
+
+app.post('/book-court', async (req, res) => {
+  try {
+    const data = {
+      start: req.body.dateTimeIso,
+      user_email: req.headers['user-email'],
+      court_name: req.body.courtId
+    };
+
+    const booking = await create_booking(data);
+    res.status(201).json({ message: 'Success' });
+
+  } catch (e) {
+    console.error('Error creating booking', error);
+    res.status(500).send('An error occurred: ' + error.message);
+  }
+});
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('*', function (req, res) {
