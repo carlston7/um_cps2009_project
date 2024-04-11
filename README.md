@@ -14,3 +14,10 @@ All work must be pushed to the development branch or a separate feature branch. 
 
 ## Work Tracking URL
 [https://app.smarttask.io/o/159735/i/p/431103/tasks/e5091826-1206-4bcc-8c5a-d074ff063681](https://app.smarttask.io/o/159735/i/p/431103/tasks/e5091826-1206-4bcc-8c5a-d074ff063681)
+
+## Co-Located Hours
+**Days->(Hours):**
+- `Monday->(9:00-14:00)`
+- `Tuesday->(9:00-15:00)`
+- `Other days in free time, Minimum 1 hour of work`
+- `Total: 12+ Hours a week`
