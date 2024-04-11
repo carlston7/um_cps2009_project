@@ -60,7 +60,7 @@ export default function TopBar() {
                     <TopbarLink to="/view-courts" text="View Courts" />
                     {isAdmin && [
                         <TopbarLink key="new-court" to="/new-court" text="Create Court" />,
-                        <TopbarLink key="edit-court" to="/edit-court" text="Edit Court" />
+                        <TopbarLink key="edit-court" to="/view-all-courts" text="Edit Court" />
                     ]}
                     <Box flexGrow={1} />
                     <IconButton
