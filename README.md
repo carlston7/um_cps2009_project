@@ -12,6 +12,5 @@ Commits should be formatted with the task ID followed by a description of the ta
 
 All work must be pushed to the development branch or a separate feature branch. Code should only be transferred to the main branch via pull requests on GitHub.
 
-ToDo Monday:
-Get payments to save to db
-Clarify meeting date with mark
+## Work Tracking URL
+[https://app.smarttask.io/o/159735/i/p/431103/tasks/e5091826-1206-4bcc-8c5a-d074ff063681](https://app.smarttask.io/o/159735/i/p/431103/tasks/e5091826-1206-4bcc-8c5a-d074ff063681)
