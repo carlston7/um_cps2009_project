@@ -18,3 +18,15 @@ exports.get_available_courts = async (time) => {
         throw new Error('A problem was encountered while getting available courts.');
     }
 };
+
+exports.create_booking = async (booking_data) => {
+    try{
+        const booking = new Booking(booking_data);
+        
+        await booking.save();
+        return booking;
+    } catch (e) {
+        console.error(e);
+        throw new Error('A problem was encountered while creating the booking.');
+    }
+};
