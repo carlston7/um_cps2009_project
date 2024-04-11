@@ -271,21 +271,28 @@ app.get('/courts', async (req, res) => {
 });
 
 const { create_booking } = require('./controllers/bookingcontroller.js');
+const { get_court_price } = require('./controllers/courtcontroller.js')
 
 app.post('/book-court', async (req, res) => {
   try {
     const user = await User.findOne({ email_address: req.headers['user-email'] });
     const valid_pwd = await bcrypt.compare(req.headers['user-password'], user.password);
+    const court_price = await get_court_price(req.body.courtName, new Date(req.body.dateTimeISO).getHours());
     
     if (user && valid_pwd) {
-      const data = {
-        start: req.body.dateTimeIso,
-        user_email: req.headers['user-email'],
-        court_name: req.body.courtName
-      };
-  
-      const booking = await create_booking(data);
-      res.status(201).json({ message: 'Success' });
+
+      if (user.credit >= court_price) {
+        const data = {
+          start: req.body.dateTimeIso,
+          user_email: req.headers['user-email'],
+          court_name: req.body.courtName
+        };
+    
+        const booking = await create_booking(data);
+        res.status(201).json({ message: 'Success' });
+      } else {
+        res.status(402).json({ message: 'Not enough funds' });
+      }
     } else {
       res.status(403).json({ message: "Forbidden" });
     }   
