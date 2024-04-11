@@ -16,7 +16,6 @@ export const bookCourt = async (booking: Booking): Promise<void> => {
     throw new Error('User email and password are required for this operation.');
   }
   console.log("booking: ", booking);
-
     try {
       await axiosInstance.post('/book-court', booking, {
         headers: {
