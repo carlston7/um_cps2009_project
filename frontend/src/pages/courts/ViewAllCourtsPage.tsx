@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { fetchAllCourts } from '../api/Courts'; // Ensure this path is correct
-import { Court } from '../models/Courts';
-import { DisplayAllCourts } from '../components/DisplayAllCourts'; // Ensure this path is correct
+import { fetchAllCourts } from '../../api/Courts'; // Ensure this path is correct
+import { Court } from '../../models/Courts';
+import { DisplayAllCourts } from '../../components/courts/DisplayAllCourts'; // Ensure this path is correct
 
 export const ViewAllCourtsPage = () => {
     const [courts, setCourts] = useState<Court[]>([]);
