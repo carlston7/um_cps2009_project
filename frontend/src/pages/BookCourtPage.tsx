@@ -18,7 +18,7 @@ const BookCourtPage = () => {
         try {
             const bookingDetails = {
                 dateTimeIso: `${date}T${time}:00`,
-                courtId: selectedCourt._id, // Use _id instead of id
+                courtName: selectedCourt.name, // Use _id instead of id
             };
             await bookCourt(bookingDetails);
             toast.success("Court booked successfully");
