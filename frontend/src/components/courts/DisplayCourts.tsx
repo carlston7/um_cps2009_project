@@ -1,8 +1,8 @@
 import React, { CSSProperties } from 'react';
-import { Court } from '../models/Courts';
+import { Court } from '../../models/Courts';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { useCourt } from '../context/CourtContext';
+import { useCourt } from '../../context/CourtContext';
 
 function getCourtTypeColor(type: string): string {
     switch (type) {
@@ -19,12 +19,16 @@ function getCourtTypeColor(type: string): string {
 
 interface Props {
     courts: Court[];
+    currentTime: string;
 }
 
+export const isNightTime = (time: string) => {
+    return parseInt(time.split(':')[0], 10) >= 18;
+};
 
-export const DisplayAllCourts: React.FC<Props> = ({ courts }) => {
+export const CourtsDisplay: React.FC<Props> = ({ courts, currentTime }) => {
     const navigate = useNavigate();
-    const { selectCourt, setDayPrice, setNightPrice } = useCourt();
+    const { selectCourt, setPrice } = useCourt();
 
     if (!Array.isArray(courts)) {
         console.error('courts is not an array', courts);
@@ -59,12 +63,12 @@ export const DisplayAllCourts: React.FC<Props> = ({ courts }) => {
         return '-1';
     };
     const handleCourtClick = (court: Court) => {
-        const dayPrice = getPriceValue(court.dayPrice);
-        const nightPrice = getPriceValue(court.nightPrice);
-        setDayPrice(dayPrice);
-        setNightPrice(nightPrice);
+        const price = isNightTime(currentTime)
+            ? getPriceValue(court.nightPrice)
+            : getPriceValue(court.dayPrice);
+        setPrice(price);
         selectCourt(court);
-        navigate('/edit-court', { state: { court } });
+        navigate('/book-court');
     };
     return (
         <table style={tableStyle}>
@@ -72,22 +76,19 @@ export const DisplayAllCourts: React.FC<Props> = ({ courts }) => {
                 <tr>
                     <th style={cellStyle}>Court Name</th>
                     <th style={cellStyle}>Type</th>
-                    <th style={cellStyle}>DayPrice</th>
-                    <th style={cellStyle}>NightPrice</th>
+                    <th style={cellStyle}>Price</th>
                 </tr>
             </thead>
             <tbody>
                 {courts.map((court) => {
                     const handleClick = () => handleCourtClick(court);
                     const courtType = Array.isArray(court.type) ? court.type[0] : court.type;
-                    const displayDayPrice = getPriceValue(court.dayPrice);
-                    const displayNightPrice = getPriceValue(court.nightPrice);
+                    const displayPrice = getPriceValue(isNightTime(currentTime) ? court.nightPrice : court.dayPrice);
                     return (
                         <tr key={court._id} onClick={handleClick} style={getRowStyle(courtType)}>
                             <td style={cellStyle}>{court.name}</td>
                             <td style={cellStyle}>{court.type}</td>
-                            <td style={cellStyle}>${displayDayPrice}</td>
-                            <td style={cellStyle}>${displayNightPrice}</td>
+                            <td style={cellStyle}>${displayPrice}</td>
                         </tr>
                     );
                 })}

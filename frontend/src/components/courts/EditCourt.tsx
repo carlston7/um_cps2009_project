@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent } from 'react';
-import { updateCourt } from '../api/Courts';
-import { Court, CourtUpdateRequest } from '../models/Courts';
-import { containerStyle } from './ui/Background';
+import { updateCourt } from '../../api/Courts';
+import { Court, CourtUpdateRequest } from '../../models/Courts';
+import { containerStyle } from '../ui/Background';
 import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 

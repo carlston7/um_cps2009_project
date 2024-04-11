@@ -1,24 +1,24 @@
 import React from 'react';
 import TopBar from './components/TopBar';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
-import { Home } from './pages/Home';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
+import { Home } from './pages/HomePage';
+import Login from './pages/LoginPage';
+import Signup from './pages/SignupPage';
 import ColorModeProvider from './context/ColourModeContext';
 import { ToastContainer } from 'react-toastify';
 import Background from './components/ui/Background';
-import PaymentPage from './pages/Payment';
+import PaymentPage from './pages/PaymentPage';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import HelpPage from './pages/HelpPage';
-import EditCourtPage from './pages/EditCourtPage';
-import CreateCourtPage from './pages/CreateCourtPage';
-import { ViewCourtPage } from './pages/ViewCourtPage';
+import EditCourtPage from './pages/courts/EditCourtPage';
+import CreateCourtPage from './pages/courts/CreateCourtPage';
+import { ViewCourtPage } from './pages/courts/ViewCourtPage';
 import ProfilePage from './pages/ProfilePage';
-import BookCourtPage from './pages/BookCourtPage';
+import BookCourtPage from './pages/courts/BookCourtPage';
 import { CourtProvider } from './context/CourtContext';
 import EditProfilePage from './pages/EditProfilePage';
-import { ViewAllCourtsPage } from './pages/ViewAllCourtsPage';
+import { ViewAllCourtsPage } from './pages/courts/ViewAllCourtsPage';
 
 const stripePromise = loadStripe('pk_test_51P3iC4P46pjciChWBf3bsIRggMExQUZU2ZTzVMToDwJnjtjQjj5FvG16NmnYfSX9OiiZI3DR1zowa4C6L3btGIYh00A4WZwzBX'); 
 

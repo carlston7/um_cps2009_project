@@ -13,7 +13,7 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createCourt } from '../../api/Courts';
-import { CreateCourtForm } from '../../components/CreateCourt';
+import { CreateCourtForm } from '../../components/courts/CreateCourt';
 import { toast } from 'react-toastify';
 
 describe('CreateCourtForm', () => {

@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent } from 'react';
-import { createCourt } from '../api/Courts';
-import { CourtCreateRequest } from '../models/Courts';
-import { containerStyle } from './ui/Background';
+import { createCourt } from '../../api/Courts';
+import { CourtCreateRequest } from '../../models/Courts';
+import { containerStyle } from '../ui/Background';
 import { toast } from 'react-toastify';
 
 export const CreateCourtForm: React.FC = () => {

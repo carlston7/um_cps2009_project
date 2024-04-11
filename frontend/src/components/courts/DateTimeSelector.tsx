@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { DateTimeSelection } from '../models/Courts';
-import { containerStyle } from './ui/Background';
-import { useCourt } from '../context/CourtContext';
+import { DateTimeSelection } from '../../models/Courts';
+import { containerStyle } from '../ui/Background';
+import { useCourt } from '../../context/CourtContext';
 
 interface Props {
     onDateTimeSelected: (dateTime: DateTimeSelection) => void;
