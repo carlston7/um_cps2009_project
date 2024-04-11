@@ -281,20 +281,28 @@ app.post('/book-court', async (req, res) => {
   try {
     const user = await User.findOne({ email_address: req.headers['user-email'] });
     const valid_pwd = await bcrypt.compare(req.headers['user-password'], user.password);
-    const court_price = await get_court_price(req.body.courtName, new Date(req.body.dateTimeISO).getHours());
     
     if (user && valid_pwd) {
 
+      const court_price = await get_court_price(req.body.courtName, new Date(req.body.dateTimeISO).getHours());
       if (user.credit >= court_price) {
-        const data = {
-          start: req.body.dateTimeIso,
-          user_email: req.headers['user-email'],
-          court_name: req.body.courtName
-        };
-    
-        const booking = await create_booking(data);
-        const user = await update_user_credit(req.headers['user-email'], court_price);
-        res.status(201).json({ message: 'Success' });
+
+        const courts = await get_available_courts(req.body.dateTimeISO);
+        if (courts.includes(req.body.courtName)) {
+          const data = {
+            start: req.body.dateTimeIso,
+            user_email: req.headers['user-email'],
+            court_name: req.body.courtName
+          };
+      
+          const booking = await create_booking(data);
+          const user = await update_user_credit(req.headers['user-email'], court_price);
+          res.status(201).json({ message: 'Success' });
+
+        } else {
+          res.status(404).json({ message: 'Court not available at this hour.'});
+        }
+        
       } else {
         res.status(402).json({ message: 'Insufficient funds' });
       }
