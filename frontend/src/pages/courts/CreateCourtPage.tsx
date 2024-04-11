@@ -1,5 +1,5 @@
 import React from 'react';
-import { CreateCourtForm } from '../components/CreateCourt';
+import { CreateCourtForm } from '../../components/courts/CreateCourt';
 
 const CreateCourtPage = () => {
     return (

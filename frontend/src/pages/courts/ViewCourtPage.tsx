@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { DateTimeSelector } from '../components/DateTimeSelector';
-import { CourtsDisplay } from '../components/DisplayCourts';
-import { fetchCourts } from '../api/Courts';
-import { Court, DateTimeSelection } from '../models/Courts';
+import { DateTimeSelector } from '../../components/courts/DateTimeSelector';
+import { CourtsDisplay } from '../../components/courts/DisplayCourts';
+import { fetchCourts } from '../../api/Courts';
+import { Court, DateTimeSelection } from '../../models/Courts';
 
 export const ViewCourtPage = () => {
     const [courts, setCourts] = useState<Court[]>([]);
@@ -12,7 +12,7 @@ export const ViewCourtPage = () => {
     const handleDateTimeSelected = async (dateTime: DateTimeSelection) => {
         try {
             const courtsData = await fetchCourts(dateTime);
-            setCourts(courtsData); 
+            setCourts(courtsData);
             const time = new Date(dateTime.dateTime).toTimeString().substring(0, 5);
             setSelectedTime(time);
         } catch (error) {
@@ -23,7 +23,7 @@ export const ViewCourtPage = () => {
     return (
         <div>
             <DateTimeSelector onDateTimeSelected={handleDateTimeSelected} />
-            <CourtsDisplay courts={courts} currentTime={selectedTime}/>
+            <CourtsDisplay courts={courts} currentTime={selectedTime} />
         </div>
     );
 };

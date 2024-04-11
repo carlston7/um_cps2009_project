@@ -1,5 +1,5 @@
 import React from 'react';
-import { EditCourtForm } from '../components/EditCourt';
+import { EditCourtForm } from '../../components/courts/EditCourt';
 
 const EditCourtPage = () => {
     return (

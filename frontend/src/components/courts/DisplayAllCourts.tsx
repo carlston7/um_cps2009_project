@@ -1,8 +1,8 @@
 import React, { CSSProperties } from 'react';
-import { Court } from '../models/Courts';
+import { Court } from '../../models/Courts';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { useCourt } from '../context/CourtContext';
+import { useCourt } from '../../context/CourtContext';
 
 function getCourtTypeColor(type: string): string {
     switch (type) {
@@ -19,16 +19,12 @@ function getCourtTypeColor(type: string): string {
 
 interface Props {
     courts: Court[];
-    currentTime: string;
 }
 
-export const isNightTime = (time: string) => {
-    return parseInt(time.split(':')[0], 10) >= 18;
-};
 
-export const CourtsDisplay: React.FC<Props> = ({ courts, currentTime }) => {
+export const DisplayAllCourts: React.FC<Props> = ({ courts }) => {
     const navigate = useNavigate();
-    const { selectCourt, setPrice } = useCourt();
+    const { selectCourt, setDayPrice, setNightPrice } = useCourt();
 
     if (!Array.isArray(courts)) {
         console.error('courts is not an array', courts);
@@ -39,36 +35,36 @@ export const CourtsDisplay: React.FC<Props> = ({ courts, currentTime }) => {
 
     const tableStyle: CSSProperties = {
         width: '50%',
-        tableLayout: 'fixed', 
+        tableLayout: 'fixed',
         margin: 'auto',
     };
 
     const cellStyle: CSSProperties = {
         textAlign: 'center',
-        padding: '10px', 
-        borderBottom: '1px solid #ddd', 
+        padding: '10px',
+        borderBottom: '1px solid #ddd',
     };
     const getRowStyle = (type: string): CSSProperties => ({
         background: getCourtTypeColor(type),
-        color: 'white', 
+        color: 'white',
         textAlign: 'center',
         width: '100%',
     });
     const getPriceValue = (price: number | { $numberDecimal: string }): string => {
         if (typeof price === 'number') {
-          return price.toString();
+            return price.toString();
         } else if (price && typeof price.$numberDecimal === 'string') {
-          return price.$numberDecimal;
+            return price.$numberDecimal;
         }
-        return '-1'; 
+        return '-1';
     };
     const handleCourtClick = (court: Court) => {
-        const price = isNightTime(currentTime)
-            ? getPriceValue(court.nightPrice)
-            : getPriceValue(court.dayPrice);
-        setPrice(price);
+        const dayPrice = getPriceValue(court.dayPrice);
+        const nightPrice = getPriceValue(court.nightPrice);
+        setDayPrice(dayPrice);
+        setNightPrice(nightPrice);
         selectCourt(court);
-        navigate('/book-court');
+        navigate('/edit-court', { state: { court } });
     };
     return (
         <table style={tableStyle}>
@@ -76,19 +72,22 @@ export const CourtsDisplay: React.FC<Props> = ({ courts, currentTime }) => {
                 <tr>
                     <th style={cellStyle}>Court Name</th>
                     <th style={cellStyle}>Type</th>
-                    <th style={cellStyle}>Price</th>
+                    <th style={cellStyle}>DayPrice</th>
+                    <th style={cellStyle}>NightPrice</th>
                 </tr>
             </thead>
             <tbody>
                 {courts.map((court) => {
                     const handleClick = () => handleCourtClick(court);
                     const courtType = Array.isArray(court.type) ? court.type[0] : court.type;
-                    const displayPrice = getPriceValue(isNightTime(currentTime) ? court.nightPrice : court.dayPrice);
+                    const displayDayPrice = getPriceValue(court.dayPrice);
+                    const displayNightPrice = getPriceValue(court.nightPrice);
                     return (
                         <tr key={court._id} onClick={handleClick} style={getRowStyle(courtType)}>
                             <td style={cellStyle}>{court.name}</td>
                             <td style={cellStyle}>{court.type}</td>
-                            <td style={cellStyle}>${displayPrice}</td>
+                            <td style={cellStyle}>${displayDayPrice}</td>
+                            <td style={cellStyle}>${displayNightPrice}</td>
                         </tr>
                     );
                 })}

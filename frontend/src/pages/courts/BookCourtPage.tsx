@@ -1,8 +1,8 @@
 import React from 'react';
-import { useCourt } from '../context/CourtContext'; // Adjust import paths as necessary
-import { bookCourt } from '../api/Bookings';
+import { useCourt } from '../../context/CourtContext'; // Adjust import paths as necessary
+import { bookCourt } from '../../api/Bookings';
 import { toast } from 'react-toastify';
-import { containerStyle } from '../components/ui/Background';
+import { containerStyle } from '../../components/ui/Background';
 import { useNavigate } from 'react-router-dom';
 
 const BookCourtPage = () => {
