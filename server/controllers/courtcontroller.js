@@ -27,3 +27,18 @@ exports.edit_court = async (court_data) => {
         throw new Error('A problem was encountered while editing the court.');
     }
 };
+
+exports.get_courts = async () => {
+    try {
+        const courts = await Court.find({}).lean()
+
+        if (!courts) {
+            throw new Error('No Courts not found.');
+        }
+
+        return courts;
+    } catch (e) {
+        console.error(e);
+        throw new Error('A problem was encountered while getting courts.');
+    }
+};
