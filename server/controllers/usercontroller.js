@@ -22,3 +22,18 @@ exports.create_user = async (user_data) => {
         throw new Error('A problem was encountered while creating the user.');
     }
 };
+
+exports.update_user_credit = async (email, price) => {
+    try{
+        const user = await Court.findOneAndUpdate({email_address: email}, {credit: credit - price});
+        
+        if (!user) {
+            throw new Error('User not found.');
+        }
+        
+        return user;
+    } catch (e) {
+        console.error(e);
+        throw new Error('A problem was encountered while updating the user\'s credit.');
+    }
+};
