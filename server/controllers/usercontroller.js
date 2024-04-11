@@ -25,7 +25,11 @@ exports.create_user = async (user_data) => {
 
 exports.update_user_credit = async (email, price) => {
     try{
-        const user = await Court.findOneAndUpdate({email_address: email}, {credit: credit - price});
+        const user = await Court.findOneAndUpdate(
+            { email_address: email },
+            { $inc: { credit: -price } },
+            { new: true }
+        );
         
         if (!user) {
             throw new Error('User not found.');
