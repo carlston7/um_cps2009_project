@@ -28,6 +28,21 @@ exports.edit_court = async (court_data) => {
     }
 };
 
+exports.get_courts = async () => {
+    try {
+        const courts = await Court.find({}).lean()
+
+        if (!courts) {
+            throw new Error('No Courts not found.');
+        }
+
+        return courts;
+    } catch (e) {
+        console.error(e);
+        throw new Error('A problem was encountered while getting courts.');
+    }
+};
+
 exports.get_court_price = async (court_name, time_booking) => {
     try{
         const court = await Court.findOne({ name: court_name });

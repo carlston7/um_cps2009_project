@@ -1,6 +1,5 @@
 import axiosInstance from './AxiosInstance';
 import { Booking } from '../models/Bookings';
-import { toast } from 'react-toastify';
 
 export const bookCourt = async (booking: Booking): Promise<void> => {
   const userType = localStorage.getItem('userType');
@@ -24,7 +23,6 @@ export const bookCourt = async (booking: Booking): Promise<void> => {
           'User-Password': userPassword
         }
       });
-      toast.success('Court booked successfully');
     } catch (error) {
       console.error('Error booking court:', error);
       throw error;

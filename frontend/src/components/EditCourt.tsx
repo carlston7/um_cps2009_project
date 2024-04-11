@@ -1,10 +1,25 @@
 import React, { useState, ChangeEvent } from 'react';
 import { updateCourt } from '../api/Courts';
-import { CourtUpdateRequest } from '../models/Courts';
+import { Court, CourtUpdateRequest } from '../models/Courts';
 import { containerStyle } from './ui/Background';
+import { useLocation } from 'react-router-dom';
+
+function isDecimal(value: any): value is { $numberDecimal: string } {
+    return value && typeof value === 'object' && '$numberDecimal' in value;
+}
 
 export const EditCourtForm: React.FC = () => {
-    const [updateFormData, setUpdateFormData] = useState<Partial<CourtUpdateRequest>>({});
+    const location = useLocation(); // Use useLocation to access the current location object
+    const court: Court = location.state?.court; // Access the court object passed via state
+
+    const [updateFormData, setUpdateFormData] = useState<Partial<CourtUpdateRequest>>({
+        name: court?.name,
+        dayPrice: isDecimal(court?.dayPrice) ? parseFloat(court.dayPrice.$numberDecimal) : court?.dayPrice,
+        nightPrice: isDecimal(court?.nightPrice) ? parseFloat(court.nightPrice.$numberDecimal) : court?.nightPrice,
+    });
+
+    // Since you're directly using the court object from the navigation state,
+    // ensure to handle cases where the court data might not be available (e.g., user navigates directly to the edit page)
 
     const handleUpdateChange = (e: ChangeEvent<HTMLInputElement>) => {
         setUpdateFormData({
@@ -18,7 +33,6 @@ export const EditCourtForm: React.FC = () => {
         try {
             await updateCourt(updateFormData as CourtUpdateRequest);
             alert('Court updated successfully!');
-
         } catch (error) {
             alert('Failed to update court.');
         }

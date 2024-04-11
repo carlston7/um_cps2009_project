@@ -302,6 +302,17 @@ app.post('/book-court', async (req, res) => {
     res.status(500).send('An error occurred: ' + error.message);
   }
 });
+const { get_courts } = require('./controllers/courtcontroller.js');
+app.get('/courts-all', async (req, res) => {
+  try {
+    const courts = await get_courts();
+
+    res.status(201).json(courts);
+  } catch (e) {
+    console.error('Error getting courts', error);
+    res.status(500).send('An error occurred: ' + error.message);
+  }
+});
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('*', function (req, res) {
