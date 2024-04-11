@@ -61,3 +61,14 @@ export const fetchCourts = async (dateTime: DateTimeSelection): Promise<Court[]>
         throw error;
     }
 };
+
+export const fetchAllCourts = async (): Promise<Court[]> => {
+    try {
+        const response = await axiosInstance.get<Court[]>('/courts-all');
+        console.log("received courts: ", response);
+        return response.data;
+    } catch (error) {
+        console.error('Error getting all courts:', error);
+        throw error;
+    }
+};

@@ -7,7 +7,11 @@ interface BookingDetails {
     date: string;
     time: string;
     price: string
+    dayPrice: string;
+    nightPrice: string;
     setPrice: (price: string) => void;
+    setDayPrice: (dayPrice: string) => void;
+    setNightPrice: (nightPrice: string) => void;
     selectCourt: (court: Court) => void;
     setBookingDate: (date: string) => void;
     setBookingTime: (time: string) => void;
@@ -22,13 +26,15 @@ interface CourtProviderProps {
 export const CourtProvider: React.FC<CourtProviderProps> = ({ children }) => {
     const [selectedCourt, setSelectedCourt] = useState<Court | null>(null);
     const [price, setPrice] = useState('')
+    const [dayPrice, setDayPrice] = useState('')
+    const [nightPrice, setNightPrice] = useState('')
     const [date, setBookingDate] = useState('');
     const [time, setBookingTime] = useState('');
 
     const selectCourt = (court: Court) => setSelectedCourt(court);
 
     return (
-        <CourtContext.Provider value={{ selectedCourt, date, time, price, selectCourt, setPrice, setBookingDate, setBookingTime }}>
+        <CourtContext.Provider value={{ selectedCourt, date, time, price, dayPrice, nightPrice, setDayPrice, setNightPrice, selectCourt, setPrice, setBookingDate, setBookingTime }}>
             {children}
         </CourtContext.Provider>
     );
