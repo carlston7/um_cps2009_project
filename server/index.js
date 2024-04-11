@@ -271,7 +271,8 @@ app.get('/courts', async (req, res) => {
 });
 
 const { create_booking } = require('./controllers/bookingcontroller.js');
-const { get_court_price } = require('./controllers/courtcontroller.js')
+const { get_court_price } = require('./controllers/courtcontroller.js');
+const { update_user_credit } = require('./controllers/usercontroller.js');
 
 app.post('/book-court', async (req, res) => {
   try {
@@ -289,9 +290,10 @@ app.post('/book-court', async (req, res) => {
         };
     
         const booking = await create_booking(data);
+        const user = await update_user_credit(req.headers['user-email'], court_price);
         res.status(201).json({ message: 'Success' });
       } else {
-        res.status(402).json({ message: 'Not enough funds' });
+        res.status(402).json({ message: 'Insufficient funds' });
       }
     } else {
       res.status(403).json({ message: "Forbidden" });
