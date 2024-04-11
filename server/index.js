@@ -274,14 +274,21 @@ const { create_booking } = require('./controllers/bookingcontroller.js');
 
 app.post('/book-court', async (req, res) => {
   try {
-    const data = {
-      start: req.body.dateTimeIso,
-      user_email: req.headers['user-email'],
-      court_name: req.body.courtId
-    };
-
-    const booking = await create_booking(data);
-    res.status(201).json({ message: 'Success' });
+    const user = await User.findOne({ email_address: req.headers['user-email'] });
+    const valid_pwd = await bcrypt.compare(req.headers['user-password'], user.password);
+    
+    if (user && valid_pwd) {
+      const data = {
+        start: req.body.dateTimeIso,
+        user_email: req.headers['user-email'],
+        court_name: req.body.courtName
+      };
+  
+      const booking = await create_booking(data);
+      res.status(201).json({ message: 'Success' });
+    } else {
+      res.status(403).json({ message: "Forbidden" });
+    }   
 
   } catch (e) {
     console.error('Error creating booking', error);
