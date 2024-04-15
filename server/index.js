@@ -362,6 +362,22 @@ app.get('/courts-all', async (req, res) => {
   }
 });
 
+const { get_bookings } = require('./controllers/bookingcontroller.js');
+
+app.get('/user-bookings', async (req, res) => {
+  try {
+    const email = req.body.email;
+    if (!email) {
+      return res.status(400).send('Email address is required');
+    }
+    const bookings = await get_bookings(email);
+    res.json(bookings);
+  } catch (error) {
+    console.error('Error getting bookings:', error);
+    res.status(500).send(error.message);
+  }
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
