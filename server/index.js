@@ -284,6 +284,25 @@ app.patch('/court', async (req, res) => {
   }
 });
 
+const { edit_user } = require('./controllers/usercontroller.js');
+
+app.patch('/profile', async (req, res) => {
+  try {
+    const user = await User.findOne({ email_address: req.body.email });
+    const valid_pwd = await bcrypt.compare(req.body.password, user.password);
+    
+    if (user && valid_pwd) {
+      const profile = await edit_user(req.body);
+      res.status(201).json({ message: 'Profile updated.' });
+    } else {
+      res.status(403).json({ message: "Forbidden" });
+    }
+  } catch (e) {
+    console.error('Error updating profile', error);
+    res.status(500).send('An error occurred: ' + error.message);
+  }
+});
+
 const { get_available_courts } = require('./controllers/bookingcontroller.js');
 
 app.get('/courts', async (req, res) => {
