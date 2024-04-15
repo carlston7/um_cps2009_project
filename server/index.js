@@ -120,19 +120,21 @@ app.post('/login', async (req, res) => {
   }
 });
 
-const { get_user_credit } = require('./controllers/usercontroller.js');
 app.get("/credit", async (req, res) => {
-  try {
-    const email = req.headers['user-email'];
-    if (!email) {
+  const email = req.headers['user-email'];
+  if (!email) {
       return res.status(400).send({ error: 'Email header is required.' });
-    }
+  }
 
+  try {
     const credit = await get_user_credit(email);
     res.send({ credit });
   } catch (e) {
     console.error(e);
-    res.status(500).send({ error: e.message });
+    // Check if headers have been sent before trying to send a response
+    if (!res.headersSent) {
+        res.status(500).send({ error: e.message });
+      }
   }
 });
 
