@@ -365,7 +365,7 @@ const { get_bookings } = require('./controllers/bookingcontroller.js');
 
 app.get('/user-bookings', async (req, res) => {
   try {
-    const email = req.body.email;
+    const email = req.headers['email'];
     if (!email) {
       return res.status(400).send('Email address is required');
     }
