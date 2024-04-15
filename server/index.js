@@ -211,7 +211,7 @@ app.post("/success", async (req, res) => {
         console.log("Successfully topped up credit in db");
     
         res.status(200).send('User credit updated successfully');
-
+        console.log("Sending ok back to user");
         return res.json({ success: true });
         // ------------------ Payment Not Successfull
       } else {

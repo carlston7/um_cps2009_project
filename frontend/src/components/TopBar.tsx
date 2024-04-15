@@ -34,7 +34,7 @@ const TopbarLink: React.FC<TopbarLinkProps> = ({ to, text, external = false }) =
 
 export default function TopBar() {
     const { isAuthenticated, isAdmin, logout } = useContext(AuthContext);
-    const userCredit = localStorage.getItem('userCredit') || '0';
+    const [userCredit, setUserCredit] = useState(localStorage.getItem('userCredit') || '0.00');
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -56,7 +56,10 @@ export default function TopBar() {
 
     useEffect(() => {
         if (isAuthenticated) {
-            fetchUserCredit().catch(err => {
+            fetchUserCredit().then(credit => {
+                const formattedCredit = parseFloat(credit).toFixed(2);
+                setUserCredit(formattedCredit);
+            }).catch(err => {
                 console.error("Failed to fetch user credit", err);
                 toast.error("Failed to load credit information.");
             });
