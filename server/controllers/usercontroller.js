@@ -45,14 +45,12 @@ exports.update_user_credit = async (email, price) => {
 exports.get_user_credit = async (email) => {
     try {
         const user = await User.findOne({ email_address: email });
-
         if (!user) {
-            throw new Error('User not found.');
+            throw new Error(`User not found for email: ${email}`);
         }
-
         return user.credit;
     } catch (e) {
-        console.error(e);
+        console.error(`Database access error for email ${email}:`, e);
         throw new Error('A problem was encountered while getting the user\'s credit.');
     }
 };
