@@ -30,3 +30,13 @@ exports.create_booking = async (booking_data) => {
         throw new Error('A problem was encountered while creating the booking.');
     }
 };
+
+exports.get_bookings = async (email) => {
+    try {
+        const bookings = await Booking.find({ user_email: email });
+        return bookings;
+    } catch (e) {
+        console.error(e);
+        throw new Error('Could not get bookings for user');
+    }
+};

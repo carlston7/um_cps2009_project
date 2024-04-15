@@ -61,13 +61,15 @@ export default function TopBar() {
                 <Toolbar>
                     <TopbarLink to="/" text="Home" />
                     <TopbarLink to="/view-courts" text="View Courts" />
-                    {isAuthenticated && (
+                    {isAuthenticated && [
+                        <>
+                            <TopbarLink to="/my-bookings" text="My Bookings" />
                         <Chip
                             icon={<AccountBalanceWallet />}
                             label={`Balance: $${formattedCredit}`}
-                            color="default"
-                        />
-                    )}
+                                color="default" />
+                        </>
+                    ]}
                     {isAdmin && [
                         <TopbarLink key="new-court" to="/new-court" text="Create Court" />,
                         <TopbarLink key="edit-court" to="/view-all-courts" text="Edit Court" />

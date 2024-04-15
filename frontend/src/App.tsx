@@ -19,6 +19,7 @@ import BookCourtPage from './pages/courts/BookCourtPage';
 import { CourtProvider } from './context/CourtContext';
 import EditProfilePage from './pages/EditProfilePage';
 import { ViewAllCourtsPage } from './pages/courts/ViewAllCourtsPage';
+import MyBookingsPage from './pages/MyBookingsPage';
 
 const stripePromise = loadStripe('pk_test_51P3iC4P46pjciChWBf3bsIRggMExQUZU2ZTzVMToDwJnjtjQjj5FvG16NmnYfSX9OiiZI3DR1zowa4C6L3btGIYh00A4WZwzBX'); 
 
@@ -35,6 +36,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/edit-court" element={<EditCourtPage />} />
           <Route path="/view-all-courts" element={<ViewAllCourtsPage />} />
+              <Route path="/my-bookings" element={<MyBookingsPage />} />
           <Route path="/view-courts" element={<ViewCourtPage/>} />
           <Route path="/new-court" element={<CreateCourtPage />} />
               <Route path="/edit-profile" element={<EditProfilePage />} />

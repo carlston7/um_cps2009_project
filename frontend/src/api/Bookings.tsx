@@ -30,3 +30,19 @@ export const bookCourt = async (booking: Booking): Promise<void> => {
       throw error;
     }
 };
+
+export const fetchBookings = async (): Promise<Booking[]> => {
+  const userEmail = localStorage.getItem('userEmail');
+  if (!userEmail) {
+    console.error('User email not found.');
+    throw new Error('You must be logged in to view bookings.');
+  }
+
+  try {
+    const response = await axiosInstance.post('/user-bookings', { email: userEmail });
+    return response.data; // Assuming the response data is an array of bookings
+  } catch (error) {
+    console.error('Error fetching bookings:', error);
+    throw error;
+  }
+};
