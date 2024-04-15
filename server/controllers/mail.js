@@ -1,12 +1,10 @@
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-    host: 'smtp.fastmail.com',
-    port: 465,
-    secure: true,
+    service: 'gmail',
     auth: {
-      user: 'tennisclub_admin@fastmail.com',
-      pass: 'cps2009admin',
+      user: 'manager.tennisclub@gmail.com',
+      pass: 'mstn tgmh xoxp kkfj',
     }
   });
 
