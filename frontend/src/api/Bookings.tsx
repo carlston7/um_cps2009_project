@@ -1,5 +1,6 @@
 import axiosInstance from './AxiosInstance';
 import { Booking } from '../models/Bookings';
+import { fetchUserCredit } from './User';
 
 export const bookCourt = async (booking: Booking): Promise<void> => {
   const userType = localStorage.getItem('userType');
@@ -23,6 +24,7 @@ export const bookCourt = async (booking: Booking): Promise<void> => {
         'User-Password': userPassword
       }
     });
+    await fetchUserCredit();
     } catch (error) {
       console.error('Error booking court:', error);
       throw error;
