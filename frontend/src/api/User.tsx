@@ -24,7 +24,7 @@ export const fetchUserCredit = async () => {
         if (response.status !== 200) {
             throw new Error(`Failed to fetch credit: ${response.status}`);
         }
-
+        localStorage.setItem('userCredit', response.data.credit);
         return response.data.credit; // Assuming the response will be { credit: number }
     } catch (e) {
         console.error('Error fetching user credit:', e);

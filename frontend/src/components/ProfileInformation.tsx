@@ -25,7 +25,7 @@ const ProfileInformation = () => {
                 <p><strong>Email:</strong> {userEmail}</p>
                 <p><strong>Name:</strong> {userName}</p>
                 <p><strong>Surname:</strong> {userSurname}</p>
-                <p><strong>Credit:</strong> {userCredit}</p>
+                <p><strong>Credit:</strong> ${userCredit}</p>
                 <p><strong>Type:</strong> {userType}</p>
             </div>
             <button onClick={handleTopUp} className="btn btn-primary">Top Up Credit</button>

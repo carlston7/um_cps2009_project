@@ -1,9 +1,10 @@
 import { toast } from 'react-toastify';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { Logout, Menu as MenuIcon } from "@mui/icons-material";
-import { AppBar, Box, IconButton, Toolbar, Typography, Link, Menu, MenuItem } from "@mui/material";
+import { AccountBalanceWallet, Logout, Menu as MenuIcon } from "@mui/icons-material";
+import { AppBar, Box, IconButton, Toolbar, Typography, Link, Menu, MenuItem, Chip } from "@mui/material";
+import { fetchUserCredit } from '../api/User';
 
 interface TopbarLinkProps {
     to: string;
@@ -33,6 +34,7 @@ const TopbarLink: React.FC<TopbarLinkProps> = ({ to, text, external = false }) =
 
 export default function TopBar() {
     const { isAuthenticated, isAdmin, logout } = useContext(AuthContext);
+    const userCredit = localStorage.getItem('userCredit') || '0';
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -52,12 +54,28 @@ export default function TopBar() {
         navigate('/');
     };
 
+    useEffect(() => {
+        if (isAuthenticated) {
+            fetchUserCredit().catch(err => {
+                console.error("Failed to fetch user credit", err);
+                toast.error("Failed to load credit information.");
+            });
+        }
+    }, [isAuthenticated]);
+
     return (
         <>
             <AppBar position="static" sx={{ backgroundImage: 'linear-gradient(to right, #097969, #209e61)' }}>
                 <Toolbar>
                     <TopbarLink to="/" text="Home" />
                     <TopbarLink to="/view-courts" text="View Courts" />
+                    {isAuthenticated && (
+                        <Chip
+                            icon={<AccountBalanceWallet />}
+                            label={`Balance: $${userCredit}`}
+                            color="default"
+                        />
+                    )}
                     {isAdmin && [
                         <TopbarLink key="new-court" to="/new-court" text="Create Court" />,
                         <TopbarLink key="edit-court" to="/view-all-courts" text="Edit Court" />
