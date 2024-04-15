@@ -278,7 +278,7 @@ app.patch('/court', async (req, res) => {
 
       const court = await edit_court(req.body);
       res.status(201).json({ message: 'Court updated.' });
-       
+
     }
   } catch (e) {
     console.error('Error updating court', error);
@@ -323,6 +323,16 @@ app.post('/book-court', async (req, res) => {
       
           const booking = await create_booking(data);
           const user = await update_user_credit(req.headers['user-email'], court_price);
+          
+          const mailOptions = {
+            from: 'tennisclub_admin@fastmail.com',
+            to: `${req.headers['user-email']}, tennisclub_admin@fastmail.com`,
+            subject: 'Booking Confirmation',
+            text: 'This is a test email.'
+          };
+          
+          await send_booking_confirmation(mailOptions);
+
           res.status(201).json({ message: 'Success' });
 
         /*} else {
