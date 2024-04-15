@@ -325,7 +325,7 @@ app.post('/book-court', async (req, res) => {
           
           const mailOptions = {
             from: 'tennisclub_admin@fastmail.com',
-            to: `${req.headers['user-email']}, tennisclub_admin@fastmail.com`,
+            to: 'data.user_email',//, tennisclub_admin@fastmail.com',
             subject: 'Booking Confirmation',
             text: 'This is a test email.'
           };
