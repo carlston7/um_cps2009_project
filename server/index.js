@@ -139,8 +139,6 @@ app.get("/credit", async (req, res) => {
   }
 });
 
-
-
 app.post("/topup", async (req, res) => {
   try {
     const { email, amount } = req.body;
