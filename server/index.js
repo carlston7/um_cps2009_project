@@ -39,14 +39,13 @@ app.use(body_parser.json());
 const bcrypt = require('bcryptjs')
 
 app.post('/signup', async (req, res) => {
-  try{
+  try {
 
     const user_exists = await User.exists({ email_address: req.body.email });
 
-    if (user_exists)
-    {
+    if (user_exists) {
       return res.status(400).json({ error: 'Email address already exists' });
-    }else{
+    } else {
       const user = await create_user(req.body);
       res.status(201).json({
         message: 'Sign up successful',
@@ -120,6 +119,24 @@ app.post('/login', async (req, res) => {
     res.status(500).send('An error occurred: ' + error.message);
   }
 });
+
+const { get_user_credit } = require('./controllers/usercontroller.js');
+app.get("/credit", async (req, res) => {
+  try {
+    const email = req.headers['user-email'];
+    if (!email) {
+      return res.status(400).send({ error: 'Email header is required.' });
+    }
+
+    const credit = await get_user_credit(email);
+    res.send({ credit });
+  } catch (e) {
+    console.error(e);
+    res.status(500).send({ error: e.message });
+  }
+});
+
+
 
 app.post("/topup", async (req, res) => {
   try {
