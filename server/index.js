@@ -288,7 +288,7 @@ app.post('/book-court', async (req, res) => {
       if (user.credit >= court_price) {
 
         const courts = await get_available_courts(req.body.dateTimeISO);
-        if (courts.includes(req.body.courtName)) {
+        //if (courts.includes(req.body.courtName)) {
           const data = {
             start: req.body.dateTimeIso,
             user_email: req.headers['user-email'],
@@ -299,9 +299,9 @@ app.post('/book-court', async (req, res) => {
           const user = await update_user_credit(req.headers['user-email'], court_price);
           res.status(201).json({ message: 'Success' });
 
-        } else {
+        /*} else {
           res.status(404).json({ message: 'Court not available at this hour.'});
-        }
+        }*/
         
       } else {
         res.status(402).json({ message: 'Insufficient funds' });
