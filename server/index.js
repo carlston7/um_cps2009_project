@@ -300,6 +300,7 @@ app.get('/courts', async (req, res) => {
 const { create_booking } = require('./controllers/bookingcontroller.js');
 const { get_court_price } = require('./controllers/courtcontroller.js');
 const { update_user_credit } = require('./controllers/usercontroller.js');
+const { send_booking_confirmation } = require('./controllers/mail.js');
 
 app.post('/book-court', async (req, res) => {
   try {
