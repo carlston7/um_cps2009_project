@@ -323,11 +323,23 @@ app.post('/book-court', async (req, res) => {
           const booking = await create_booking(data);
           const user = await update_user_credit(req.headers['user-email'], court_price);
           
+          const dateTimeParts = req.body.dateTimeIso.split('T');
+          const datePart = dateTimeParts[0];
+          const timePart = dateTimeParts[1];
+
+          const formattedDate = new Date(datePart).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+          const formattedTime = new Date(`1970-01-01T${timePart}`).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+
           const mailOptions = {
             from: 'manager.tennisclub@gmail.com',
-            to: data.user_email,//, tennisclub_admin@fastmail.com',
+            to: `${data.user_email}, manager.tennisclub@gmail.com`,
             subject: 'Booking Confirmation',
-            text: 'This is a test email.'
+            html: ` 
+              <h4>The following booking made by ${data.user_email} has been confirmed:<\h4>
+              <p>Court Name: ${data.court_name}</p>
+              <p>Date: ${data.formattedDate}</p>
+              <p>Time: ${data.formattedTime}
+            `
           };
           
           await send_booking_confirmation(mailOptions);
