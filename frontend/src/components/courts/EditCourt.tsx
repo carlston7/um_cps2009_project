@@ -2,7 +2,7 @@ import React, { useState, ChangeEvent } from 'react';
 import { updateCourt } from '../../api/Courts';
 import { Court, CourtUpdateRequest } from '../../models/Courts';
 import { containerStyle } from '../ui/Background';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 function isDecimal(value: any): value is { $numberDecimal: string } {
@@ -12,6 +12,7 @@ function isDecimal(value: any): value is { $numberDecimal: string } {
 export const EditCourtForm: React.FC = () => {
     const location = useLocation(); // Use useLocation to access the current location object
     const court: Court = location.state?.court; // Access the court object passed via state
+    const navigate = useNavigate();
 
     const [updateFormData, setUpdateFormData] = useState<Partial<CourtUpdateRequest>>({
         name: court?.name,
@@ -34,6 +35,7 @@ export const EditCourtForm: React.FC = () => {
         try {
             await updateCourt(updateFormData as CourtUpdateRequest);
             toast.success('Court updated successfully!');
+            navigate('/');
         } catch (error) {
             toast.error('Failed to update court.');
         }
@@ -50,6 +52,7 @@ export const EditCourtForm: React.FC = () => {
                         type="text"
                         name="name"
                         value={updateFormData.name || ''}
+                        readOnly
                         onChange={handleUpdateChange}
                         style={{ width: '100%', margin: '10px 0', padding: '10px', borderRadius: '4px' }}
                     />
@@ -75,6 +78,7 @@ export const EditCourtForm: React.FC = () => {
                     />
                 </div>
                 <button type="submit">Update Court</button>
+                <button type="button" onClick={() => navigate('/view-all-courts')}>Back</button>
             </form>
         </div>
     );
