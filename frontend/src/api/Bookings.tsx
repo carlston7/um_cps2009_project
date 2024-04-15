@@ -1,5 +1,5 @@
 import axiosInstance from './AxiosInstance';
-import { Booking } from '../models/Bookings';
+import { Booking, MyBookings } from '../models/Bookings';
 import { fetchUserCredit } from './User';
 
 export const bookCourt = async (booking: Booking): Promise<void> => {
@@ -31,7 +31,7 @@ export const bookCourt = async (booking: Booking): Promise<void> => {
     }
 };
 
-export const fetchBookings = async (): Promise<Booking[]> => {
+export const fetchBookings = async (): Promise<MyBookings[]> => {
   const userEmail = localStorage.getItem('userEmail');
   if (!userEmail) {
     console.error('User email not found.');

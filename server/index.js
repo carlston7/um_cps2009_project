@@ -324,7 +324,7 @@ app.post('/book-court', async (req, res) => {
           const user = await update_user_credit(req.headers['user-email'], court_price);
           
           const mailOptions = {
-            from: 'tennisclub_admin@fastmail.com',
+            from: 'manager.tennisclub@gmail.com',
             to: data.user_email,//, tennisclub_admin@fastmail.com',
             subject: 'Booking Confirmation',
             text: 'This is a test email.'
