@@ -335,10 +335,10 @@ app.post('/book-court', async (req, res) => {
             to: `${data.user_email}, manager.tennisclub@gmail.com`,
             subject: 'Booking Confirmation',
             html: ` 
-              <h4>The following booking made by ${data.user_email} has been confirmed:<\h4>
+              <h4>The following booking made by ${data.user_email} has been confirmed:</h4>
               <p>Court Name: ${data.court_name}</p>
-              <p>Date: ${data.formattedDate}</p>
-              <p>Time: ${data.formattedTime}
+              <p>Date: ${formattedDate}</p>
+              <p>Time: ${formattedTime}</p>
             `
           };
           
