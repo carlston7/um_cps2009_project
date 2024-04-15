@@ -1,10 +1,9 @@
 import { toast } from 'react-toastify';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { AccountBalanceWallet, Logout, Menu as MenuIcon } from "@mui/icons-material";
 import { AppBar, Box, IconButton, Toolbar, Typography, Link, Menu, MenuItem, Chip } from "@mui/material";
-import { fetchUserCredit } from '../api/User';
 
 interface TopbarLinkProps {
     to: string;
