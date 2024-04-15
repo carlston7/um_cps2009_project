@@ -22,6 +22,7 @@ const BookCourtPage = () => {
             };
             await bookCourt(bookingDetails);
             toast.success("Court booked successfully");
+            navigate('/');
         } catch (error) {
             toast.error("Failed to book court");
         }

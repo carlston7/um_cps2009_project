@@ -139,8 +139,6 @@ app.get("/credit", async (req, res) => {
   }
 });
 
-
-
 app.post("/topup", async (req, res) => {
   try {
     const { email, amount } = req.body;
@@ -382,6 +380,7 @@ const start = async() => {
   }
 }
 
+module.exports = app;
 // Calling the function which makes a database
 // connection and starts the server
 start();

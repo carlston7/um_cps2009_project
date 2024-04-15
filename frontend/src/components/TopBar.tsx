@@ -1,10 +1,9 @@
 import { toast } from 'react-toastify';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { AccountBalanceWallet, Logout, Menu as MenuIcon } from "@mui/icons-material";
 import { AppBar, Box, IconButton, Toolbar, Typography, Link, Menu, MenuItem, Chip } from "@mui/material";
-import { fetchUserCredit } from '../api/User';
 
 interface TopbarLinkProps {
     to: string;
@@ -34,7 +33,6 @@ const TopbarLink: React.FC<TopbarLinkProps> = ({ to, text, external = false }) =
 
 export default function TopBar() {
     const { isAuthenticated, isAdmin, logout } = useContext(AuthContext);
-    const [userCredit, setUserCredit] = useState(localStorage.getItem('userCredit') || '0.00');
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -54,17 +52,8 @@ export default function TopBar() {
         navigate('/');
     };
 
-    useEffect(() => {
-        if (isAuthenticated) {
-            fetchUserCredit().then(credit => {
-                const formattedCredit = parseFloat(credit).toFixed(2);
-                setUserCredit(formattedCredit);
-            }).catch(err => {
-                console.error("Failed to fetch user credit", err);
-                toast.error("Failed to load credit information.");
-            });
-        }
-    }, [isAuthenticated]);
+    const userCredit = localStorage.getItem('userCredit') || '0.00';
+    const formattedCredit = parseFloat(userCredit).toFixed(2);
 
     return (
         <>
@@ -75,7 +64,7 @@ export default function TopBar() {
                     {isAuthenticated && (
                         <Chip
                             icon={<AccountBalanceWallet />}
-                            label={`Balance: $${userCredit}`}
+                            label={`Balance: $${formattedCredit}`}
                             color="default"
                         />
                     )}
