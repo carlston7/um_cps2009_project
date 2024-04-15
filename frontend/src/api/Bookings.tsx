@@ -15,14 +15,14 @@ export const bookCourt = async (booking: Booking): Promise<void> => {
     throw new Error('User email and password are required for this operation.');
   }
   console.log("booking: ", booking);
-    try {
-      await axiosInstance.post('/book-court', booking, {
-        headers: {
-          'User-Email': userEmail,
-          'User-Type': userType,
-          'User-Password': userPassword
-        }
-      });
+  try {
+    await axiosInstance.post('/book-court', booking, {
+      headers: {
+        'User-Email': userEmail,
+        'User-Type': userType,
+        'User-Password': userPassword
+      }
+    });
     } catch (error) {
       console.error('Error booking court:', error);
       throw error;

@@ -15,7 +15,7 @@ export const apiSignup = async (data: SignupRequest) => {
         localStorage.setItem('userSurname', surname);
         return response;
     } catch (error: unknown) {
-        if (axios.isAxiosError(error)) { 
+        if (axios.isAxiosError(error)) {
             console.error('Signup error:', error.response?.data || error.message);
         } else {
             console.error('Unexpected error:', error);
