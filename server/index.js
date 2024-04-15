@@ -120,6 +120,7 @@ app.post('/login', async (req, res) => {
   }
 });
 
+const { get_user_credit } = require('./controllers/usercontroller.js');
 app.get("/credit", async (req, res) => {
   const email = req.headers['user-email'];
   if (!email) {
@@ -133,7 +134,7 @@ app.get("/credit", async (req, res) => {
     console.error(e);
     // Check if headers have been sent before trying to send a response
     if (!res.headersSent) {
-        res.status(500).send({ error: e.message });
+      res.status(500).send({ error: e.message });
       }
   }
 });
@@ -230,6 +231,7 @@ app.post("/success", async (req, res) => {
 
 // const { requireAdmin } = require('./middleware/admin_authorization.js'); 
 const { create_court } = require('./controllers/courtcontroller.js');
+const { get_courts } = require('./controllers/courtcontroller.js');
 
 // app.post('/court', requireAdmin, async (req, res) => {
 app.post('/court', async (req, res) => {
@@ -243,8 +245,15 @@ app.post('/court', async (req, res) => {
         !valid_pwd) {
       res.status(403).json({ message: "Forbidden" });
     } else {
-      const court = await create_court(req.body);
-      res.status(201).json({ message: 'Success' });
+      const courts = await get_courts();
+      const courtNames = courts.map(court => court.name);
+
+      if (courtNames && courtNames.includes(req.body.name)) {
+        res.status(409).json({ message: 'Court already exists.' });
+      } else {
+        const court = await create_court(req.body);
+        res.status(201).json({ message: 'Success' });
+      }
     }    
   } catch (error) {
     console.error('Error creating court', error); // Log the specific error
@@ -334,8 +343,6 @@ app.post('/book-court', async (req, res) => {
     res.status(500).send('An error occurred: ' + error.message);
   }
 });
-
-const { get_courts } = require('./controllers/courtcontroller.js');
 
 app.get('/courts-all', async (req, res) => {
   try {
