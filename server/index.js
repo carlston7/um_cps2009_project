@@ -275,8 +275,10 @@ app.patch('/court', async (req, res) => {
         !valid_pwd) {
       res.status(403).json({ message: "Forbidden" });
     } else {
+
       const court = await edit_court(req.body);
       res.status(201).json({ message: 'Court updated.' });
+       
     }
   } catch (e) {
     console.error('Error updating court', error);
