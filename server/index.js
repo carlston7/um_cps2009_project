@@ -370,6 +370,7 @@ const start = async() => {
   }
 }
 
+module.exports = app;
 // Calling the function which makes a database
 // connection and starts the server
 start();
