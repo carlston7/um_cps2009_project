@@ -345,8 +345,8 @@ app.post('/book-court', async (req, res) => {
     }   
 
   } catch (e) {
-    console.error('Error creating booking', error);
-    res.status(500).send('An error occurred: ' + error.message);
+    console.error('Error creating booking', e);
+    res.status(500).send('An error occurred: ' + e.message);
   }
 });
 
