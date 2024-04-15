@@ -39,7 +39,7 @@ export const fetchBookings = async (): Promise<Booking[]> => {
   }
 
   try {
-    const response = await axiosInstance.post('/user-bookings', { email: userEmail });
+    const response = await axiosInstance.get('/user-bookings', { headers: { 'email': userEmail } });
     return response.data; // Assuming the response data is an array of bookings
   } catch (error) {
     console.error('Error fetching bookings:', error);
