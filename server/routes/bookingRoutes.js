@@ -34,12 +34,12 @@ router.post('/book-court', async (req, res) => {
 
             if (court_names.includes(req.body.courtName)) {
                 
-                currentTime = new Date();
-                bookingTime = new Date(req.body.dateTimeIso);
+                const currentTime = new Date();
+                const bookingTime = new Date(req.body.dateTimeIso);
                 const timezoneOffsetHours = 2;
-                const cetTime = new Date(currentTime.getTime() + (timezoneOffsetHours * 60 * 60 * 1000));
+                const cetCurrentTime = new Date(currentTime.getTime() + (timezoneOffsetHours * 60 * 60 * 1000));
 
-                if (cetTime < bookingTime) {
+                if (cetCurrentTime < bookingTime) {
                     const data = {
                         start: req.body.dateTimeIso,
                         user_email: req.headers['user-email'],
@@ -72,12 +72,7 @@ router.post('/book-court', async (req, res) => {
 
                     res.status(201).json({ message: 'Success' });
               } else {
-                  res.status(400).json({
-                    message: 'Bookings can only be made for an upcoming date/time.',
-                    currentTime: cetTime,
-                    bookingTime: bookingTime,
-                    bookingTimeRaw: req.body.dateTimeIso
-                });
+                  res.status(400).json({ message: 'Bookings can only be made for an upcoming date/time.' });
               }
 
 
