@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { create_user, get_user_credit, edit_user } = require('../controllers/usercontroller');
 const bcrypt = require('bcryptjs');
+const User = require('../models/users');
 
 router.post('/signup', async (req, res) => {
     try {
