@@ -36,7 +36,10 @@ router.post('/book-court', async (req, res) => {
                 
                 currentTime = new Date();
                 bookingTime = new Date(req.body.dateTimeISO);
-                if (currentTime < bookingTime) {
+                const timezoneOffsetHours = 2;
+                const cetTime = new Date(currentTime.getTime() + (timezoneOffsetHours * 60 * 60 * 1000));
+
+                if (cetTime < bookingTime) {
                     const data = {
                         start: req.body.dateTimeIso,
                         user_email: req.headers['user-email'],
@@ -71,7 +74,7 @@ router.post('/book-court', async (req, res) => {
               } else {
                   res.status(400).json({
                     message: 'Bookings can only be made for an upcoming date/time.',
-                    currentTime: currentTime,
+                    currentTime: cetTime,
                     bookingTime: bookingTime
                 });
               }
