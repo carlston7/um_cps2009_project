@@ -28,6 +28,19 @@ jobs:
           npm run build --if-present
         working-directory: ./server
 
+      - name: Run tests and save results
+        run: |
+          npm test > test-results.txt || true
+        working-directory: ./server
+        continue-on-error: true
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        if: always() # This ensures that the artifact is uploaded even if the test step fails
+        with:
+          name: test-results
+          path: ./server/test-results.txt
+          
       - name: Copy frontend build to server's public directory
         run: |
           mkdir -p ./server/public
