@@ -293,7 +293,11 @@ app.patch('/profile', async (req, res) => {
     
     if (user && valid_pwd) {
       const profile = await edit_user(req.body);
-      res.status(201).json({ message: 'Profile updated.' });
+      res.status(201).json({
+        message: 'Profile updated.',
+        name: profile['name'],
+        surname: profile['surname']
+      });
     } else {
       res.status(403).json({ message: "Forbidden" });
     }
@@ -332,7 +336,9 @@ app.post('/book-court', async (req, res) => {
       if (user.credit >= court_price) {
 
         const courts = await get_available_courts(req.body.dateTimeISO);
-        //if (courts.includes(req.body.courtName)) {
+        const court_names = courts.map(court => court.name);
+
+        if (court_names.includes(req.body.courtName)) {
           const data = {
             start: req.body.dateTimeIso,
             user_email: req.headers['user-email'],
@@ -365,9 +371,9 @@ app.post('/book-court', async (req, res) => {
 
           res.status(201).json({ message: 'Success' });
 
-        /*} else {
+        } else {
           res.status(404).json({ message: 'Court not available at this hour.'});
-        }*/
+        }
         
       } else {
         res.status(402).json({ message: 'Insufficient funds' });
