@@ -26,16 +26,16 @@ router.post('/book-court', async (req, res) => {
 
         if (user && valid_pwd) {
 
-            const court_price = await get_court_price(req.body.courtName, new Date(req.body.dateTimeISO).getHours());
+            const court_price = await get_court_price(req.body.courtName, new Date(req.body.dateTimeIso).getHours());
             if (user.credit >= court_price) {
 
-                const courts = await get_available_courts(req.body.dateTimeISO);
+                const courts = await get_available_courts(req.body.dateTimeIso);
             const court_names = courts.map(court => court.name);
 
             if (court_names.includes(req.body.courtName)) {
                 
                 currentTime = new Date();
-                bookingTime = new Date(req.body.dateTimeISO);
+                bookingTime = new Date(req.body.dateTimeIso);
                 const timezoneOffsetHours = 2;
                 const cetTime = new Date(currentTime.getTime() + (timezoneOffsetHours * 60 * 60 * 1000));
 
@@ -75,7 +75,8 @@ router.post('/book-court', async (req, res) => {
                   res.status(400).json({
                     message: 'Bookings can only be made for an upcoming date/time.',
                     currentTime: cetTime,
-                    bookingTime: bookingTime
+                    bookingTime: bookingTime,
+                    bookingTimeRaw: req.body.dateTimeIso
                 });
               }
 
