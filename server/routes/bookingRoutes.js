@@ -35,7 +35,7 @@ router.post('/book-court', async (req, res) => {
             if (court_names.includes(req.body.courtName)) {
                 
                 currentTime = new Date();
-                bookingTime = new Date(req.body.dateTimeISO)
+                bookingTime = new Date(req.body.dateTimeISO);
                 if (currentTime < bookingTime) {
                     const data = {
                         start: req.body.dateTimeIso,
