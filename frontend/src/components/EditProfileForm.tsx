@@ -40,7 +40,7 @@ const EditProfile = () => {
                 <h2 >Edit Profile</h2>
                 <label>
                     Email:
-                    <input type="email" name="email" value={profile.email} onChange={handleChange} required />
+                    <input type="email" name="email" value={profile.email} onChange={handleChange} readOnly />
                 </label>
                 <label>
                     Name:

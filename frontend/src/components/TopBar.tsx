@@ -60,21 +60,21 @@ export default function TopBar() {
             <AppBar position="static" sx={{ backgroundImage: 'linear-gradient(to right, #097969, #209e61)' }}>
                 <Toolbar>
                     <TopbarLink to="/" text="Home" />
-                    <TopbarLink to="/view-courts" text="View Courts" />
+                    <TopbarLink to="/view-courts" text="Book a Court" />
                     {isAuthenticated && [
-                        <>
-                            <TopbarLink to="/my-bookings" text="My Bookings" />
-                        <Chip
-                            icon={<AccountBalanceWallet />}
-                            label={`Balance: $${formattedCredit}`}
-                                color="default" />
-                        </>
+                        <TopbarLink to="/my-bookings" text="My Bookings" />
                     ]}
                     {isAdmin && [
                         <TopbarLink key="new-court" to="/new-court" text="Create Court" />,
                         <TopbarLink key="edit-court" to="/view-all-courts" text="Edit Court" />
                     ]}
                     <Box flexGrow={1} />
+                    {isAuthenticated && [
+                        <Chip
+                            icon={<AccountBalanceWallet />}
+                            label={`Balance: $${formattedCredit}`}
+                            color="default" />
+                    ]}
                     <IconButton
                         color="inherit"
                         aria-label="menu"
