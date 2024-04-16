@@ -339,37 +339,43 @@ app.post('/book-court', async (req, res) => {
         const court_names = courts.map(court => court.name);
 
         if (court_names.includes(req.body.courtName)) {
-          const data = {
-            start: req.body.dateTimeIso,
-            user_email: req.headers['user-email'],
-            court_name: req.body.courtName
-          };
-      
-          const booking = await create_booking(data);
-          const user = await update_user_credit(req.headers['user-email'], court_price);
+
+          if(new Date() < new Date(req.body.dateTimeISO)) {
+            const data = {
+              start: req.body.dateTimeIso,
+              user_email: req.headers['user-email'],
+              court_name: req.body.courtName
+            };
+        
+            const booking = await create_booking(data);
+            const user = await update_user_credit(req.headers['user-email'], court_price);
+            
+            const dateTimeParts = req.body.dateTimeIso.split('T');
+            const datePart = dateTimeParts[0];
+            const timePart = dateTimeParts[1];
+  
+            const formattedDate = new Date(datePart).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            const formattedTime = new Date(`1970-01-01T${timePart}`).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+  
+            const mailOptions = {
+              from: 'manager.tennisclub@gmail.com',
+              to: `${data.user_email}, manager.tennisclub@gmail.com`,
+              subject: 'Booking Confirmation',
+              html: ` 
+                <h4>The following booking made by ${data.user_email} has been confirmed:</h4>
+                <p>Court Name: ${data.court_name}</p>
+                <p>Date: ${formattedDate}</p>
+                <p>Time: ${formattedTime}</p>
+              `
+            };
+            
+            await send_booking_confirmation(mailOptions);
+  
+            res.status(201).json({ message: 'Success' });
+          } else {
+            res.status(400).json({ message: 'Bookings can only be made for an upcoming date/time.' });
+          }
           
-          const dateTimeParts = req.body.dateTimeIso.split('T');
-          const datePart = dateTimeParts[0];
-          const timePart = dateTimeParts[1];
-
-          const formattedDate = new Date(datePart).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-          const formattedTime = new Date(`1970-01-01T${timePart}`).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-
-          const mailOptions = {
-            from: 'manager.tennisclub@gmail.com',
-            to: `${data.user_email}, manager.tennisclub@gmail.com`,
-            subject: 'Booking Confirmation',
-            html: ` 
-              <h4>The following booking made by ${data.user_email} has been confirmed:</h4>
-              <p>Court Name: ${data.court_name}</p>
-              <p>Date: ${formattedDate}</p>
-              <p>Time: ${formattedTime}</p>
-            `
-          };
-          
-          await send_booking_confirmation(mailOptions);
-
-          res.status(201).json({ message: 'Success' });
 
         } else {
           res.status(404).json({ message: 'Court not available at this hour.'});
