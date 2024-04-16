@@ -39,8 +39,8 @@ app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-const start = async() => {
-  try{
+const start = async () => {
+  try {
     // Makes a database connection
     await connect_db();
 
@@ -48,7 +48,7 @@ const start = async() => {
     app.listen(port, () => {
       console.log(`Server is running on port: ${port}`);
     });
-  }catch(e){
+  } catch (e) {
     console.error(e.message);
   }
 }
