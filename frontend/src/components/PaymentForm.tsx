@@ -22,7 +22,6 @@ const TopUp = () => {
           // Now call apiLogin to refresh user details including balance
           try {
             await fetchUserCredit(); // Update the user's session details
-            toast.success("User details updated");
           } catch (loginError) {
             console.error('Error updating user details:', loginError);
           }
