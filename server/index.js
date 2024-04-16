@@ -293,7 +293,11 @@ app.patch('/profile', async (req, res) => {
     
     if (user && valid_pwd) {
       const profile = await edit_user(req.body);
-      res.status(201).json({ message: 'Profile updated.' });
+      res.status(201).json({
+        message: 'Profile updated.',
+        name: profile['name'],
+        surname: profile['surname']
+      });
     } else {
       res.status(403).json({ message: "Forbidden" });
     }
