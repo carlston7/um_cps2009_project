@@ -339,8 +339,9 @@ app.post('/book-court', async (req, res) => {
         const court_names = courts.map(court => court.name);
 
         if (court_names.includes(req.body.courtName)) {
-
-          if(new Date() < new Date(req.body.dateTimeISO)) {
+          currentTime=new Date();
+          bookingTime=new Date(req.body.dateTimeISO);
+          if(currentTime < bookingTime) {
             const data = {
               start: req.body.dateTimeIso,
               user_email: req.headers['user-email'],
@@ -373,7 +374,11 @@ app.post('/book-court', async (req, res) => {
   
             res.status(201).json({ message: 'Success' });
           } else {
-            res.status(400).json({ message: 'Bookings can only be made for an upcoming date/time.' });
+            res.status(400).json({ 
+              message: 'Bookings can only be made for an upcoming date/time.',
+              currentTime: currentTime,
+              bookingTime: bookingTime 
+            });
           }
           
 
