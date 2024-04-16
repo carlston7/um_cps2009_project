@@ -17,7 +17,7 @@ const BookCourtPage = () => {
 
         try {
             const bookingDetails = {
-                dateTimeIso: `${date}T${time}:00`,
+                dateTimeIso: `${date}T${time}:00.000Z`,
                 courtName: selectedCourt.name, // Use _id instead of id
             };
             await bookCourt(bookingDetails);
