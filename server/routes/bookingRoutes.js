@@ -70,7 +70,7 @@ router.post('/book-court', async (req, res) => {
                     res.status(201).json({ message: 'Success' });
               } else {
                   res.status(400).json({
-                    message: 'Bookings can only be made for an upcoming date/time.',
+                      message: 'Bookings can only be made for an upcoming date/time V2.',
                     currentTime: currentTime,
                     bookingTime: bookingTime
                 });

@@ -21,7 +21,7 @@ export const DateTimeSelector: React.FC<Props> = ({ onDateTimeSelected }) => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        const dateTimeIso = `${date}T${time}:00`;
+        const dateTimeIso = `${date}T${time}:00.000Z`;
         onDateTimeSelected({ dateTime: dateTimeIso });
         setBookingDate(date);
         setBookingTime(time);
