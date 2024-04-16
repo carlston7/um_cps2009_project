@@ -55,10 +55,14 @@ const BookingsComponent: React.FC = () => {
         alignItems: 'flex-start' // This will align the child divs at their start edge vertically
     };
     const formatBookingTime = (booking: { start: string | number | Date; }) => {
+        console.log("Booking time", booking)
         const startTime = new Date(booking.start);
+        const formattedStartTime = startTime.toISOString().replace('Z', '').replace('T', ' ');
         const endTime = new Date(startTime.getTime() + 60 * 60 * 1000); // Add 1 hour
-
-        return `${startTime.toLocaleTimeString()} - ${endTime.toLocaleTimeString()}`;
+        const formattedEndTime = endTime.toISOString().replace('Z', '').replace('T', ' ');
+        const startTimeOnly = formattedStartTime.split(' ')[1].substring(0, 5);
+        const endTimeOnly = formattedEndTime.split(' ')[1].substring(0, 5);
+        return `${startTimeOnly} - ${endTimeOnly}`;
     };
 
     return (
