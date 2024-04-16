@@ -42,12 +42,13 @@ const BookingsComponent: React.FC = () => {
         alignItems: 'center',
         borderRadius: '10px',
     };
-    const bookingEntryStyle = {
+    const bookingEntryStyle: React.CSSProperties = {
         backgroundColor: '#708090', // Light Grey
         padding: '10px',
         margin: '10px 0',
         alignItems: 'center',
         borderRadius: '5px',
+        flexDirection: 'column',
     };
     const bookingsContainerStyle = {
         display: 'flex',        // This will layout the child divs in a row
@@ -67,7 +68,7 @@ const BookingsComponent: React.FC = () => {
 
     return (
         <div style={bookingsContainerStyle}>
-            <div style={{ ...containerStyle, marginRight: '10px', alignItems: 'flex-start' }}>
+            <div style={{ ...containerStyle, marginRight: '20px', alignItems: 'flex-column' }}>
                 <h2 style={pastBookingStyle}>Past Bookings</h2>
                 {pastBookings.map((booking, index) => (
                     <div key={index} style={bookingEntryStyle}>
@@ -77,7 +78,7 @@ const BookingsComponent: React.FC = () => {
                     </div>
                 ))}
             </div>
-            <div style={{ ...containerStyle, marginLeft: '10px', alignItems: 'flex-start' }}>
+            <div style={{ ...containerStyle, marginLeft: '20px', alignItems: 'flex-column' }}>
                 <h2 style={futureBookingStyle}>Future Bookings</h2>
                 {futureBookings.map((booking, index) => (
                     <div key={index} style={bookingEntryStyle}>
