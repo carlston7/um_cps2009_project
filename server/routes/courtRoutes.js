@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { create_court, get_courts, edit_court } = require('../controllers/courtcontroller');
-const app = express();
 
-app.get('/courts-all', async (req, res) => {
+router.get('/courts-all', async (req, res) => {
     try {
         const courts = await get_courts();
 
@@ -15,7 +14,7 @@ app.get('/courts-all', async (req, res) => {
 });
 
 // app.post('/court', requireAdmin, async (req, res) => {
-app.post('/court', async (req, res) => {
+router.post('/court', async (req, res) => {
     try {
         const user = await User.findOne({ email_address: req.headers['user-email'] });
         const valid_pwd = await bcrypt.compare(req.headers['user-password'], user.password);
@@ -48,7 +47,7 @@ app.post('/court', async (req, res) => {
     }
 });
 
-app.patch('/court', async (req, res) => {
+router.patch('/court', async (req, res) => {
     try {
         const user = await User.findOne({ email_address: req.headers['user-email'] });
         const valid_pwd = await bcrypt.compare(req.headers['user-password'], user.password);

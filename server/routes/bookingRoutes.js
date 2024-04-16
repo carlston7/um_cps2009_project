@@ -1,13 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const app = express();
 
 const { create_booking, get_bookings, get_available_courts } = require('../controllers/bookingcontroller');
 const { get_court_price } = require('../controllers/courtcontroller.js');
 const { update_user_credit } = require('../controllers/usercontroller.js');
 const { send_booking_confirmation } = require('../controllers/mail.js');
 
-app.get('/courts', async (req, res) => {
+router.get('/courts', async (req, res) => {
     try {
         const courts = await get_available_courts(req.query.dateTime);
 
@@ -18,7 +17,7 @@ app.get('/courts', async (req, res) => {
     }
 });
 
-app.post('/book-court', async (req, res) => {
+router.post('/book-court', async (req, res) => {
     try {
         const user = await User.findOne({ email_address: req.headers['user-email'] });
         const valid_pwd = await bcrypt.compare(req.headers['user-password'], user.password);
@@ -93,7 +92,7 @@ app.post('/book-court', async (req, res) => {
     }
 });
 
-app.get('/user-bookings', async (req, res) => {
+router.get('/user-bookings', async (req, res) => {
     try {
         const email = req.headers['email'];
         if (!email) {
