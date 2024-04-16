@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { create_court, get_courts, edit_court } = require('../controllers/courtcontroller');
+const bcrypt = require('bcryptjs');
+const User = require('../models/users');
 
 router.get('/courts-all', async (req, res) => {
     try {
