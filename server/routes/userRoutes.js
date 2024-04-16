@@ -2,9 +2,8 @@ const express = require('express');
 const router = express.Router();
 const { create_user, get_user_credit, edit_user } = require('../controllers/usercontroller');
 const bcrypt = require('bcryptjs');
-const app = express();
 
-app.post('/signup', async (req, res) => {
+router.post('/signup', async (req, res) => {
     try {
 
         const user_exists = await User.exists({ email_address: req.body.email });
@@ -30,7 +29,7 @@ app.post('/signup', async (req, res) => {
 });
 
 //Login validation
-app.post('/login', async (req, res) => {
+router.post('/login', async (req, res) => {
     try {
         const user_data = req.body;
 
@@ -64,7 +63,7 @@ app.post('/login', async (req, res) => {
     }
 });
 
-app.get("/credit", async (req, res) => {
+router.get("/credit", async (req, res) => {
     const email = req.headers['user-email'];
     if (!email) {
         return res.status(400).send({ error: 'Email header is required.' });
@@ -82,7 +81,7 @@ app.get("/credit", async (req, res) => {
     }
 });
 
-app.patch('/profile', async (req, res) => {
+router.patch('/profile', async (req, res) => {
     try {
         const user = await User.findOne({ email_address: req.body.email });
         const valid_pwd = await bcrypt.compare(req.body.password, user.password);

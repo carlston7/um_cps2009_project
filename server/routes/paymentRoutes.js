@@ -4,10 +4,9 @@ const stripe = require('stripe')(process.env.SECRET_KEY);
 const User = require('../models/users');
 const { getStripeSessionsBySessionID, saveStripeSession } = require('../controllers/stripe');
 const body_parser = require('body-parser')
-const app = express();
-app.use(body_parser.json());
+router.use(body_parser.json());
 
-app.post("/topup", async (req, res) => {
+router.post("/topup", async (req, res) => {
     try {
         const { email, amount } = req.body;
 
@@ -37,7 +36,7 @@ app.post("/topup", async (req, res) => {
     }
 });
 
-app.post("/success", async (req, res) => {
+router.post("/success", async (req, res) => {
     try {
         const session_id = req.body.session_id;
         console.log("Req.Body:", req.body);
