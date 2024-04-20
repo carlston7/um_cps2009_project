@@ -3,8 +3,10 @@ import { createCourt } from '../../api/Courts';
 import { CourtCreateRequest } from '../../models/Courts';
 import { containerStyle } from '../ui/Background';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 export const CreateCourtForm: React.FC = () => {
+    const navigate = useNavigate();
     const [createFormData, setCreateFormData] = useState<CourtCreateRequest>({
         name: '',
         type: '',
@@ -31,7 +33,7 @@ export const CreateCourtForm: React.FC = () => {
                 dayPrice: 0,
                 nightPrice: 0,
             });
-
+            navigate('/view-all-courts');
         } catch (error) {
             toast.error('Failed to create court.');
         }
