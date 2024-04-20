@@ -5,7 +5,7 @@ import axios from 'axios';
 export const apiEditProfile = async (data: SignupRequest) => {
     try {
         const response = await axiosInstance.patch(`/profile`, data);
-
+        console.log("response", response.data);
         const { name, surname } = response.data;
         localStorage.setItem('userName', name);
         localStorage.setItem('userSurname', surname);

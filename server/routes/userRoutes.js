@@ -84,6 +84,8 @@ router.get("/credit", async (req, res) => {
 
 router.patch('/profile', async (req, res) => {
     try {
+        res.set('Cache-Control', 'no-store');
+
         const user = await User.findOne({ email_address: req.body.email });
         const valid_pwd = await bcrypt.compare(req.body.password, user.password);
 
