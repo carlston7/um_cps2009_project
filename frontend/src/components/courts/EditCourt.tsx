@@ -35,7 +35,7 @@ export const EditCourtForm: React.FC = () => {
         try {
             await updateCourt(updateFormData as CourtUpdateRequest);
             toast.success('Court updated successfully!');
-            navigate('/');
+            navigate('/view-all-courts');
         } catch (error) {
             toast.error('Failed to update court.');
         }
