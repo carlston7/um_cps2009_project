@@ -23,7 +23,7 @@ router.post('/court', async (req, res) => {
         // const court = await create_court(req.body);
         // res.status(201).json({ message: 'Success' });
         if (req.headers['user-type'] !== 'admin' ||
-            req.headers['user-email'] !== 'admin@admin.admin' ||
+            req.headers['user-email'] !== 'manager.tennisclub@gmail.com' ||
             !valid_pwd) {
             res.status(403).json({ message: "Forbidden" });
         } else {
@@ -55,7 +55,7 @@ router.patch('/court', async (req, res) => {
         const valid_pwd = await bcrypt.compare(req.headers['user-password'], user.password);
 
         if (req.headers['user-type'] !== 'admin' ||
-            req.headers['user-email'] !== 'admin@admin.admin' ||
+            req.headers['user-email'] !== 'manager.tennisclub@gmail.com' ||
             !valid_pwd) {
             res.status(403).json({ message: "Forbidden" });
         } else {
