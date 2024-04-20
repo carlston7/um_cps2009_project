@@ -91,6 +91,7 @@ router.patch('/profile', async (req, res) => {
 
         if (user && valid_pwd) {
             const profile = await edit_user(req.body);
+            console.log("Profile: ", profile);
             res.status(201).json({
                 message: 'Profile updated.',
                 name: profile['name'],
