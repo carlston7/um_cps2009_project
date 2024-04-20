@@ -94,8 +94,8 @@ router.patch('/profile', async (req, res) => {
             console.log("Profile: ", profile);
             res.status(201).json({
                 message: 'Profile updated.',
-                name: profile['name'],
-                surname: profile['surname']
+                name: profile.name,
+                surname: profile.surname
             });
         } else {
             res.status(403).json({ message: "Forbidden" });

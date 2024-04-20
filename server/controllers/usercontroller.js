@@ -57,14 +57,17 @@ exports.get_user_credit = async (email) => {
 
 exports.edit_user = async (user_data) => {
     try{
-        const user = await User.findOneAndUpdate({email_address: user_data.email},
-            {name: user_data.name, surname: user_data.surname});
+        const updatedUser = await User.findOneAndUpdate(
+            { email_address: user_data.email },
+            { name: user_data.name, surname: user_data.surname },
+            { new: true }  // ensure modified document is returned NOT the pre edited one
+        );
         
-        if (!user) {
+        if (!updatedUser) {
             throw new Error('User not found.');
         }
         
-        return user;
+        return updatedUser;
     } catch (e) {
         console.error(e);
         throw new Error('A problem was encountered while editing the user profile.');
