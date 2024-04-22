@@ -15,7 +15,7 @@ export const SignupForm = () => {
     const [rePassword, setRePassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showRePassword, setShowRePassword] = useState(false);
-    const { login } = useAuth();
+    // const { login } = useAuth();
 
     const togglePasswordVisibility = () => setShowPassword(!showPassword);
     const toggleRePasswordVisibility = () => setShowRePassword(!showRePassword);
@@ -30,7 +30,7 @@ export const SignupForm = () => {
             return;
         }
         try {
-            const response = await apiSignup({ name, surname, email, password });
+            await apiSignup({ name, surname, email, password });
             setAwaitingConfirmation(true);
             toast.info('Waiting for email confirmation');
             // login(response.data.token);
