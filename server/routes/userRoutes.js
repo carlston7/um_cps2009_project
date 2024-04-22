@@ -23,7 +23,9 @@ router.post('/signup', async (req, res) => {
         if (user_exists) {
             return res.status(400).json({ error: 'Email address already exists' });
         } else {
-            const user = await create_user(req.body);
+            const confirmationToken = crypto.randomBytes(20).toString('hex');
+            const tokenExpiration = Date.now() + 3600000; // 1 hour from now
+            const user = await create_user(req.body,confirmationToken,tokenExpiration);
             const token = await generateToken(user);
 
             const mailOptions = {

@@ -26,6 +26,7 @@ const EmailConfirmation = () => {
         });
     }, [token, navigate]);
 
+    console.log("Confirming email with tok: ", token);
     return (
         <div style={{ textAlign: 'center', padding: '20px' }}>
             <h1>Confirming Your Email...</h1>

@@ -1,7 +1,7 @@
 const User = require('../models/users')
 const bcrypt = require('bcryptjs')
 
-exports.create_user = async (user_data) => {
+exports.create_user = async (user_data, confirmationToken, tokenExpiration) => {
     try{
         const salt = await bcrypt.genSalt(10);
         const hashed_pwd = await bcrypt.hash(user_data.password, salt);
@@ -11,7 +11,10 @@ exports.create_user = async (user_data) => {
             ...user_data,
             email_address: user_data.email,
             credit: 0,
-            type: 'member'
+            type: 'member',
+            confirmationToken: confirmationToken,
+            tokenExpiration: tokenExpiration,
+            emailVerified: false 
         };
         const user = new User(mappedData);
         

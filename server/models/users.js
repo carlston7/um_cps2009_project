@@ -6,7 +6,10 @@ const users_schema = new mongoose.Schema({
     email_address: String,
     password: String,
     credit: Number,
-    type: ['member', 'owner', 'admin']
+    type: ['member', 'owner', 'admin'],
+    confirmationToken: String,
+    tokenExpiration: Date,
+    emailVerified: { type: Boolean, default: false }
 });
 
 module.exports = mongoose.model('users', users_schema);
