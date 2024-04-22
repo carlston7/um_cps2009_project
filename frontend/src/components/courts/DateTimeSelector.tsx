@@ -16,7 +16,7 @@ export const DateTimeSelector: React.FC<Props> = ({ onDateTimeSelected }) => {
     const currentTime = now.getHours();
 
     const maxDate = new Date();
-    maxDate.setDate(maxDate.getDate() + 14);  // Set max date to two weeks in advance
+    maxDate.setDate(maxDate.getDate() + 7);  // Set max date to two weeks in advance
     const maxDateValue = maxDate.toISOString().split('T')[0];
 
     useEffect(() => {
