@@ -3,11 +3,13 @@ import { fetchBookings } from '../api/Bookings';
 import { MyBookings } from '../models/Bookings';
 import { toast } from 'react-toastify';
 import { containerStyle } from './ui/Background';
+import { useNavigate } from 'react-router-dom';
 
 const BookingsComponent: React.FC = () => {
     const [pastBookings, setPastBookings] = useState<MyBookings[]>([]);
     const [futureBookings, setFutureBookings] = useState<MyBookings[]>([]);
-
+    const navigate = useNavigate();
+    
     useEffect(() => {
         const getBookings = async () => {
             try {
@@ -66,6 +68,28 @@ const BookingsComponent: React.FC = () => {
         return `${startTimeOnly} - ${endTimeOnly}`;
     };
 
+    const navigateToCancel = (booking: MyBookings) => {
+        console.log("Booking sent: ", booking);
+        if (!booking || !booking._id) {
+            console.error("Invalid booking object:", booking);
+            toast.error("Invalid booking data");
+            return;
+        }
+        const userEmail = localStorage.getItem('userEmail');
+        if (!userEmail) {
+            console.error("No user email found in localStorage");
+            toast.error("User email is not available");
+            return;
+        }
+    
+        navigate(`/cancel-booking/${booking._id}`, {
+            state: {
+                booking: booking, // assuming booking is a full object with all details
+                userEmail: userEmail,
+            }
+        });
+    };
+    
     return (
         <div style={bookingsContainerStyle}>
             <div style={{ ...containerStyle, marginRight: '20px', alignItems: 'flex-column' }}>
@@ -81,7 +105,7 @@ const BookingsComponent: React.FC = () => {
             <div style={{ ...containerStyle, marginLeft: '20px', alignItems: 'flex-column' }}>
                 <h2 style={futureBookingStyle}>Future Bookings</h2>
                 {futureBookings.map((booking, index) => (
-                    <div key={index} style={bookingEntryStyle}>
+                    <div key={index} style={{ ...bookingEntryStyle, cursor: 'pointer' }} onClick={() => navigateToCancel(booking)}>
                         <p>Date: {new Date(booking.start).toLocaleDateString()}</p>
                         <p>Time: {formatBookingTime(booking)}</p>
                         <p>Court: {booking.court_name || 'Unknown Court'}</p>

@@ -1,4 +1,5 @@
 import axiosInstance from './AxiosInstance';
+import { AxiosError } from 'axios';
 import { Booking, MyBookings } from '../models/Bookings';
 import { fetchUserCredit } from './User';
 
@@ -43,6 +44,29 @@ export const fetchBookings = async (): Promise<MyBookings[]> => {
     return response.data; // Assuming the response data is an array of bookings
   } catch (error) {
     console.error('Error fetching bookings:', error);
+    throw error;
+  }
+};
+
+// Define the type for the cancellation request
+interface CancelBookingRequest {
+    _id: string;
+    court_name: string;
+    user_email: string;
+}
+
+export const apiCancelBooking = async (data: CancelBookingRequest) => {
+  try {
+    console.log("data: ", data)
+    const response = await axiosInstance.delete(`/cancel-booking`, { data });
+    console.log("response", response.data);
+    return response;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      console.error('Error:', error.response?.data || error.message);
+    } else {
+      console.error('Unexpected error:', error);
+    }
     throw error;
   }
 };
