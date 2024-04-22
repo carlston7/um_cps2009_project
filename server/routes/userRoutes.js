@@ -65,7 +65,7 @@ router.get('/confirm-email', async (req, res) => {
         user.emailVerified = true;
         await user.save();
 
-        res.redirect('/login');
+        res.json({ message: 'Email verification successful' });
     } catch (e) {
         console.error(e);
         res.status(500).send('Server Error');

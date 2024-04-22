@@ -15,15 +15,15 @@ const EmailConfirmation = () => {
             return;
         }
         axiosInstance.get(`/confirm-email?token=${token}`)
-            .then(() => {
-                toast.success('Email confirmed successfully!');
-                navigate('/login');
-            })
-            .catch((error) => {
-                console.log("Error confirming email", error);
-                toast.error('Failed to confirm email. Please try again.');
-                navigate('/');
-            });
+        .then((response) => {
+            toast.success(response.data.message);
+            navigate('/login');
+        })
+        .catch((error) => {
+            console.log("Error confirming email", error);
+            toast.error('Failed to confirm email. Please try again.');
+            navigate('/');
+        });
     }, [token, navigate]);
 
     return (
