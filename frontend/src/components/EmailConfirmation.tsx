@@ -9,7 +9,7 @@ const EmailConfirmation = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_API_URL}/confirm-email?token=${token}`)
+        axios.get(`$https://cps2009project.azurewebsites.net/confirm-email?token=${token}`)
             .then(() => {
                 toast.success('Email confirmed successfully!');
                 navigate('/login');
