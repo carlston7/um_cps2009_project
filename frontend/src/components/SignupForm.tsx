@@ -33,14 +33,15 @@ export const SignupForm = () => {
             const response = await apiSignup({ name, surname, email, password });
             setAwaitingConfirmation(true);
             toast.info('Waiting for email confirmation');
-            login(response.data.token);
-            navigate('/');
+            // login(response.data.token);
+            // navigate('/');
         } catch (error) {
             toast.error('Signup failed');
             console.log(error);
         }
     };
     if (awaitingConfirmation) {
+        console.log('awaiting confirmation');
         return (
             <div style={containerStyle}>
                 <h2 style={{ textAlign: 'center' }}>Confirm Your Email</h2>

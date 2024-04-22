@@ -32,6 +32,7 @@ router.post('/signup', async (req, res) => {
                 subject: 'Confirm your Email',
                 text: `Please confirm your email by clicking on the following link: https://cps2009project.azurewebsites.net/confirm-email?token=${token}`
             };
+            console.log("Mail options: ", mailOptions);
             await send_booking_confirmation(mailOptions); // rename to send email later
 
             res.status(201).json({
@@ -52,6 +53,7 @@ router.post('/signup', async (req, res) => {
 
 router.get('/confirm-email', async (req, res) => {
     try {
+        console.log("Confirming email");
         const { token } = req.query;
         const user = await User.findOne({ confirmationToken: token, tokenExpiration: { $gt: Date.now() } });
         if (!user) {
