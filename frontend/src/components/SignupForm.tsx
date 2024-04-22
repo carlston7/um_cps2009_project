@@ -20,6 +20,8 @@ export const SignupForm = () => {
     const togglePasswordVisibility = () => setShowPassword(!showPassword);
     const toggleRePasswordVisibility = () => setShowRePassword(!showRePassword);
     const navigate = useNavigate();
+    const [awaitingConfirmation, setAwaitingConfirmation] = useState(false);
+
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -29,14 +31,29 @@ export const SignupForm = () => {
         }
         try {
             const response = await apiSignup({ name, surname, email, password });
+            setAwaitingConfirmation(true);
+            toast.info('Waiting for email confirmation');
             login(response.data.token);
-            toast.success('Signup successful');
             navigate('/');
         } catch (error) {
             toast.error('Signup failed');
             console.log(error);
         }
     };
+    if (awaitingConfirmation) {
+        return (
+            <div style={containerStyle}>
+                <h2 style={{ textAlign: 'center' }}>Confirm Your Email</h2>
+                <p style={{ textAlign: 'center' }}>
+                    A confirmation email has been sent to <strong>{email}</strong>.
+                    Please check your inbox and click the link to activate your account.
+                </p>
+                <Button onClick={() => navigate('/login')} style={{ width: '100%', marginTop: '20px' }}>
+                    Go to Login
+                </Button>
+            </div>
+        );
+    }
 
     return (
         <div style={containerStyle}>

@@ -3,6 +3,17 @@ const router = express.Router();
 const { create_user, get_user_credit, edit_user } = require('../controllers/usercontroller');
 const bcrypt = require('bcryptjs');
 const User = require('../models/users');
+const crypto = require('crypto');
+const { send_booking_confirmation } = require('../controllers/mail.js');
+
+// Function to generate and store a token
+const generateToken = async (user) => {
+    const token = crypto.randomBytes(20).toString('hex');
+    user.confirmationToken = token;
+    user.tokenExpiration = Date.now() + 3600000; // 1 hour from now
+    await user.save();
+    return token;
+};
 
 router.post('/signup', async (req, res) => {
     try {
@@ -13,6 +24,16 @@ router.post('/signup', async (req, res) => {
             return res.status(400).json({ error: 'Email address already exists' });
         } else {
             const user = await create_user(req.body);
+            const token = await generateToken(user);
+
+            const mailOptions = {
+                from: 'manager.tennisclub@gmail.com',
+                to: user.email_address,
+                subject: 'Confirm your Email',
+                text: `Please confirm your email by clicking on the following link: https://cps2009project.azurewebsites.net/confirm-email?token=${token}`
+            };
+            await send_booking_confirmation(mailOptions); // rename to send email later
+
             res.status(201).json({
                 message: 'Sign up successful',
                 email: user.email_address,
@@ -23,6 +44,26 @@ router.post('/signup', async (req, res) => {
                 surname: user.surname,
             });
         }
+    } catch (e) {
+        console.error(e);
+        res.status(500).send('Server Error');
+    }
+});
+
+router.get('/confirm-email', async (req, res) => {
+    try {
+        const { token } = req.query;
+        const user = await User.findOne({ confirmationToken: token, tokenExpiration: { $gt: Date.now() } });
+        if (!user) {
+            return res.status(400).send('Invalid or expired token.');
+        }
+
+        user.confirmationToken = undefined;
+        user.tokenExpiration = undefined;
+        user.emailVerified = true;
+        await user.save();
+
+        res.redirect('/login');
     } catch (e) {
         console.error(e);
         res.status(500).send('Server Error');
