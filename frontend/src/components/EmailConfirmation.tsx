@@ -1,15 +1,20 @@
 // EmailConfirmation component
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { toast } from 'react-toastify';
+import axiosInstance from '../api/AxiosInstance';
 
 const EmailConfirmation = () => {
     const { token } = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`$https://cps2009project.azurewebsites.net/confirm-email?token=${token}`)
+        if (!token) {
+            toast.error("Invalid access. No token provided.");
+            navigate('/');
+            return;
+        }
+        axiosInstance.get(`/confirm-email?token=${token}`)
             .then(() => {
                 toast.success('Email confirmed successfully!');
                 navigate('/login');
@@ -22,7 +27,9 @@ const EmailConfirmation = () => {
     }, [token, navigate]);
 
     return (
-        <div>Loading...</div>
+        <div style={{ textAlign: 'center', padding: '20px' }}>
+            <h1>Confirming Your Email...</h1>
+        </div>
     );
 };
 
