@@ -8,7 +8,7 @@ const transporter = nodemailer.createTransport({
     }
   });
 
-exports.send_booking_confirmation = async (mailOptions) => {
+exports.send_booking_confirmation = async (mailOptions) => { // rename to send_email
     try {
         const mail = await transporter.sendMail(mailOptions);
         return mail;
