@@ -1,4 +1,3 @@
-// EmailConfirmation component
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -15,18 +14,31 @@ const EmailConfirmation = () => {
             return;
         }
         axiosInstance.get(`/confirm-email?token=${token}`)
-        .then((response) => {
-            toast.success(response.data.message);
-            navigate('/login');
-        })
-        .catch((error) => {
-            console.log("Error confirming email", error);
-            toast.error('Failed to confirm email. Please try again.');
-            navigate('/');
-        });
+            .then((response) => {
+                toast.success(response.data.message);
+                navigate('/login'); // Redirect to login after successful confirmation
+            })
+            .catch((error) => {
+                // Error handling based on the response status code
+                if (error.response) {
+                    switch (error.response.status) {
+                        case 400: // Bad request, likely invalid token
+                            toast.error('Invalid or expired token.');
+                            break;
+                        case 500: // Server error
+                            toast.error('Server error. Please try again later.');
+                            break;
+                        default:
+                            toast.error('An unknown error occurred. Please try again.');
+                    }
+                } else {
+                    // Handle errors without a response (network errors, etc.)
+                    toast.error('Network error. Please check your internet connection.');
+                }
+                navigate('/'); // Redirect to home on error
+            });
     }, [token, navigate]);
 
-    console.log("Confirming email with tok: ", token);
     return (
         <div style={{ textAlign: 'center', padding: '20px' }}>
             <h1>Confirming Your Email...</h1>
