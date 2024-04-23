@@ -28,14 +28,16 @@ exports.create_user = async (user_data, confirmationToken, tokenExpiration) => {
 
 exports.update_user_credit = async (email, price, booking_flag) => {
     try{
+        let user;
+
         if (booking_flag) {
-            const user = await User.findOneAndUpdate(
+            user = await User.findOneAndUpdate(
                 { email_address: email },
                 { $inc: { credit: -price } },
                 { new: true }
             );
         } else {
-            const user = await User.findOneAndUpdate(
+            user = await User.findOneAndUpdate(
                 { email_address: email },
                 { $inc: { credit: price } },
                 { new: true }
