@@ -32,7 +32,7 @@ router.post('/signup', async (req, res) => {
                 from: 'manager.tennisclub@gmail.com',
                 to: user.email_address,
                 subject: 'Confirm your Email',
-                text: `Please confirm your email by clicking on the following link: https://cps2009project.azurewebsites.net/confirm-email?token=${token}`
+                text: `Please confirm your email by clicking on the following link: https://cps2009project.azurewebsites.net/confirm-user-email?token=${token}`
             };
             console.log("Mail options: ", mailOptions);
             await send_booking_confirmation(mailOptions); // rename to send email later
