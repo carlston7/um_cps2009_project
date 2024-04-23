@@ -4,8 +4,9 @@ import EmailConfirmation from '../components/user/EmailConfirmation';
 const EmailConfirmationPage = () => {
     return (
         <div>
-            console.log("BULLSHIT"),
+            <p>ASUIGFSBJFKbJKFJKGAKFAKSFBJKJFBSJKFHFVSHKVAFF</p>
             <EmailConfirmation />
+            <p>ASUIGFSBJFKbJKFJKGAKFAKSFBJKJFBSJKFHFVSHKVAFF</p>
         </div>
     );
 };
