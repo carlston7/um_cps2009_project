@@ -81,7 +81,7 @@ router.post('/login', async (req, res) => {
 
         // Find user by email address using Mongoose
         const user = await User.findOne({ email_address: user_data.email });
-        if (!emailVerified) {
+        if (!user.emailVerified) {
             res.status(401).send('Email not verified');
         }
         // Check if user exists and compare passwords (make sure to hash passwords in production)

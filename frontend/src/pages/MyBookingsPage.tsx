@@ -1,5 +1,5 @@
 import React from 'react';
-import BookingsComponent from '../components/MyBookingsComponent';
+import BookingsComponent from '../components/user/MyBookingsComponent';
 import { containerStyle } from '../components/ui/Background';
 
 const MyBookingsPage = () => {

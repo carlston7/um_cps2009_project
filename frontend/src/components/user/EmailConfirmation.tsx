@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import axiosInstance from '../api/AxiosInstance';
-import { containerStyle } from './ui/Background';
+import axiosInstance from '../../api/AxiosInstance';
+import { containerStyle } from '../ui/Background';
 
 const EmailConfirmation = () => {
     const { token } = useParams();

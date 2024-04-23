@@ -1,5 +1,5 @@
 import React from 'react';
-import CancelBookingComponent from '../components/CancelBookingComponent';
+import CancelBookingComponent from '../components/user/CancelBookingComponent';
 
 const CancelBookingPage = () => {
     return (

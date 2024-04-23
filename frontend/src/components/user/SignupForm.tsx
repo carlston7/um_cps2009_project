@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { apiSignup } from '../api/Signup';
+import { apiSignup } from '../../api/Signup';
 // import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button } from './ui/button';
+import { Button } from '../ui/button';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import { containerStyle } from './ui/Background';
+import { containerStyle } from '../ui/Background';
 
 export const SignupForm = () => {
     const [name, setName] = useState('');

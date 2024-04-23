@@ -1,5 +1,5 @@
 import React from 'react';
-import EmailConfirmation from '../components/EmailConfirmation';
+import EmailConfirmation from '../components/user/EmailConfirmation';
 
 const EmailConfirmationPage = () => {
     return (

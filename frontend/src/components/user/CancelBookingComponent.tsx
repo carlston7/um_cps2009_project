@@ -1,8 +1,9 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { apiCancelBooking } from '../api/Bookings'; // Import the cancellation function
+import { apiCancelBooking } from '../../api/Bookings'; // Import the cancellation function
 import { toast } from 'react-toastify';
-import { containerStyle } from './ui/Background';
+import { containerStyle } from '../ui/Background';
+import { fetchUserCredit } from '../../api/User';
 
 const CancelBookingComponent = () => {
     const navigate = useNavigate();
@@ -21,6 +22,11 @@ const CancelBookingComponent = () => {
                 court_name: booking.court_name,
                 user_email: userEmail
             });
+            try {
+                await fetchUserCredit(); // Update the user's session details
+            } catch (loginError) {
+                console.error('Error updating user details:', loginError);
+            }
             toast.success('Booking successfully cancelled.');
             navigate('/'); // Redirect to homepage
         } catch (error) {
@@ -41,15 +47,15 @@ const CancelBookingComponent = () => {
         const endTimeOnly = formattedEndTime.split(' ')[1].substring(0, 5);
         return `${startTimeOnly} - ${endTimeOnly}`;
     };
-    
+
     return (
         <div style={containerStyle}>
             <h2>Are you sure you want to cancel this booking?</h2>
             {booking && (
                 <>
                     <p><strong>Court:</strong> {booking.court_name}</p>
-                    <p><strong>Time Slot:</strong> {formatBookingTime(booking)}</p> 
-                    <p><strong>Date:</strong> {new Date(booking.start).toLocaleDateString()}</p> 
+                    <p><strong>Time Slot:</strong> {formatBookingTime(booking)}</p>
+                    <p><strong>Date:</strong> {new Date(booking.start).toLocaleDateString()}</p>
                     {/* Use the formattedTime from the state */}
                 </>
             )}
