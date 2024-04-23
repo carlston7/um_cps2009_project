@@ -130,12 +130,11 @@ router.delete('/cancel-booking', async (req, res) => {
 
             if ((curr_year <= book_year) &&
                 (curr_month <= book_month) &&
-                (curr_date < book_date) &&
-                (curr_hr <= book_hr)) {
+                (((curr_date == book_date - 1) && (curr_hr < book_hr)) || (curr_date < book_date-1))) {
                     const book_del = await delete_booking(booking._id);
                     const court_price = await get_court_price(book_del.court_name, new Date(book_del.start).getHours());
                     const user = await update_user_credit(req.headers['user-email'], court_price, false);
-            } else {
+                } else {
                 throw new Error('A booking can only be deleted up till 24 hours before.')
             }
         } else {
