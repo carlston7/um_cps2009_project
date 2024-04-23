@@ -1,5 +1,5 @@
 import React from 'react';
-import ProfileInformation from '../components/ProfileInformation';
+import ProfileInformation from '../components/user/ProfileInformation';
 
 
 const ProfilePage = () => {

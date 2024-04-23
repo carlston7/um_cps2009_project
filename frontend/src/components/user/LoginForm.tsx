@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { apiLogin } from '../api/Login';
-import { useAuth } from '../context/AuthContext';
+import { apiLogin } from '../../api/Login';
+import { useAuth } from '../../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button } from './ui/button';
+import { Button } from '../ui/button';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import { containerStyle } from './ui/Background';
+import { containerStyle } from '../ui/Background';
 
 export const LoginForm = () => {
     const [email, setEmail] = useState('');
@@ -55,6 +55,7 @@ export const LoginForm = () => {
                 </div>
                 <Button variant="default" size="default" style={{ width: '100%', marginTop: '10px' }}>Login</Button>
                 <p style={{ textAlign: 'center', marginTop: '20px' }}>Not a member? <Link to="/signup">Sign up now</Link></p>
+                <p style={{ textAlign: 'center', marginTop: '20px' }}>Forgot password? <Link to="/email-code">Oopsy</Link></p>
             </form>
         </div>
     );

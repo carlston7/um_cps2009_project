@@ -1,5 +1,5 @@
 import React from 'react';
-import Topup  from '../components/PaymentForm';
+import Topup from '../components/user/PaymentForm';
 
 const PaymentPage = () => {
   return (

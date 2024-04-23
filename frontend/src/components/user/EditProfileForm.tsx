@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { apiEditProfile } from '../api/Profile'; // Update the import path according to your project structure
-import { containerStyle } from './ui/Background';
+import { apiEditProfile } from '../../api/Profile'; // Update the import path according to your project structure
+import { containerStyle } from '../ui/Background';
 import { toast } from 'react-toastify';
 
 const EditProfile = () => {

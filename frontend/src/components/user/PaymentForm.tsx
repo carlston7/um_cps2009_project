@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import axiosInstance from '../api/AxiosInstance';
-import { containerStyle } from './ui/Background';
+import axiosInstance from '../../api/AxiosInstance';
+import { containerStyle } from '../ui/Background';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { fetchUserCredit } from '../api/User';
+import { fetchUserCredit } from '../../api/User';
 
 const TopUp = () => {
   const [amount, setAmount] = useState('');
@@ -13,7 +13,7 @@ const TopUp = () => {
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const session_id = searchParams.get('session_id');
-    
+
     if (session_id) {
       axiosInstance.post('/success', { session_id, email: localStorage.getItem('userEmail') })
         .then(async ({ data }) => { // Mark this function as async
@@ -37,7 +37,7 @@ const TopUp = () => {
     event.preventDefault();
     try {
       const { data } = await axiosInstance.post('/topup', {
-        email: localStorage.getItem('userEmail'), 
+        email: localStorage.getItem('userEmail'),
         amount: parseFloat(amount),
       });
       if (data.url) {

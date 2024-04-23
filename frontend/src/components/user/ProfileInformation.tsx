@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { containerStyle } from './ui/Background';
+import { containerStyle } from '../ui/Background';
 
 const ProfileInformation = () => {
     // Hook to navigate programmatically

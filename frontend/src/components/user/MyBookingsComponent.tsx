@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { fetchBookings } from '../api/Bookings';
-import { MyBookings } from '../models/Bookings';
+import { fetchBookings } from '../../api/Bookings';
+import { MyBookings } from '../../models/Bookings';
 import { toast } from 'react-toastify';
-import { containerStyle } from './ui/Background';
+import { containerStyle } from '../ui/Background';
 import { useNavigate } from 'react-router-dom';
 
 const BookingsComponent: React.FC = () => {
     const [pastBookings, setPastBookings] = useState<MyBookings[]>([]);
     const [futureBookings, setFutureBookings] = useState<MyBookings[]>([]);
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         const getBookings = async () => {
             try {
@@ -81,7 +81,7 @@ const BookingsComponent: React.FC = () => {
             toast.error("User email is not available");
             return;
         }
-    
+
         navigate(`/cancel-booking/${booking._id}`, {
             state: {
                 booking: booking, // assuming booking is a full object with all details
@@ -89,7 +89,7 @@ const BookingsComponent: React.FC = () => {
             }
         });
     };
-    
+
     return (
         <div style={bookingsContainerStyle}>
             <div style={{ ...containerStyle, marginRight: '20px', alignItems: 'flex-column' }}>
