@@ -59,7 +59,7 @@ router.get('/confirm-email', async (req, res) => {
         const { token } = req.query;
         const user = await User.findOne({ confirmationToken: token, tokenExpiration: { $gt: Date.now() } });
         if (!user) {
-            return res.status(400).send('Invalid or expired token.');
+            return res.status(400).json({ error: 'Invalid or expired token' });
         }
 
         user.confirmationToken = undefined;
@@ -70,7 +70,7 @@ router.get('/confirm-email', async (req, res) => {
         res.json({ message: 'Email verification successful' });
     } catch (e) {
         console.error(e);
-        res.status(500).send('Server Error');
+        res.status(500).json({ error: 'Server Error' });
     }
 });
 
