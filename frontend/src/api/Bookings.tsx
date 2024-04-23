@@ -58,7 +58,19 @@ interface CancelBookingRequest {
 export const apiCancelBooking = async (data: CancelBookingRequest) => {
   try {
     console.log("data: ", data)
-    const response = await axiosInstance.delete(`/cancel-booking`, { data });
+    const userEmail = localStorage.getItem('userEmail');
+    const userPassword = localStorage.getItem('userPassword');
+    if (!userPassword || !userEmail) {
+      console.error('User email and password not found.');
+      throw new Error('User email and password are required for this operation.');
+    }
+    const response = await axiosInstance.delete(`/cancel-booking`, {
+      data: data,
+      headers: {
+        'User-Email': userEmail,
+        'User-Password': userPassword
+      }
+    });
     console.log("response", response.data);
     return response;
   } catch (error) {
