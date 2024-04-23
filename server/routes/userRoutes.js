@@ -37,15 +37,16 @@ router.post('/signup', async (req, res) => {
             console.log("Mail options: ", mailOptions);
             await send_booking_confirmation(mailOptions); // rename to send email later
 
-            res.status(201).json({
-                message: 'Sign up successful',
-                email: user.email_address,
-                type: user.type,
-                password: req.body.password,
-                credit: user.credit,
-                name: user.name,
-                surname: user.surname,
-            });
+            res.staatus(201).json({ message: 'Sign up successful' });
+            // res.status(201).json({
+            //     message: 'Sign up successful',
+            //     email: user.email_address,
+            //     type: user.type,
+            //     password: req.body.password,
+            //     credit: user.credit,
+            //     name: user.name,
+            //     surname: user.surname,
+            // });
         }
     } catch (e) {
         console.error(e);
@@ -85,7 +86,10 @@ router.post('/login', async (req, res) => {
         // Check if user exists and compare passwords (make sure to hash passwords in production)
         if (user) {
             const valid_pwd = await bcrypt.compare(user_data.password, user.password);
-
+            const emailVerified = user.emailVerified;
+            if (!emailVerified) {
+                res.status(401).send('Email not verified');
+            }
             if (valid_pwd) {
                 res.status(200).json({
                     message: 'Login successful',
