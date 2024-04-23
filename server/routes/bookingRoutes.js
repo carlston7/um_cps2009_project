@@ -134,6 +134,8 @@ router.delete('/cancel-booking', async (req, res) => {
                     const book_del = await delete_booking(booking._id);
                     const court_price = await get_court_price(book_del.court_name, new Date(book_del.start).getHours());
                     const user = await update_user_credit(req.headers['user-email'], court_price, false);
+
+                    res.status(200).json({ message: "Booking successfully canceled and credits refunded." });
                 } else {
                 throw new Error('A booking can only be deleted up till 24 hours before.')
             }

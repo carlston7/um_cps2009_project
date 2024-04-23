@@ -22,13 +22,9 @@ const CancelBookingComponent = () => {
                 court_name: booking.court_name,
                 user_email: userEmail
             });
-            try {
-                await fetchUserCredit(); // Update the user's session details
-            } catch (loginError) {
-                console.error('Error updating user details:', loginError);
-            }
             toast.success('Booking successfully cancelled.');
-            navigate('/'); // Redirect to homepage
+            await fetchUserCredit(); // Update the user's credit
+            navigate('/my-bookings'); // Redirect to my-bookings
         } catch (error) {
             toast.error('Failed to cancel the booking');
         }
