@@ -1,54 +1,34 @@
 import React, { useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axiosInstance from '../../api/AxiosInstance';
 import { containerStyle } from '../ui/Background';
 
 const EmailConfirmation = () => {
-    const { token } = useParams();
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const token = searchParams.get('token');
 
     useEffect(() => {
-        console.log("Component mounted.");
         if (!token) {
-            console.log("No token provided.");
             toast.error("Invalid access. No token provided.");
             navigate('/');
-            setTimeout(() => { 
-                return;
-            }, 2000);
+            return;
         }
         axiosInstance.get(`/confirm-email?token=${token}`)
             .then((response) => {
-                console.log("Email confirmation response:", response.data);
                 toast.success(response.data.message);
                 navigate('/login'); // Redirect to login after successful confirmation
             })
             .catch((error) => {
-                // Error handling based on the response status code
-                if (error.response) {
-                    switch (error.response.status) {
-                        case 400: // Bad request, likely invalid token
-                            toast.error('Invalid or expired token2.');
-                            break;
-                        case 500: // Server error
-                            toast.error('Server error. Please try again later.');
-                            break;
-                        default:
-                            toast.error('An unknown error occurred. Please try again.');
-                    }
-                } else {
-                    // Handle errors without a response (network errors, etc.)
-                    toast.error('Network error. Please check your internet connection.');
-                }
-                navigate('/'); // Redirect to home on error
+                toast.error(error.response?.data?.error || 'An unknown error occurred. Please try again.');
+                navigate('/');
             });
     }, [token, navigate]);
 
     return (
-        console.log("Component unmounting."),
         <div style={containerStyle}>
-            <h1>Confirming Your Email...</h1>
+            <h1 style={containerStyle}>Confirming Your Email...</h1>
         </div>
     );
 };

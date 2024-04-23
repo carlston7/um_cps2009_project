@@ -41,7 +41,7 @@ const App = () => {
           <Route path="/edit-court" element={<EditCourtPage />} />
           <Route path="/view-all-courts" element={<ViewAllCourtsPage />} />
               <Route path="/my-bookings" element={<MyBookingsPage />} />
-              <Route path="/confirm-user-email/:token" element={<EmailConfirmationPage />} />
+              <Route path="/confirm-email" element={<EmailConfirmationPage />} />
               <Route path="/cancel-booking/:bookingId" element={<CancelBookingPage />} />
               <Route path="/forget-password" element={<ForgetPasswordPage />} />
               <Route path="/email-code" element={<EmailOneTimeCodePage />} />
