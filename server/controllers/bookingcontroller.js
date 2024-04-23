@@ -40,3 +40,33 @@ exports.get_bookings = async (email) => {
         throw new Error('Could not get bookings for user');
     }
 };
+
+exports.delete_booking = async (booking_id) => {
+    try {
+        const booking = await Booking.findByIdAndDelete(booking_id);
+
+        if (!booking) {
+            throw new Error('Booking cannot be deleted.')
+        }
+
+        return booking;
+    } catch (e) {
+        console.error(e);
+        throw e;
+    }
+}
+
+exports.get_booking = async (booking_id) => {
+    try {
+        const booking = await Booking.findById(booking_id);
+
+        if (!booking) {
+            throw new Error('Booking not found.')
+        }
+
+        return booking;
+    } catch (e) {
+        console.error(e);
+        throw e;
+    }
+}

@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const { create_booking, get_bookings, get_available_courts } = require('../controllers/bookingcontroller');
+const { create_booking, get_booking,
+        get_bookings, get_available_courts, delete_booking } = require('../controllers/bookingcontroller');
 const { get_court_price } = require('../controllers/courtcontroller.js');
 const { update_user_credit } = require('../controllers/usercontroller.js');
 const { send_booking_confirmation } = require('../controllers/mail.js');
@@ -47,7 +48,7 @@ router.post('/book-court', async (req, res) => {
                     };
 
                     const booking = await create_booking(data);
-                    const user = await update_user_credit(req.headers['user-email'], court_price);
+                    const user = await update_user_credit(req.headers['user-email'], court_price, true);
 
                     const dateTimeParts = req.body.dateTimeIso.split('T');
                     const datePart = dateTimeParts[0];
@@ -103,6 +104,45 @@ router.get('/user-bookings', async (req, res) => {
         res.json(bookings);
     } catch (error) {
         console.error('Error getting bookings:', error);
+        res.status(500).send(error.message);
+    }
+});
+
+router.delete('/cancel-booking', async (req, res) => {
+    try {
+        const user = await User.findOne({ email_address: req.headers['user-email'] });
+        const valid_pwd = await bcrypt.compare(req.headers['user-password'], user.password);
+
+        if (user && valid_pwd) {
+            const booking = await Booking.get_booking(req.body._id);
+            
+            const start = new Date(booking.start);
+            const book_hr = start.getHours();
+            const book_date = start.getDate();
+            const book_month = start.getMonth() + 1;
+            const book_year = start.getFullYear();
+
+            const current = new Date();
+            const curr_hr = start.getHours();
+            const curr_date = current.getDate();
+            const curr_month = current.getMonth() + 1;
+            const curr_year = current.getFullYear();
+
+            if ((curr_year <= book_year) &&
+                (curr_month <= book_month) &&
+                (curr_date < book_date) &&
+                (curr_hr <= book_hr)) {
+                    const book_del = await delete_booking(booking._id);
+                    const court_price = await get_court_price(book_del.court_name, new Date(book_del.start).getHours());
+                    const user = await update_user_credit(req.headers['user-email'], court_price, false);
+            } else {
+                throw new Error('A booking can only be deleted up till 24 hours before.')
+            }
+        } else {
+            res.status(403).json({ message: "Forbidden" });
+        }
+    } catch (error) {
+        console.error('Error cancelling booking:', error);
         res.status(500).send(error.message);
     }
 });
