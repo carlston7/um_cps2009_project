@@ -114,7 +114,7 @@ router.delete('/cancel-booking', async (req, res) => {
         const valid_pwd = await bcrypt.compare(req.headers['user-password'], user.password);
 
         if (user && valid_pwd) {
-            const booking = await Booking.get_booking(req.body._id);
+            const booking = await get_booking(req.body._id);
             
             const start = new Date(booking.start);
             const book_hr = start.getHours();
