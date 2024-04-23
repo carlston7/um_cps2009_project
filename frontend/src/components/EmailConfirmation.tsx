@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axiosInstance from '../api/AxiosInstance';
+import { containerStyle } from './ui/Background';
 
 const EmailConfirmation = () => {
     const { token } = useParams();
@@ -40,7 +41,7 @@ const EmailConfirmation = () => {
     }, [token, navigate]);
 
     return (
-        <div style={{ textAlign: 'center', padding: '20px' }}>
+        <div style={containerStyle}>
             <h1>Confirming Your Email...</h1>
         </div>
     );
