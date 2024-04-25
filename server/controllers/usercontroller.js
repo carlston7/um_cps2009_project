@@ -15,8 +15,8 @@ exports.create_user = async (user_data, confirmationToken, tokenExpiration) => {
             confirmationToken: confirmationToken,
             tokenExpiration: tokenExpiration,
             emailVerified: false, 
-            resetCode: { type: String, default: null },           // Add this line
-            resetCodeExpiration: { type: Date, default: null },
+            resetCode: null,          
+            resetCodeExpiration: null,
         };
         const user = new User(mappedData);
         
