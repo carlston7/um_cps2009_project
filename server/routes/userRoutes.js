@@ -24,7 +24,7 @@ router.post('/signup', async (req, res) => {
             return res.status(400).json({ error: 'Email address already exists' });
         } else {
             const confirmationToken = crypto.randomBytes(20).toString('hex');
-            const tokenExpiration = Date.now() + 3600000; // 1 hour from now
+            const tokenExpiration = Date.now() + 10800000; // 1 hour from now (db saves it 2 hours backwards so 3 hours accounts for this)
             const user = await create_user(req.body,confirmationToken,tokenExpiration);
             const token = await generateToken(user);
 
