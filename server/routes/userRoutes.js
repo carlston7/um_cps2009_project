@@ -196,7 +196,7 @@ router.post('/forget-password', async (req, res) => {
     try {
         const user = await User.findOne({ email_address, resetCode: code, resetCodeExpiration: { $gt: Date.now() } });
 
-        if (!user) {
+        if (!user || code === null) {
             return res.status(400).json({ error: 'Invalid or expired reset code' });
         }
 
