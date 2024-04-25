@@ -171,7 +171,7 @@ router.post('/email-one-time-code', async (req, res) => {
         // Generate and store the 4-digit code
         const resetCode = generateFourDigitCode();
         user.resetCode = resetCode;
-        user.resetCodeExpiration = Date.now() + 3600000;  // Code valid for 1 hour
+        user.resetCodeExpiration = new Date(Date.now() + 3600000);   // Code valid for 1 hour
         await user.save();
 
         const mailOptions = {
@@ -196,7 +196,7 @@ router.post('/forget-password', async (req, res) => {
     try {
         const user = await User.findOne({ email_address, resetCode: code, resetCodeExpiration: { $gt: Date.now() } });
 
-        if (!user || code === null) {
+        if (!user) {
             return res.status(400).json({ error: 'Invalid or expired reset code' });
         }
 
@@ -204,8 +204,8 @@ router.post('/forget-password', async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(newPassword, salt);
         user.password = hashedPassword;
-        user.resetCode = undefined;  // Clear the reset code
-        user.resetCodeExpiration = undefined;  // Clear the expiration
+        user.resetCode = null;  // Set to null if you want to keep the field
+        user.resetCodeExpiration = null;  // Set to null if you want to keep the field
         await user.save();
 
         res.status(201).json({
