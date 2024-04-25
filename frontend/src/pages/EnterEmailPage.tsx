@@ -14,7 +14,7 @@ const EmailOneTimeCodePage = () => {
             const response = await apiEmailOneTimeCode({ email_address });  // Adjusted to match expected API input
             console.log(response);
             navigate('/forget-password');
-            toast.success('A one-time code has been sent to your email.');
+            toast.info('A one-time code has been sent to your email.');
         } catch (error) {
             toast.error('Failed to send one-time code. Please try again.');
             console.error('Email one-time code error:', error);
