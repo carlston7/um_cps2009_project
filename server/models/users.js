@@ -9,7 +9,9 @@ const users_schema = new mongoose.Schema({
     type: ['member', 'owner', 'admin'],
     confirmationToken: String,
     tokenExpiration: Date,
-    emailVerified: { type: Boolean, default: false }
+    emailVerified: { type: Boolean, default: false },
+    resetCode: { type: String, default: null },        
+    resetCodeExpiration: { type: Date, default: null },
 });
 
 module.exports = mongoose.model('users', users_schema);
