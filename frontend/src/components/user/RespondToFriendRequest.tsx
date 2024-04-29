@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { containerStyle } from '../ui/Background';
+import axiosInstance from '../../api/AxiosInstance';
 
 interface FriendRequest {
   senderEmail: string;
@@ -13,7 +13,8 @@ export const RespondToRequests = () => {
     useEffect(() => {
         const fetchRequests = async () => {
             try {
-                const response = await axios.get('/api/friends/requests', {
+                console.log("User Email:", localStorage.getItem('userEmail'));
+                const response = await axiosInstance.get('/friends/requests', {
                     headers: { 'user-email': localStorage.getItem('userEmail') }
                 });
                 console.log("Fetch Friend Requests:", response.data);  // Log the response data
@@ -31,7 +32,7 @@ export const RespondToRequests = () => {
 
     const handleResponse = async (senderEmail: string, accept: boolean) => {
         try {
-            await axios.post('/api/friends/respond', { senderEmail, accept }, {
+            await axiosInstance.post('/friends/respond', { senderEmail, accept }, {
                 headers: { 'user-email': localStorage.getItem('userEmail') }
             });
             // Update requests state to remove the handled request

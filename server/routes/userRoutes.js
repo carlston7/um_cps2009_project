@@ -219,6 +219,31 @@ router.post('/forget-password', async (req, res) => {
     }
 });
 
+// GET /friends/requests - Fetch all friend requests for the logged-in user
+router.get('/friends/requests', async (req, res) => {
+    const userEmail = req.headers['user-email'];
+
+    if (!userEmail) {
+        return res.status(400).json({ error: 'User email is required.' });
+    }
+
+    try {
+        const user = await User.findOne({ email_address: userEmail });
+        if (!user) {
+            return res.status(404).json({ message: "User not found." });
+        }
+        const requests = await User.find({
+            email_address: { $in: user.friendRequests }
+        }).select('email_address'); 
+
+        res.status(200).json(requests.map(req => ({ senderEmail: req.email_address })));
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+
 // POST /api/friends/request
 router.post('/friends/request', async (req, res) => {
     const { receiverEmail } = req.body;
@@ -251,7 +276,7 @@ router.post('/friends/request', async (req, res) => {
     }
 });
 
-// POST /api/friends/respond
+// POST /friends/respond
 router.post('/friends/respond', async (req, res) => {
     const { senderEmail, accept } = req.body;
     const receiverEmail = req.headers['user-email'];
@@ -281,7 +306,7 @@ router.post('/friends/respond', async (req, res) => {
     }
 });
 
-// GET /api/friends/list
+// GET /friends/list
 router.get('/friends/list', async (req, res) => {
     const userEmail = req.headers['user-email'];
 
