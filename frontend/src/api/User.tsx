@@ -31,3 +31,12 @@ export const fetchUserCredit = async () => {
         throw e;
     }
 }
+
+export const respondToInvitation = async ({ _id, email_address, accept }: { _id: string, email_address: string, accept: boolean }) => {
+    const response = await axiosInstance.post('/respond', {
+        _id,
+        email_address,
+        accept
+    });
+    return response.data;
+};
