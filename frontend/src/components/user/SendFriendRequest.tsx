@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import axiosInstance from '../../api/AxiosInstance';
-import { containerStyle } from '../ui/Background';
 
 export const SendFriendRequest = () => {
     const [email, setEmail] = useState('');
@@ -19,7 +18,7 @@ export const SendFriendRequest = () => {
     };
 
     return (
-        <div style={containerStyle}>
+        <div>
             <input
                 type="email"
                 value={email}

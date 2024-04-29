@@ -25,7 +25,6 @@ import EmailConfirmationPage from './pages/EmailConfirmationPage';
 import ForgetPasswordPage from './pages/ForgotPasswordPage';
 import EmailOneTimeCodePage from './pages/OneTimeCode';
 import AcceptBillPage from './pages/AcceptBillPage';
-import SendFriendRequestPage from './pages/SendFriendRequestPage';
 import FriendsListPage from './pages/FriendsListPage';
 import RespondToFriendRequestPage from './pages/RespondToFriendRequest';
 
@@ -51,7 +50,6 @@ const App = () => {
               <Route path="/forget-password" element={<ForgetPasswordPage />} />
               <Route path="/email-code" element={<EmailOneTimeCodePage />} />
               <Route path="/friends/respond" element={<RespondToFriendRequestPage />} />
-              <Route path="/friends/request" element={<SendFriendRequestPage />} />
               <Route path="/friends" element={<FriendsListPage />} />
           <Route path="/view-courts" element={<ViewCourtPage/>} />
           <Route path="/new-court" element={<CreateCourtPage />} />

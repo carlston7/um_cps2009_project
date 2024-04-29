@@ -322,5 +322,20 @@ router.get('/friends/list', async (req, res) => {
     }
 });
 
+// GET /api/friends/requests/count - Get the count of friend requests
+router.get('/friends/requests/count', async (req, res) => {
+    const userEmail = req.headers['user-email'];
+    try {
+        const user = await User.findOne({ email_address: userEmail });
+        if (!user) {
+            return res.status(404).json({ message: "User not found." });
+        }
+        const count = user.friendRequests.length; // Assuming friendRequests is an array of requests
+        res.json({ count });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
 
 module.exports = router;

@@ -64,6 +64,7 @@ export default function TopBar() {
                     <TopbarLink to="/" text="Home" />
                     {isAuthenticated && !isAdmin && !isMobile && <TopbarLink to="/view-courts" text="Book a Court" />}
                     {isAuthenticated && !isAdmin && !isMobile && <TopbarLink to="/my-bookings" text="My Bookings" />}
+                    {isAuthenticated && !isAdmin && !isMobile && <TopbarLink to="/friends" text="My Friends" />}
                     {isAdmin && [
                         <TopbarLink key="new-court" to="/new-court" text="Create Court" />,
                         <TopbarLink key="edit-court" to="/view-all-courts" text="Edit Court" />
@@ -89,6 +90,7 @@ export default function TopBar() {
                     >
                         {isMobile && isAuthenticated && !isAdmin && <MenuItem onClick={handleMenuClose} component={RouterLink} to="/view-courts">Book a Court</MenuItem>}
                         {isMobile && isAuthenticated && !isAdmin && <MenuItem onClick={handleMenuClose} component={RouterLink} to="/my-bookings">My Bookings</MenuItem>}
+                        {isMobile && isAuthenticated && !isAdmin && <MenuItem onClick={handleMenuClose} component={RouterLink} to="/friends">My Friends</MenuItem>}
                         {isMobile && isAdmin && [
                             <MenuItem key="view-courts-mobile" onClick={handleMenuClose} component={RouterLink} to="/view-courts">Book a Court</MenuItem>,
                             <MenuItem key="my-bookings-mobile" onClick={handleMenuClose} component={RouterLink} to="/my-bookings">My Bookings</MenuItem>
