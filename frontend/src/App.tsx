@@ -25,6 +25,9 @@ import EmailConfirmationPage from './pages/EmailConfirmationPage';
 import ForgetPasswordPage from './pages/ForgotPasswordPage';
 import EmailOneTimeCodePage from './pages/OneTimeCode';
 import AcceptBillPage from './pages/AcceptBillPage';
+import SendFriendRequestPage from './pages/SendFriendRequestPage';
+import FriendsListPage from './pages/FriendsListPage';
+import RespondToFriendRequestPage from './pages/RespondToFriendRequest';
 
 const stripePromise = loadStripe('pk_test_51P3iC4P46pjciChWBf3bsIRggMExQUZU2ZTzVMToDwJnjtjQjj5FvG16NmnYfSX9OiiZI3DR1zowa4C6L3btGIYh00A4WZwzBX'); 
 
@@ -47,6 +50,9 @@ const App = () => {
               <Route path="/accept-bill" element={<AcceptBillPage />} />
               <Route path="/forget-password" element={<ForgetPasswordPage />} />
               <Route path="/email-code" element={<EmailOneTimeCodePage />} />
+              <Route path="/friends/respond" element={<RespondToFriendRequestPage />} />
+              <Route path="/friends/request" element={<SendFriendRequestPage />} />
+              <Route path="/friends" element={<FriendsListPage />} />
           <Route path="/view-courts" element={<ViewCourtPage/>} />
           <Route path="/new-court" element={<CreateCourtPage />} />
               <Route path="/edit-profile" element={<EditProfilePage />} />
