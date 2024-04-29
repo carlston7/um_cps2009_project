@@ -119,36 +119,46 @@ router.get('/user-bookings', async (req, res) => {
 router.delete('/cancel-booking', async (req, res) => {
     try {
         const user = await User.findOne({ email_address: req.headers['user-email'] });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
         const valid_pwd = await bcrypt.compare(req.headers['user-password'], user.password);
+        if (!valid_pwd) {
+            return res.status(403).json({ message: "Forbidden" });
+        }
 
-        if (user && valid_pwd) {
-            const booking = await get_booking(req.body._id);
-            
-            const start = new Date(booking.start);
-            const book_hr = start.getHours();
-            const book_date = start.getDate();
-            const book_month = start.getMonth() + 1;
-            const book_year = start.getFullYear();
+        const booking = await get_booking(req.body._id);
+        if (!booking) {
+            return res.status(404).json({ message: "Booking not found" });
+        }
 
-            const current = new Date();
-            const curr_hr = start.getHours();
-            const curr_date = current.getDate();
-            const curr_month = current.getMonth() + 1;
-            const curr_year = current.getFullYear();
+        const start = new Date(booking.start);
+        const current = new Date();
+        const timeDifference = start - current;
 
-            if ((curr_year <= book_year) &&
-                (curr_month <= book_month) &&
-                (((curr_date == book_date - 1) && (curr_hr < book_hr)) || (curr_date < book_date-1))) {
-                    const book_del = await delete_booking(booking._id);
-                    const court_price = await get_court_price(book_del.court_name, new Date(book_del.start).getHours());
-                    const user = await update_user_credit(req.headers['user-email'], court_price, false);
+        // Check if the booking is more than 24 hours ahead
+        if (timeDifference > 24 * 60 * 60 * 1000) {
+            const book_del = await delete_booking(booking._id);
+            const court_price = await get_court_price(book_del.court_name, new Date(book_del.start).getHours());
+            const updated_user = await update_user_credit(req.headers['user-email'], court_price, false);
 
-                    res.status(200).json({ message: "Booking successfully canceled and credits refunded." });
-                } else {
-                throw new Error('A booking can only be deleted up till 24 hours before.')
-            }
+            const mailOptions = {
+                from: 'manager.tennisclub@gmail.com',
+                to: `${user.email_address}, manager.tennisclub@gmail.com`,
+                subject: 'Booking Cancellation Confirmation',
+                html: ` 
+                    <h4>The following booking made by ${updated_user.email_address} has been confirmed:</h4>
+                    <p>Court Name: ${booking.court_name}</p>
+                    <p>Date: ${start.toDateString()}</p>
+                    <p>Time: ${start.getHours()}:00 - ${start.getHours() + 1}:00</p>
+                `
+            };
+
+            await send_booking_confirmation(mailOptions);
+            res.status(200).json({ message: "Booking successfully canceled and credits refunded." });
         } else {
-            res.status(403).json({ message: "Forbidden" });
+            throw new Error('A booking can only be deleted up till 24 hours before.')
         }
     } catch (error) {
         console.error('Error cancelling booking:', error);
