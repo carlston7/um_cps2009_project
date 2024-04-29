@@ -218,7 +218,6 @@ router.post('/forget-password', async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
-const User = require('../models/users'); // Ensure User model is properly imported
 
 // POST /api/friends/request
 router.post('/friends/request', async (req, res) => {
