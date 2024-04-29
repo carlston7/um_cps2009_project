@@ -218,18 +218,21 @@ router.post('/forget-password', async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
+const User = require('../models/users'); // Ensure User model is properly imported
 
 // POST /api/friends/request
 router.post('/friends/request', async (req, res) => {
     const { receiverEmail } = req.body;
-    const sender = req.user; // Assume user is attached to req via middleware
+    const senderEmail = req.headers['user-email'];
 
-    if (sender.email_address === receiverEmail) {
+    if (senderEmail === receiverEmail) {
         return res.status(400).json({ message: "You cannot send a friend request to yourself." });
     }
 
     try {
+        const sender = await User.findOne({ email_address: senderEmail });
         const receiver = await User.findOne({ email_address: receiverEmail });
+
         if (!receiver) {
             return res.status(404).json({ message: "User not found." });
         }
@@ -252,10 +255,12 @@ router.post('/friends/request', async (req, res) => {
 // POST /api/friends/respond
 router.post('/friends/respond', async (req, res) => {
     const { senderEmail, accept } = req.body;
-    const receiver = req.user; // Assume user is attached to req via middleware
+    const receiverEmail = req.headers['user-email'];
 
     try {
+        const receiver = await User.findOne({ email_address: receiverEmail });
         const sender = await User.findOne({ email_address: senderEmail });
+
         if (!sender) {
             return res.status(404).json({ message: "Sender not found." });
         }
@@ -265,7 +270,7 @@ router.post('/friends/respond', async (req, res) => {
 
         if (accept) {
             receiver.friends.push({ email: senderEmail, accepted: true });
-            sender.friends.push({ email: receiver.email_address, accepted: true });
+            sender.friends.push({ email: receiverEmail, accepted: true });
             await sender.save();
         }
 
@@ -279,14 +284,19 @@ router.post('/friends/respond', async (req, res) => {
 
 // GET /api/friends/list
 router.get('/friends/list', async (req, res) => {
-    const user = req.user; // Assume user is attached to req via middleware
+    const userEmail = req.headers['user-email'];
 
     try {
+        const user = await User.findOne({ email_address: userEmail });
+        if (!user) {
+            return res.status(404).json({ message: "User not found." });
+        }
         res.status(200).json(user.friends.filter(friend => friend.accepted));
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Internal server error" });
     }
 });
+
 
 module.exports = router;
