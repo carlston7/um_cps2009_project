@@ -43,6 +43,7 @@ const App = () => {
               <Route path="/my-bookings" element={<MyBookingsPage />} />
               <Route path="/confirm-email" element={<EmailConfirmationPage />} />
               <Route path="/cancel-booking/:bookingId" element={<CancelBookingPage />} />
+              <Route path="/accept-bill" element={<CancelBookingPage/>} />
               <Route path="/forget-password" element={<ForgetPasswordPage />} />
               <Route path="/email-code" element={<EmailOneTimeCodePage />} />
           <Route path="/view-courts" element={<ViewCourtPage/>} />
