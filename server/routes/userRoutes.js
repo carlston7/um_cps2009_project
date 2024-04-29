@@ -24,7 +24,7 @@ router.post('/signup', async (req, res) => {
             return res.status(400).json({ error: 'Email address already exists' });
         } else {
             const confirmationToken = crypto.randomBytes(20).toString('hex');
-            const tokenExpiration = Date.now() + 3600000; // 1 hour from now
+            const tokenExpiration = Date.now() + 10800000; // 1 hour from now (db saves it 2 hours backwards so 3 hours accounts for this)
             const user = await create_user(req.body,confirmationToken,tokenExpiration);
             const token = await generateToken(user);
 
@@ -152,5 +152,72 @@ router.patch('/profile', async (req, res) => {
         res.status(500).send('An error occurred: ' + error.message);
     }
 });
+
+// Helper function to generate a 4-digit code
+const generateFourDigitCode = () => {
+    return Math.floor(1000 + Math.random() * 9000).toString();  // Generate a number between 1000 and 9999
+};
+
+// Route to initiate the password reset process
+router.post('/email-one-time-code', async (req, res) => {
+    const { email_address } = req.body;
+
+    try {
+        const user = await User.findOne({ email_address });
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Generate and store the 4-digit code
+        const resetCode = generateFourDigitCode();
+        user.resetCode = resetCode;
+        user.resetCodeExpiration = new Date(Date.now() + 3600000);   // Code valid for 1 hour
+        await user.save();
+
+        const mailOptions = {
+            from: 'manager.tennisclub@gmail.com',
+            to: user.email_address,
+            subject: 'Password Reset Code',
+            text: `Your password reset code is: ${resetCode}`
+        };
+
+        await send_booking_confirmation(mailOptions);
+        res.json({ message: 'A one-time code has been sent to your email.' });
+    } catch (error) {
+        console.error('Forget password error:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// Route to reset the password using the 4-digit code
+router.post('/forget-password', async (req, res) => {
+    const { email_address, code, newPassword } = req.body;
+
+    try {
+        const user = await User.findOne({ email_address, resetCode: code, resetCodeExpiration: { $gt: Date.now() } });
+
+        if (!user) {
+            return res.status(400).json({ error: 'Invalid or expired reset code' });
+        }
+
+        // Update the password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+        user.password = hashedPassword;
+        user.resetCode = null;  // Set to null if you want to keep the field
+        user.resetCodeExpiration = null;  // Set to null if you want to keep the field
+        await user.save();
+
+        res.status(201).json({
+                message: 'Password reset successful',
+                email: user.email_address,
+                password: newPassword,
+            });
+    } catch (error) {
+        console.error('Reset password error:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 
 module.exports = router;

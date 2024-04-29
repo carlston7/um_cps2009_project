@@ -10,23 +10,27 @@ interface Props {
 export const DateTimeSelector: React.FC<Props> = ({ onDateTimeSelected }) => {
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
+    const [availableHours, setAvailableHours] = useState<string[]>([]);  // Store available hours in state
     const { setBookingDate, setBookingTime } = useCourt();
     const now = new Date();
     const today = now.toISOString().split('T')[0];
     const currentTime = now.getHours();
 
     const maxDate = new Date();
-    maxDate.setDate(maxDate.getDate() + 7);  // Set max date to two weeks in advance
+    maxDate.setDate(maxDate.getDate() + 7);  // Set max date to one week in advance
     const maxDateValue = maxDate.toISOString().split('T')[0];
 
     useEffect(() => {
-        const hours = [];
-        const startHour = date === today ? Math.max(currentTime + 1, 9) : 9; // Adjusted to start at next hour if today
-        for (let i = startHour; i <= 22; i++) {
-            hours.push(`${i.toString().padStart(2, '0')}:00`);
+        if (date) {
+            const startHour = date === today ? Math.max(currentTime + 1, 9) : 9;  // Use 9 AM as the minimum start time
+            const hours = [];
+            for (let i = startHour; i <= 22; i++) {  // Assume court hours are between 9 AM and 10 PM
+                hours.push(`${i.toString().padStart(2, '0')}:00`);
+            }
+            setAvailableHours(hours);
+            setTime(hours[0]); // Automatically set time to the first available slot
         }
-        setTime(hours[0]); // Update time to the first available slot
-    }, [date, currentTime, today]); // Depend on currentTime and today to adjust startHour
+    }, [date, currentTime, today]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -58,14 +62,11 @@ export const DateTimeSelector: React.FC<Props> = ({ onDateTimeSelected }) => {
                             onChange={(e) => setTime(e.target.value)}
                             required
                         >
-                            {/* This mapping will react to the useEffect hook's changes */}
-                            {Array.from({ length: 14 - (Math.max(currentTime + 1, 9) - 9) }, (_, i) =>
-                                `${(Math.max(currentTime + 1, 9) + i).toString().padStart(2, '0')}:00`)
-                                .map(hour => (
-                                    <option key={hour} value={hour}>
-                                        {hour}
-                                    </option>
-                                ))}
+                            {availableHours.map(hour => (
+                                <option key={hour} value={hour}>
+                                    {hour}
+                                </option>
+                            ))}
                         </select>
                     </label>
                 )}
