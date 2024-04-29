@@ -10,6 +10,7 @@ const EmailConfirmation = () => {
     const token = searchParams.get('token');
 
     useEffect(() => {
+        console.log("EmailConfirmation.tsx: token: ", token);
         if (!token) {
             toast.error("Invalid access. No token provided.");
             navigate('/');
