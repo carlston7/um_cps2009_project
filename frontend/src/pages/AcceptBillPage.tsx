@@ -1,6 +1,8 @@
 import React from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { respondToInvitation } from '../api/User';
+import { toast } from 'react-toastify';
+import { containerStyle } from '../components/ui/Background';
 
 const AcceptBillPage = () => {
     const [searchParams] = useSearchParams();
@@ -15,19 +17,22 @@ const AcceptBillPage = () => {
         }
         try {
             await respondToInvitation({ _id, email_address, accept });
-            alert(`You have ${accept ? 'accepted' : 'declined'} the invitation.`);
-            navigate('/'); // Redirect somewhere relevant
+            if (accept) {
+                toast.success('You have accepted the invitation.');
+            } else {
+                toast.success('You have declined the invitation.');
+            }
+            navigate('/');
         } catch (error) {
-            alert('Failed to process your response.');
+            toast.error('Failed to process your response.');
         }
     };
 
     return (
-        <div>
-            <h1>Accept or Decline Invitation</h1>
-            <p>Please confirm your participation:</p>
-            <button onClick={() => handleResponse(true)}>Accept</button>
-            <button onClick={() => handleResponse(false)}>Decline</button>
+        <div style={containerStyle}>
+            <h3>Please confirm your participation:</h3>
+            <button onClick={() => handleResponse(true)}>I accept</button>
+            <button onClick={() => handleResponse(false)}>Decline invitation</button>
         </div>
     );
 };
