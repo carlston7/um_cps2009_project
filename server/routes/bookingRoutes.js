@@ -5,7 +5,7 @@ const { create_booking, get_booking,
         get_bookings, get_available_courts, delete_booking } = require('../controllers/bookingcontroller');
 const { get_court_price } = require('../controllers/courtcontroller.js');
 const { update_user_credit } = require('../controllers/usercontroller.js');
-const { send_booking_confirmation } = require('../controllers/mail.js');
+const { send_booking_confirmation, send_booking_invites } = require('../controllers/mail.js');
 const User = require('../models/users');
 const bcrypt = require('bcryptjs');
 
@@ -44,7 +44,14 @@ router.post('/book-court', async (req, res) => {
                         const data = {
                             start: req.body.dateTimeIso,
                             user_email: req.headers['user-email'],
-                            court_name: req.body.courtName
+                            court_name: req.body.courtName,
+                            invite_responses: req.body.emails.map(email => ({
+                                email: email,
+                                status: {
+                                    confirmed: false,
+                                    accepted: false
+                                }
+                            }))
                         };
 
                         const booking = await create_booking(data);
@@ -70,6 +77,7 @@ router.post('/book-court', async (req, res) => {
                         };
 
                         await send_booking_confirmation(mailOptions);
+                        await send_booking_invites(data.user_email, data.court_name, formattedDate, formattedTime, booking._id, req.body.emails);
 
                         res.status(201).json({ message: 'Success' });
                     } else {
