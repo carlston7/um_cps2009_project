@@ -1,6 +1,7 @@
 export interface Booking {
     dateTimeIso: string;
     courtName: string;
+    emails: string[];
 }
   
 export interface MyBookings {
