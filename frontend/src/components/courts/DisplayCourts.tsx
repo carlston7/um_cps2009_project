@@ -23,7 +23,12 @@ interface Props {
 }
 
 export const isNightTime = (time: string) => {
-    return parseInt(time.split(':')[0], 10) >= 18;
+    const hour = parseInt(time.split(':')[0], 10);
+    console.log('hour', hour - 2);
+    if (hour - 2 < 0) {
+        return true;
+    }
+    return hour - 2 >= 18 && hour - 2 < 22;  // Adjust this condition based on your needs
 };
 
 export const CourtsDisplay: React.FC<Props> = ({ courts, currentTime }) => {
