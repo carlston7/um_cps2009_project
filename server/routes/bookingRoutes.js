@@ -77,7 +77,10 @@ router.post('/book-court', async (req, res) => {
                         };
 
                         await send_booking_confirmation(mailOptions);
-                        await send_booking_invites(data.user_email, data.court_name, formattedDate, formattedTime, booking._id, req.body.emails);
+                        
+                        const court_price = await get_court_price(data.court_name, new Date(req.body.dateTimeIso.getHours()));
+                        const user_price = court_price / req.body.emails.length;
+                        await send_booking_invites(data.user_email, data.court_name, formattedDate, formattedTime, booking._id, user_price, req.body.emails);
 
                         res.status(201).json({ message: 'Success' });
                     } else {

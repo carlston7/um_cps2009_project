@@ -18,10 +18,10 @@ exports.send_booking_confirmation = async (mailOptions) => { // rename to send_e
     }
 };
 
-exports.send_booking_invites = async (inviter_email, court_name, date, time, booking_id, invite_list) => {
+exports.send_booking_invites = async (inviter_email, court_name, date, time, booking_id, price, invite_list) => {
   try {
 
-    if (invite_list !== 0) {
+    if (invite_list.length !== 0) {
 
       await Promise.all(invite_list.map(async (email) => {
         const mailInviteOptions = {
@@ -33,6 +33,7 @@ exports.send_booking_invites = async (inviter_email, court_name, date, time, boo
                   <p>Court Name: ${court_name}</p>
                   <p>Date: ${date}</p>
                   <p>Time: ${time}</p>
+                  <p>Cost: ${price}</p>
                   <p>Click on the following link to accept or reject the invite:</p>
                   <a href="https://cps2009project.azurewebsites.net/accept-bill?_id=${booking_id}&email_address=${email}">Confirm Invitation</a>
                 `
