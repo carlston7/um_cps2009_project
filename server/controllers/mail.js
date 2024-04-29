@@ -38,9 +38,11 @@ exports.send_booking_invites = async (inviter_email, court_name, date, time, boo
                 `
         };
 
-        await transporter.sendMail(mailOptions);
+        await transporter.sendMail(mailInviteOptions);
 
       }));
+    }else {
+      return;
     }
   } catch (e) {
       console.error(e);
