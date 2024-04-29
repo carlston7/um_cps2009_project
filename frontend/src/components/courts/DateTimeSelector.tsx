@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { DateTimeSelection } from '../../models/Courts';
 import { containerStyle } from '../ui/Background';
 import { useCourt } from '../../context/CourtContext';
@@ -32,18 +32,18 @@ export const DateTimeSelector: React.FC<Props> = ({ onDateTimeSelected }) => {
         }
     }, [date, currentTime, today]);
 
-    useEffect(() => {
-        if (date && time) {
-            submitForm();
-        }
-    }, [time]);
-
-    const submitForm = () => {
+    const submitForm = useCallback(() => {
         const dateTimeIso = `${date}T${time}:00.000Z`;
         onDateTimeSelected({ dateTime: dateTimeIso });
         setBookingDate(date);
         setBookingTime(time);
-    };
+    }, [date, time, onDateTimeSelected, setBookingDate, setBookingTime]);  // include all used variables and functions
+
+    useEffect(() => {
+        if (date && time) {
+            submitForm();
+        }
+    }, [date, time, submitForm]);  // include submitForm in the dependency array
 
     return (
         <div style={containerStyle}>
