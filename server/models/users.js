@@ -12,6 +12,8 @@ const users_schema = new mongoose.Schema({
     emailVerified: { type: Boolean, default: false },
     resetCode: { type: String, default: null },        
     resetCodeExpiration: { type: Date, default: null },
+    friends: [{ email: String, accepted: { type: Boolean, default: false } }],
+    friendRequests: [String]
 });
 
 module.exports = mongoose.model('users', users_schema);

@@ -19,26 +19,16 @@ function getCourtTypeColor(type: string): string {
 
 interface Props {
     courts: Court[];
-    currentTime: string;
 }
 
-export const isNightTime = (time: string) => {
-    const hour = parseInt(time.split(':')[0], 10);
-    console.log('hour', hour - 2);
-    if (hour - 2 < 0) {
-        return true;
-    }
-    return hour - 2 >= 18 && hour - 2 < 22;  // Adjust this condition based on your needs
-};
-
-export const CourtsDisplay: React.FC<Props> = ({ courts, currentTime }) => {
+export const CourtsDisplay: React.FC<Props> = ({ courts }) => {
     const navigate = useNavigate();
     const { selectCourt, setPrice } = useCourt();
 
     if (!Array.isArray(courts)) {
         console.error('courts is not an array', courts);
-        toast.error("No courts available for this date and time");
-        return <div>No courts available for this date and time.</div>;
+        toast.error("Error fetching courts. Please try again later.");
+        return <div>Please try again later.</div>;
     }
 
     const tableStyle: CSSProperties = {
@@ -67,10 +57,6 @@ export const CourtsDisplay: React.FC<Props> = ({ courts, currentTime }) => {
         return '-1';
     };
     const handleCourtClick = (court: Court) => {
-        const price = isNightTime(currentTime)
-            ? getPriceValue(court.nightPrice)
-            : getPriceValue(court.dayPrice);
-        setPrice(price);
         selectCourt(court);
         navigate('/book-court');
     };
@@ -87,12 +73,10 @@ export const CourtsDisplay: React.FC<Props> = ({ courts, currentTime }) => {
                 {courts.map((court) => {
                     const handleClick = () => handleCourtClick(court);
                     const courtType = Array.isArray(court.type) ? court.type[0] : court.type;
-                    const displayPrice = getPriceValue(isNightTime(currentTime) ? court.nightPrice : court.dayPrice);
                     return (
                         <tr key={court._id} onClick={handleClick} style={getRowStyle(courtType)}>
                             <td style={cellStyle}>{court.name}</td>
                             <td style={cellStyle}>{court.type}</td>
-                            <td style={cellStyle}>${displayPrice}</td>
                         </tr>
                     );
                 })}

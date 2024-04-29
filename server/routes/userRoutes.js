@@ -219,5 +219,74 @@ router.post('/forget-password', async (req, res) => {
     }
 });
 
+// POST /api/friends/request
+router.post('/friends/request', async (req, res) => {
+    const { receiverEmail } = req.body;
+    const sender = req.user; // Assume user is attached to req via middleware
+
+    if (sender.email_address === receiverEmail) {
+        return res.status(400).json({ message: "You cannot send a friend request to yourself." });
+    }
+
+    try {
+        const receiver = await User.findOne({ email_address: receiverEmail });
+        if (!receiver) {
+            return res.status(404).json({ message: "User not found." });
+        }
+
+        if (receiver.friendRequests.includes(sender.email_address)) {
+            return res.status(400).json({ message: "Friend request already sent." });
+        }
+
+        // Add sender's email to receiver's friendRequests array
+        receiver.friendRequests.push(sender.email_address);
+        await receiver.save();
+
+        res.status(200).json({ message: "Friend request sent successfully." });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+// POST /api/friends/respond
+router.post('/friends/respond', async (req, res) => {
+    const { senderEmail, accept } = req.body;
+    const receiver = req.user; // Assume user is attached to req via middleware
+
+    try {
+        const sender = await User.findOne({ email_address: senderEmail });
+        if (!sender) {
+            return res.status(404).json({ message: "Sender not found." });
+        }
+
+        // Remove the request regardless of accept or decline
+        receiver.friendRequests = receiver.friendRequests.filter(email => email !== senderEmail);
+
+        if (accept) {
+            receiver.friends.push({ email: senderEmail, accepted: true });
+            sender.friends.push({ email: receiver.email_address, accepted: true });
+            await sender.save();
+        }
+
+        await receiver.save();
+        res.status(200).json({ message: `Friend request ${accept ? 'accepted' : 'declined'}.` });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+// GET /api/friends/list
+router.get('/friends/list', async (req, res) => {
+    const user = req.user; // Assume user is attached to req via middleware
+
+    try {
+        res.status(200).json(user.friends.filter(friend => friend.accepted));
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
 
 module.exports = router;

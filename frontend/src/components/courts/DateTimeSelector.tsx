@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DateTimeSelection } from '../../models/Courts';
 import { containerStyle } from '../ui/Background';
 import { useCourt } from '../../context/CourtContext';
@@ -10,7 +10,7 @@ interface Props {
 export const DateTimeSelector: React.FC<Props> = ({ onDateTimeSelected }) => {
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
-    const [availableHours, setAvailableHours] = useState<string[]>([]);
+    const [availableHours, setAvailableHours] = useState<string[]>([]);  // Store available hours in state
     const { setBookingDate, setBookingTime } = useCourt();
     const now = new Date();
     const today = now.toISOString().split('T')[0];
@@ -32,22 +32,17 @@ export const DateTimeSelector: React.FC<Props> = ({ onDateTimeSelected }) => {
         }
     }, [date, currentTime, today]);
 
-    const submitForm = useCallback(() => {
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
         const dateTimeIso = `${date}T${time}:00.000Z`;
         onDateTimeSelected({ dateTime: dateTimeIso });
         setBookingDate(date);
         setBookingTime(time);
-    }, [date, time, onDateTimeSelected, setBookingDate, setBookingTime]);  // include all used variables and functions
-
-    useEffect(() => {
-        if (date && time) {
-            submitForm();
-        }
-    }, [date, time, submitForm]);  // include submitForm in the dependency array
+    };
 
     return (
         <div style={containerStyle}>
-            <form onSubmit={(e) => e.preventDefault()}>
+            <form onSubmit={handleSubmit}>
                 <label>
                     Date:
                     <input
@@ -77,6 +72,7 @@ export const DateTimeSelector: React.FC<Props> = ({ onDateTimeSelected }) => {
                 )}
                 <h4>Please select a court to book</h4>
                 <p>Kindly note that price for use during the day and price for use during night differ</p>
+                <button type="submit">Check Availability</button>
             </form>
         </div>
     );
