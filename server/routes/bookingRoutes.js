@@ -79,7 +79,7 @@ router.post('/book-court', async (req, res) => {
 
                         await send_booking_confirmation(mailOptions);
                         
-                        const court_price = await get_court_price(data.court_name, new Date(req.body.dateTimeIso).getHours());
+                        //const court_price = await get_court_price(data.court_name, new Date(req.body.dateTimeIso).getHours());
                         const user_price = court_price / req.body.emails.length;
                         await send_booking_invites(data.user_email, data.court_name, formattedDate, formattedTime, booking._id, user_price, req.body.emails);
 
@@ -182,9 +182,10 @@ router.post('/respond', async (req, res) => {
             const court_price = await get_court_price(booking.court_name, new Date(req.body.dateTimeIso).getHours());
             const price = court_price / booking.invite_responses.length;
             const user = await update_user_credit(req.body.email_address, price, true);
-
-            res.status(200).json({ message: "Your response to the invitation has been updated." });
         }
+
+        res.status(200).json({ message: "Your response to the invitation has been updated." });
+
     } catch (error) {
         console.error('Error accepting/rejecting invitation:', error);
         res.status(500).send(error.message);
