@@ -102,6 +102,7 @@ exports.is_friend = async (user_email, friend_email) => {
         user.friends.forEach(friend => {
             if (friend.email === friend_email) {
                 found = true;
+                return found;
             }
         });
 
