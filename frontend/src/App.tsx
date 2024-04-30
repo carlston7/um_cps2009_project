@@ -27,6 +27,7 @@ import EmailOneTimeCodePage from './pages/OneTimeCode';
 import AcceptBillPage from './pages/AcceptBillPage';
 import FriendsListPage from './pages/FriendsListPage';
 import RespondToFriendRequestPage from './pages/RespondToFriendRequest';
+import SendCreditPage from './pages/SendCreditPage';
 
 const stripePromise = loadStripe('pk_test_51P3iC4P46pjciChWBf3bsIRggMExQUZU2ZTzVMToDwJnjtjQjj5FvG16NmnYfSX9OiiZI3DR1zowa4C6L3btGIYh00A4WZwzBX'); 
 
@@ -51,6 +52,7 @@ const App = () => {
               <Route path="/email-code" element={<EmailOneTimeCodePage />} />
               <Route path="/friends/respond" element={<RespondToFriendRequestPage />} />
               <Route path="/friends" element={<FriendsListPage />} />
+              <Route path="/friends/send/credit" element={<SendCreditPage />} />
           <Route path="/view-courts" element={<ViewCourtPage/>} />
           <Route path="/new-court" element={<CreateCourtPage />} />
               <Route path="/edit-profile" element={<EditProfilePage />} />
