@@ -42,16 +42,16 @@ router.post('/book-court', async (req, res) => {
                     const cetCurrentTime = new Date(currentTime.getTime() + (timezoneOffsetHours * 60 * 60 * 1000));
 
                     if (cetCurrentTime < bookingTime) {
-                        let is_friend = true;
+                        let friend = true;
 
                         for (const friend_email of req.body.emails) {
-                            is_friend = await is_friend(user.email_address, friend_email);
-                                if (!is_friend) {
+                            friend = await is_friend(user.email_address, friend_email);
+                                if (!friend) {
                                     break;
                                 }
                         }
 
-                        if (is_friend) {
+                        if (friend) {
                             const data = {
                                 start: req.body.dateTimeIso,
                                 user_email: req.headers['user-email'],
