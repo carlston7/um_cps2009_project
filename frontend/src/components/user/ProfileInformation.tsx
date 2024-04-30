@@ -13,10 +13,6 @@ const ProfileInformation = () => {
     const userCredit = localStorage.getItem('userCredit') || '0.00';
     const userType = localStorage.getItem('userType');
     const formattedCredit = parseFloat(userCredit).toFixed(2);
-    // Handler for the top-up button
-    const handleTopUp = () => {
-        navigate('/topup');
-    };
 
     return (
         <div className="container profile-page" style={containerStyle}>
@@ -28,7 +24,6 @@ const ProfileInformation = () => {
                 <p><strong>Credit:</strong> ${formattedCredit}</p>
                 <p><strong>Type:</strong> {userType}</p>
             </div>
-            <button onClick={handleTopUp} className="btn btn-primary">Top Up Credit</button>
             <button onClick={() => navigate('/edit-profile')} className="btn btn-secondary">Edit Profile</button>
         </div>
     );
