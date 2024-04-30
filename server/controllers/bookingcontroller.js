@@ -94,7 +94,7 @@ exports.accept_game_invite = async (data) => {
                 { _id: data._id },
                 {
                   $set: {
-                    "invite_responses.$[elem].status.confirmed": false
+                    "invite_responses.$[elem].status.confirmed": true
                   }
                 },
                 {
