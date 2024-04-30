@@ -66,10 +66,10 @@ export default function TopBar() {
                     {isAuthenticated && !isAdmin && !isMobile && <TopbarLink to="/my-bookings" text="My Bookings" />}
                     {isAuthenticated && !isAdmin && !isMobile && <TopbarLink to="/friends" text="My Friends" />}
                     {isAuthenticated && !isMobile && <TopbarLink to="/topup" text="Top up Credit" />}
-
+                    {isAuthenticated && isAdmin && <TopbarLink to="/block-courts" text="Block Courts" />}
                     {isAdmin && [
                         <TopbarLink key="new-court" to="/new-court" text="Create Court" />,
-                        <TopbarLink key="edit-court" to="/view-all-courts" text="Edit Court" />
+                        <TopbarLink key="edit-court" to="/view-all-courts" text="Edit Court" />,
                     ]}
                     <Box flexGrow={1} />
                     {isAuthenticated && !isAdmin && [
@@ -78,6 +78,13 @@ export default function TopBar() {
                             label={`Balance: $${formattedCredit}`}
                             color="default" />
                     ]}
+                    {isAuthenticated && isAdmin && !isMobile && [
+                        <Chip
+                            icon={<AccountBalanceWallet />}
+                            label={`Balance: $${formattedCredit}`}
+                            color="default" />
+                    ]}
+
                     <IconButton
                         color="inherit"
                         aria-label="menu"

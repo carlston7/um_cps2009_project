@@ -46,7 +46,7 @@ const sendCredit = async (email: any, amount: any) => {
         const response = await axiosInstance.patch('/send/credit', { email, amount }, {
             headers: { 'user-email': localStorage.getItem('userEmail') }
         });
-        localStorage.setItem('userCredit', response.data.credit);
+        localStorage.setItem('userCredit', response.data.senderCredit);
         return response.data;
     } catch (error) {
         console.error('Failed to send credit:', (error as Error).message);
