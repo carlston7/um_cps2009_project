@@ -80,8 +80,8 @@ exports.accept_game_invite = async (data) => {
                 { _id: data._id },
                 {
                   $set: {
-                    "invite_responses.$[elem].confirmed": true,
-                    "invite_responses.$[elem].accepted": true
+                    "invite_responses.$[elem].status.confirmed": true,
+                    "invite_responses.$[elem].status.accepted": true
                   }
                 },
                 {
@@ -94,7 +94,7 @@ exports.accept_game_invite = async (data) => {
                 { _id: data._id },
                 {
                   $set: {
-                    "invite_responses.$[elem].confirmed": false
+                    "invite_responses.$[elem].status.confirmed": false
                   }
                 },
                 {
