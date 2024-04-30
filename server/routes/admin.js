@@ -6,16 +6,32 @@ const Court = require('../models/courts');
 
 router.get('/admin/bookings', async (req, res) => {
     try {
-        const { dates, courts } = req.body; //need to add password check
-        const user = await User.findOne({ email_address: req.headers['user-email'] });
+        let { dates, courts } = req.query;
+        if (typeof dates === 'string') {
+            dates = [dates];
+        }
+        if (typeof courts === 'string') {
+            courts = [courts];
+        }
 
-        if (!user || user.type !== 'admin') {
+        const user = await User.findOne({ email_address: req.headers['user-email'] });
+        if (!user || !user.type.includes('admin')) {
             return res.status(403).json({ message: 'Access denied' });
         }
 
+        // Convert dates to cover the whole day from 00:00:00 to 23:59:59
+        const dateQueries = dates.map(date => ({
+            start: {
+                $gte: new Date(new Date(date).setUTCHours(0, 0, 0, 0)),
+                $lt: new Date(new Date(date).setUTCHours(23, 59, 59, 999))
+            }
+        }));
+
         const bookings = await Booking.find({
-            start: { $in: dates.map(date => new Date(date)) },
-            court_name: { $in: courts }
+            $and: [
+                { $or: dateQueries }, // Apply date ranges
+                { court_name: { $in: courts } }
+            ]
         });
         res.status(200).json(bookings);
     } catch (e) {
@@ -29,7 +45,8 @@ router.post('/admin/block-courts', async (req, res) => {
         const { dates, courts } = req.body; // Include userEmail in body for admin check
         const user = await User.findOne({ email_address: req.headers['user-email'] });//need to add password check
 
-        if (!user || user.type !== 'admin') {
+        if (!user || !user.type.includes('admin')) {
+            console.log('Access Denied Logic Triggered'); // Log when access is denied
             return res.status(403).json({ message: 'Access denied' });
         }
 
