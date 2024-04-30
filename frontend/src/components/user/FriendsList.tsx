@@ -55,7 +55,7 @@ export const FriendsList = () => {
                     {friendRequestsCount > 0 && (
                         <p>
                             You have {friendRequestsCount} active friend request(s).{' '}
-                            <Link to="/manage-requests">Click here to review them.</Link>
+                            <Link to="/friends/respond">Click here to review them.</Link>
                         </p>
                     )}
                 </div>

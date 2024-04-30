@@ -338,4 +338,41 @@ router.get('/friends/requests/count', async (req, res) => {
     }
 });
 
+router.patch('/send/credit', async (req, res) => {
+    try {
+        const { email, amount } = req.body;
+        const sender = await User.findOne({ email_address: req.headers['user-email'] });
+        const receiver = await User.findOne({ email_address: email });
+
+        if (amount <= 0) {
+            return res.status(400).json({ message: "Amount must be greater than 0." });
+        }
+
+        if (!sender || !receiver) {
+            return res.status(404).json({ message: "User not found." });
+        }
+
+        if (sender.credit < amount) {
+            return res.status(400).json({ message: "Insufficient credit." });
+        }
+
+        // Check if receiver is sender's friend and friendship is accepted
+        const isFriend = sender.friends.some(friend => friend.email === email && friend.accepted);
+        if (!isFriend) {
+            return res.status(403).json({ message: "Receiver is not your friend." });
+        }
+
+        sender.credit -= amount;
+        receiver.credit += amount;
+
+        await sender.save();
+        await receiver.save();
+
+        res.status(200).json({ message: "Credit sent successfully.", senderCredit: sender.credit });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
 module.exports = router;

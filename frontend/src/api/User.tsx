@@ -40,3 +40,18 @@ export const respondToInvitation = async ({ _id, email_address, accept }: { _id:
     });
     return response.data;
 };
+
+const sendCredit = async (email: any, amount: any) => {
+    try {
+        const response = await axiosInstance.patch('/send/credit', { email, amount }, {
+            headers: { 'user-email': localStorage.getItem('userEmail') }
+        });
+        localStorage.setItem('userCredit', response.data.senderCredit);
+        return response.data;
+    } catch (error) {
+        console.error('Failed to send credit:', (error as Error).message);
+        throw error;
+    }
+};
+
+export default sendCredit;
