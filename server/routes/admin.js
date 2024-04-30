@@ -6,8 +6,8 @@ const Court = require('../models/courts');
 
 router.get('/admin/bookings', async (req, res) => {
     try {
-        const { dates, courts, userEmail } = req.query; // Receive user email to check if admin
-        const user = await User.findOne({ email_address: userEmail });
+        const { dates, courts } = req.body; //need to add password check
+        const user = await User.findOne({ email_address: req.headers['user-email'] });
 
         if (!user || user.type !== 'admin') {
             return res.status(403).json({ message: 'Access denied' });
@@ -26,8 +26,8 @@ router.get('/admin/bookings', async (req, res) => {
 
 router.post('/admin/block-courts', async (req, res) => {
     try {
-        const { dates, courts, userEmail } = req.body; // Include userEmail in body for admin check
-        const user = await User.findOne({ email_address: userEmail });
+        const { dates, courts } = req.body; // Include userEmail in body for admin check
+        const user = await User.findOne({ email_address: req.headers['user-email'] });//need to add password check
 
         if (!user || user.type !== 'admin') {
             return res.status(403).json({ message: 'Access denied' });
