@@ -80,7 +80,7 @@ router.post('/book-court', async (req, res) => {
                         await send_booking_confirmation(mailOptions);
                         
                         //const court_price = await get_court_price(data.court_name, new Date(req.body.dateTimeIso).getHours());
-                        const user_price = court_price / req.body.emails.length;
+                        const user_price = court_price / req.body.emails.length + 1;
                         await send_booking_invites(data.user_email, data.court_name, formattedDate, formattedTime, booking._id, user_price, req.body.emails);
 
                         res.status(201).json({ message: 'Success' });
@@ -180,8 +180,9 @@ router.post('/respond', async (req, res) => {
 
         if (accepted) {
             const court_price = await get_court_price(booking.court_name, new Date(req.body.dateTimeIso).getHours());
-            const price = court_price / booking.invite_responses.length;
+            const price = court_price / booking.invite_responses.length + 1;
             const user = await update_user_credit(req.body.email_address, price, true);
+            const booking_user = await update_user_credit(booking.user_email, price, false);
         }
 
         res.status(200).json({ message: "Your response to the invitation has been updated." });
