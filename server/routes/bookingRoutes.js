@@ -5,7 +5,7 @@ const { create_booking, get_booking,
         get_bookings, get_available_courts, delete_booking,
         accept_game_invite } = require('../controllers/bookingcontroller');
 const { get_court_price } = require('../controllers/courtcontroller.js');
-const { update_user_credit } = require('../controllers/usercontroller.js');
+const { update_user_credit, is_friend } = require('../controllers/usercontroller.js');
 const { send_booking_confirmation, send_booking_invites } = require('../controllers/mail.js');
 const User = require('../models/users');
 const bcrypt = require('bcryptjs');
@@ -42,6 +42,17 @@ router.post('/book-court', async (req, res) => {
                     const cetCurrentTime = new Date(currentTime.getTime() + (timezoneOffsetHours * 60 * 60 * 1000));
 
                     if (cetCurrentTime < bookingTime) {
+                        // let is_friend = true;
+
+                        // for (const friend_email of req.body.emails) {
+                        //     is_friend = await is_friend(user.email_address, friend_email);
+                        //         if (!is_friend) {
+                        //             break;
+                        //         }
+                        // }
+
+                        // if (is_friend) {}
+
                         const data = {
                             start: req.body.dateTimeIso,
                             user_email: req.headers['user-email'],
