@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 
 const { create_booking, get_booking,
-        get_bookings, get_available_courts, delete_booking } = require('../controllers/bookingcontroller');
+        get_bookings, get_available_courts, delete_booking,
+        accept_game_invite } = require('../controllers/bookingcontroller');
 const { get_court_price } = require('../controllers/courtcontroller.js');
 const { update_user_credit } = require('../controllers/usercontroller.js');
 const { send_booking_confirmation, send_booking_invites } = require('../controllers/mail.js');
@@ -78,7 +79,7 @@ router.post('/book-court', async (req, res) => {
 
                         await send_booking_confirmation(mailOptions);
                         
-                        const court_price = await get_court_price(data.court_name, new Date(req.body.dateTimeIso.getHours()));
+                        //const court_price = await get_court_price(data.court_name, new Date(req.body.dateTimeIso).getHours());
                         const user_price = court_price / req.body.emails.length;
                         await send_booking_invites(data.user_email, data.court_name, formattedDate, formattedTime, booking._id, user_price, req.body.emails);
 
@@ -165,6 +166,28 @@ router.delete('/cancel-booking', async (req, res) => {
         }
     } catch (error) {
         console.error('Error cancelling booking:', error);
+        res.status(500).send(error.message);
+    }
+});
+
+router.post('/respond', async (req, res) => {
+    try {
+        const booking = await accept_game_invite(req.body);
+
+        const response = booking.invite_responses.find(response => response.email === req.body.email_address);
+
+        const accepted = response ? response.status.accepted : false;
+
+        if (accepted) {
+            const court_price = await get_court_price(booking.court_name, new Date(req.body.dateTimeIso).getHours());
+            const price = court_price / booking.invite_responses.length;
+            const user = await update_user_credit(req.body.email_address, price, true);
+        }
+
+        res.status(200).json({ message: "Your response to the invitation has been updated." });
+
+    } catch (error) {
+        console.error('Error accepting/rejecting invitation:', error);
         res.status(500).send(error.message);
     }
 });

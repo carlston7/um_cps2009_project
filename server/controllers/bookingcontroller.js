@@ -70,3 +70,47 @@ exports.get_booking = async (booking_id) => {
         throw e;
     }
 }
+
+exports.accept_game_invite = async (data) => {
+    try {
+        let booking;
+
+        if (data.accept) {
+            booking = await Booking.findOneAndUpdate(
+                { _id: data._id },
+                {
+                  $set: {
+                    "invite_responses.$[elem].confirmed": true,
+                    "invite_responses.$[elem].accepted": true
+                  }
+                },
+                {
+                  arrayFilters: [{ "elem.email": data.email_address }],
+                  returnOriginal: false
+                }
+              )
+        } else {
+            booking = await Booking.findOneAndUpdate(
+                { _id: data._id },
+                {
+                  $set: {
+                    "invite_responses.$[elem].confirmed": false
+                  }
+                },
+                {
+                  arrayFilters: [{ "elem.email": data.email_address }],
+                  returnOriginal: false
+                }
+              )
+        }
+
+        if (!booking) {
+            throw new Error('Match invite not updated.')
+        } else {
+            return booking;
+        }
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
