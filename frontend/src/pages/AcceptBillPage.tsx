@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { respondToInvitation } from '../api/User';
+import { fetchUserCredit, respondToInvitation } from '../api/User';
 import { toast } from 'react-toastify';
 import { containerStyle } from '../components/ui/Background';
 
@@ -22,6 +22,7 @@ const AcceptBillPage = () => {
             } else {
                 toast.success('You have declined the invitation.');
             }
+            await fetchUserCredit();
             navigate('/');
         } catch (error) {
             toast.error('Failed to process your response.');
