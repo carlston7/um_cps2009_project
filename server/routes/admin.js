@@ -50,7 +50,7 @@ router.post('/admin/block-courts', async (req, res) => {
             console.log('Access Denied Logic Triggered'); // Log when access is denied
             return res.status(403).json({ message: 'Access denied' });
         }
-
+        
         const sessionsToBlock = await Booking.find({
             start: { $in: dates.map(date => new Date(date)) },
             court_name: { $in: courts }
