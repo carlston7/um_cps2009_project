@@ -164,7 +164,7 @@ router.delete('/cancel-booking', async (req, res) => {
             const updated_user = await update_user_credit(user.email_address, eachRefund, false);
 
             for (const response of booking.invite_responses) {
-                if (invite.status.confirmed && invite.status.accepted) {
+                if (response.status.confirmed && response.status.accepted) {
                     await update_user_credit(response.email, eachRefund, false);
                 }
             }
@@ -202,7 +202,7 @@ router.post('/respond', async (req, res) => {
 
         if (accepted) {
             const court_price = await get_court_price(booking.court_name, new Date(req.body.dateTimeIso).getHours());
-            const price = court_price / booking.invite_responses.length + 1;
+            const price = court_price / (booking.invite_responses.length + 1);
             const user = await update_user_credit(req.body.email_address, price, true);
             const booking_user = await update_user_credit(booking.user_email, price, false);
         }
