@@ -122,12 +122,29 @@ router.post('/admin/block-courts', async (req, res) => {
             console.log("Refunded: ", session.user_email, eachRefund);
             // Refund to each invitee
             session.invite_responses.forEach(async invite => {
-                await User.findOneAndUpdate(
-                    { email_address: invite.email },
-                    { $inc: { credit: eachRefund } }
-                );
-                console.log("Refunded: ", invite.email, eachRefund);
+                if (invite.status.confirmed && invite.status.accepted) {
+                    await User.findOneAndUpdate(
+                        { email_address: invite.email },
+                        { $inc: { credit: eachRefund } }
+                    );
+                    console.log("Refunded: ", invite.email, eachRefund);
+                }
             });
+
+            const mailOptions = {
+                from: 'manager.tennisclub@gmail.com',
+                to: `${session.user_email}, ${invite.email},manager.tennisclub@gmail.com`,
+                subject: 'Booking Cancellation Confirmation',
+                html: ` 
+                    <h4>The following booking made by ${session.user_email} has been cancelled due to the court booked needing to be used on that date:</h4>
+                    <p>Court Name: ${court.court_name}</p>
+                    <p>Date: ${session.start.getDate()}</p>
+                    <p>Time: ${session.start.getHours()}:00 - ${session.start.getHours() + 1}:00</p>
+                    <p>Refunded amount: ${eachRefund}</p>
+                `
+            };
+            await send_booking_confirmation(mailOptions);
+
             // Finally, delete the session (or mark as blocked)
             await Booking.findByIdAndDelete(session._id);
         });

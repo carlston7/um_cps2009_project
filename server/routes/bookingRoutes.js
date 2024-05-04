@@ -156,9 +156,18 @@ router.delete('/cancel-booking', async (req, res) => {
 
         // Check if the booking is more than 24 hours ahead
         if (timeDifference > 24 * 60 * 60 * 1000) {
-            const book_del = await delete_booking(booking._id);
-            const court_price = await get_court_price(book_del.court_name, new Date(book_del.start).getHours());
-            const updated_user = await update_user_credit(req.headers['user-email'], court_price, false);
+            await delete_booking(booking._id);
+            const court_price = await get_court_price(booking.court_name, start.getHours());
+            const numParticipants = booking.invite_responses.length + 1; // Including the booker
+            const eachRefund = court_price / numParticipants;
+            
+            const updated_user = await update_user_credit(user.email_address, eachRefund, false);
+
+            for (const response of booking.invite_responses) {
+                if (invite.status.confirmed && invite.status.accepted) {
+                    await update_user_credit(response.email, eachRefund, false);
+                }
+            }
 
             const mailOptions = {
                 from: 'manager.tennisclub@gmail.com',
