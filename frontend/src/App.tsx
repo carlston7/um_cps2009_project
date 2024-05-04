@@ -29,6 +29,7 @@ import FriendsListPage from './pages/FriendsListPage';
 import RespondToFriendRequestPage from './pages/RespondToFriendRequest';
 import SendCreditPage from './pages/SendCreditPage';
 import { BlockCourtsPage } from './pages/courts/BlockCourtsPage';
+import ConfirmBlockPage from './pages/courts/ConfirmBlockPage';
 
 const stripePromise = loadStripe('pk_test_51P3iC4P46pjciChWBf3bsIRggMExQUZU2ZTzVMToDwJnjtjQjj5FvG16NmnYfSX9OiiZI3DR1zowa4C6L3btGIYh00A4WZwzBX'); 
 
@@ -49,7 +50,7 @@ const App = () => {
               <Route path="/confirm-email" element={<EmailConfirmationPage />} />
               <Route path="/cancel-booking/:bookingId" element={<CancelBookingPage />} />
               <Route path="/block-courts" element={<BlockCourtsPage />} />
-
+              <Route path="/confirm-blocking" element={<ConfirmBlockPage />} />
               <Route path="/accept-bill" element={<AcceptBillPage />} />
               <Route path="/forget-password" element={<ForgetPasswordPage />} />
               <Route path="/email-code" element={<EmailOneTimeCodePage />} />
