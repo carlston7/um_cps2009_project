@@ -55,6 +55,7 @@ router.post('/admin/block-courts', async (req, res) => {
             start: { $in: dates.map(date => new Date(date)) },
             court_name: { $in: courts }
         });
+        console.log("Blcoking sessions", sessionsToBlock);
 
         const refundProcessing = sessionsToBlock.map(async (session) => {
             const court = await Court.findOne({ name: session.court_name });
@@ -68,15 +69,15 @@ router.post('/admin/block-courts', async (req, res) => {
                 { email_address: session.user_email },
                 { $inc: { credit: eachRefund } }
             );
-
+            console.log("Refunded: ", session.user_email, eachRefund);
             // Refund to each invitee
             session.invite_responses.forEach(async invite => {
                 await User.findOneAndUpdate(
                     { email_address: invite.email },
                     { $inc: { credit: eachRefund } }
                 );
+                console.log("Refunded: ", invite.email, eachRefund);
             });
-
             // Finally, delete the session (or mark as blocked)
             await Booking.findByIdAndDelete(session._id);
         });
