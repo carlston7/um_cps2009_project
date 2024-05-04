@@ -202,11 +202,11 @@ router.post('/respond', async (req, res) => {
         const accepted = response ? response.status.accepted : false;
 
         if (accepted) {
-            const court_price = await get_court_price(booking.court_name, new Date(req.body.dateTimeIso).getHours());
+            const court_price = await get_court_price(booking.court_name, new Date(booking.start).getHours());
             const price = court_price / (booking.invite_responses.length + 1);
             console.log("Price: ", price, "Court price: ", court_price);
-            const user = await update_user_credit(req.body.email_address, price, true);
-            const booking_user = await update_user_credit(booking.user_email, price, false);
+            await update_user_credit(req.body.email_address, price, true);
+            await update_user_credit(booking.user_email, price, false);
         }
 
         res.status(200).json({ message: "Your response to the invitation has been updated." });
