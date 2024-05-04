@@ -88,7 +88,7 @@ router.post('/admin/block-courts', async (req, res) => {
             for (const courtName of courts) {
                 console.log(`Creating bookings for court: ${courtName} on date: ${date}`);
                 // Create bookings for each hour within the operational hours
-                for (let hour = 9; hour < 23; hour++) {
+                for (let hour = 9; hour < 24; hour++) {
                     const startDateTime = new Date(date + `T${hour.toString().padStart(2, '0')}:00:00.000Z`);
 
                     const bookingData = {
@@ -104,6 +104,11 @@ router.post('/admin/block-courts', async (req, res) => {
         }
         const refundProcessing = sessionsToBlock.map(async (session) => {
             const court = await Court.findOne({ name: session.court_name });
+            if (!court) {
+                console.error("No court found with the name:", session.court_name);
+                return; // Skip processing this session if the court is not found
+            }
+            console.log("Sessions start:" , session.start.getHours());
             const price = session.start.getHours() >= 18 ? court.nightPrice : court.dayPrice; // Price based on time
             const totalPriceRefund = Number(price.toString()); // Convert Decimal128 to Number
             const totalInvitees = session.invite_responses.length;
