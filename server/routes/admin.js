@@ -51,11 +51,19 @@ router.post('/admin/block-courts', async (req, res) => {
             return res.status(403).json({ message: 'Access denied' });
         }
 
+        console.log("Received dates: ", dates);
+        console.log("Received courts: ", courts);
+
         const sessionsToBlock = await Booking.find({
-            start: { $in: dates.map(date => new Date(date)) },
+            start: {
+                $in: dates.map(date => ({
+                    $gte: new Date(date + "T00:00:00.000Z"),
+                    $lt: new Date(date + "T23:59:59.999Z")
+                }))
+            },
             court_name: { $in: courts }
         });
-        console.log("Blcoking sessions", sessionsToBlock);
+        console.log("Blocking sessions", sessionsToBlock);
 
         const refundProcessing = sessionsToBlock.map(async (session) => {
             const court = await Court.findOne({ name: session.court_name });
