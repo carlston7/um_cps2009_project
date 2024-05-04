@@ -95,10 +95,10 @@ export const DisplayAllCourts: React.FC<Props> = ({ courts }) => {
             return;
         }
 
-        const courtIds = selectedCourts.map((court) => court._id).join(',');
+        const courtParams = selectedCourts.map((court) => `courts=${court.name}`);
         const dateParams = selectedDates.map((date) => `dates=${date}`).join('&');
 
-        axiosInstance.get(`/admin/bookings?${dateParams}&courts=${courtIds}`, {
+        axiosInstance.get(`/admin/bookings?${dateParams}&${courtParams.join('&')}`, {
             headers: {
                 'User-Email': userEmail,
             },
@@ -106,7 +106,7 @@ export const DisplayAllCourts: React.FC<Props> = ({ courts }) => {
             .then((response) => {
                 // Handle success
                 console.log("response", response.data);
-                navigate('/confirm-blocking', { state: { courts: response.data } });
+                navigate('/confirm-blocking', { state: {bookings: response.data, courts: selectedCourts, dates: selectedDates } });
             })
             .catch((error) => {
                 // Handle error
