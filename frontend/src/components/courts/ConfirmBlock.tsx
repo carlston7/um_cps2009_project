@@ -2,14 +2,17 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axiosInstance from '../../api/AxiosInstance';
 import { toast } from 'react-toastify';
+import { containerStyle } from '../ui/Background';
 
 const ConfirmBlock = () => {
     const { state } = useLocation();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-
+    if (!state) {
+        return <div style={containerStyle}>No data available.</div>;
+    }
     // Extract courts and dates from the navigation state
-    const { courts, dates } = state;
+    const { courts = [], dates = [] } = state;
 
     const handleSubmit = async () => {
         setLoading(true);

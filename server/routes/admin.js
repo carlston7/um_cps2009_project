@@ -33,6 +33,7 @@ router.get('/admin/bookings', async (req, res) => {
                 { court_name: { $in: courts } }
             ]
         });
+        console.log("found bookings", bookings);
         res.status(200).json(bookings);
     } catch (e) {
         console.error(e);

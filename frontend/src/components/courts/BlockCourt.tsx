@@ -105,6 +105,7 @@ export const DisplayAllCourts: React.FC<Props> = ({ courts }) => {
         })
             .then((response) => {
                 // Handle success
+                console.log("response", response.data);
                 navigate('/confirm-blocking', { state: { courts: response.data } });
             })
             .catch((error) => {
