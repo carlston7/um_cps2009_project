@@ -50,8 +50,8 @@ exports.get_court_price = async (court_name, time_booking) => {
         if (!court) {
             throw new Error('Court not found.');
         }
-
-        if (time_booking >= 18)
+        const time_booking_hours = new Date(time_booking).getHours();
+        if (time_booking_hours >= 18)
         {
             return court.nightPrice;
         } else {

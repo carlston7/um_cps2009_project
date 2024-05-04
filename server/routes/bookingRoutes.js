@@ -158,7 +158,8 @@ router.delete('/cancel-booking', async (req, res) => {
         if (timeDifference > 24 * 60 * 60 * 1000) {
             await delete_booking(booking._id);
             const court_price = await get_court_price(booking.court_name, start.getHours());
-            const numParticipants = booking.invite_responses.length + 1; // Including the booker
+            const confirmedAndAcceptedResponses = booking.invite_responses.filter(response => response.status.confirmed && response.status.accepted);
+            const numParticipants = confirmedAndAcceptedResponses.length + 1;
             const eachRefund = court_price / numParticipants;
             
             const updated_user = await update_user_credit(user.email_address, eachRefund, false);
