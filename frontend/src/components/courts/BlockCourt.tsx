@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useCourt } from '../../context/CourtContext';
 import axiosInstance from '../../api/AxiosInstance';
+import { containerStyle} from '../ui/Background';
 
 function getCourtTypeColor(type: string): string {
     switch (type) {
@@ -95,12 +96,18 @@ export const DisplayAllCourts: React.FC<Props> = ({ courts }) => {
             return;
         }
 
+        const userPassword = localStorage.getItem('userPassword');
+        if (!userPassword) {
+            toast.error('User password not found');
+            return;
+        }
         const courtParams = selectedCourts.map((court) => `courts=${court.name}`);
         const dateParams = selectedDates.map((date) => `dates=${date}`).join('&');
 
         axiosInstance.get(`/admin/bookings?${dateParams}&${courtParams.join('&')}`, {
             headers: {
                 'User-Email': userEmail,
+                'User-Password': userPassword,
             },
         })
             .then((response) => {
@@ -113,6 +120,8 @@ export const DisplayAllCourts: React.FC<Props> = ({ courts }) => {
                 toast.error('Failed to retrieve court information');
             });
     };
+
+    const currentDate = new Date().toISOString().split('T')[0];
 
     return (
         <div>
@@ -148,12 +157,13 @@ export const DisplayAllCourts: React.FC<Props> = ({ courts }) => {
                     })}
                 </tbody>
             </table>
-            <div>
+            <div style={containerStyle}>
                 <label>Select Dates:</label>
                 <div>
                     {courts.length > 0 && (
                         <input
                             type="date"
+                            min={currentDate}
                             onChange={(event) => handleDateSelection(event.target.value)}
                         />
                     )}
@@ -168,8 +178,8 @@ export const DisplayAllCourts: React.FC<Props> = ({ courts }) => {
                         </div>
                     ))}
                 </div>
+                <button onClick={handleSubmit}>Submit</button>
             </div>
-            <button onClick={handleSubmit}>Submit</button>
         </div>
     );
 };

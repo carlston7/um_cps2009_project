@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axiosInstance from '../../api/AxiosInstance';
 import { toast } from 'react-toastify';
-import { containerStyle } from '../ui/Background';
+import { blankStyle, containerStyle, containerStyle2, containerStyle3  } from '../ui/Background';
 import { Court } from '../../models/Courts';
 import { MyBookings } from '../../models/Bookings';
 
@@ -25,6 +25,7 @@ const ConfirmBlock = () => {
             }, {
                 headers: {
                     'User-Email': localStorage.getItem('userEmail'),
+                    'User-Password': localStorage.getItem('userPassword'),
                 } // Remove the extra comma here
             });
 
@@ -41,31 +42,40 @@ const ConfirmBlock = () => {
     };
 
     return (
-        <div>
-            <h2>Confirm Block of Courts</h2>
-            <h3>Selected Dates</h3>
-            <ul>
-                {dates.map((date: string) => (
-                    <li key={date}>{date}</li>
-                ))}
-            </ul>
-            <h3>Selected Courts</h3>
-            <ul>
-                {courts.map((court: Court) => (
-                    <li key={court._id}>{court.name}</li>
-                ))}
-            </ul>
-            <h3>Bookings to be Refunded</h3>
-            <ul>
-                {bookings.map((booking: MyBookings) => (
-                    <li key={booking._id}>
-                        {booking.court_name} - {new Date(new Date(booking.start).getTime() - 2 * 60 * 60 * 1000).toLocaleString()}
-                    </li>
-                ))}
-            </ul>
-            <button onClick={handleSubmit} disabled={loading}>
-                {loading ? 'Blocking...' : 'Confirm Block'}
-            </button>
+        <div> 
+            <h1 style={containerStyle3}>Confirm Blocking of Courts</h1>
+            <div style={blankStyle}></div>
+            <div style={{...containerStyle, padding: '10px'}}>
+                <h2>Selected Dates:</h2>
+                <ul>
+                    {dates.map((date: string) => (
+                        <li key={date}>{date}</li>
+                    ))}
+                </ul>
+            </div>
+            <div style={blankStyle}></div>
+            <div style={containerStyle}>
+                <h2>Selected Courts</h2>
+                <ul>
+                    {courts.map((court: Court) => (
+                        <li key={court._id}>{court.name}</li>
+                    ))}
+                </ul>
+            </div>
+            <div style={blankStyle}></div>
+            <div style={containerStyle2}>
+                <h2>Bookings to be Refunded</h2>
+                <ul>
+                    {bookings.map((booking: MyBookings) => (
+                        <li key={booking._id}>
+                            {booking.court_name} - {new Date(new Date(booking.start).getTime() - 2 * 60 * 60 * 1000).toLocaleString()}
+                        </li>
+                    ))}
+                </ul>
+                <button onClick={handleSubmit} disabled={loading}>
+                    {loading ? 'Blocking...' : 'Confirm Block'}
+                </button>
+            </div>
         </div>
     );
 };
