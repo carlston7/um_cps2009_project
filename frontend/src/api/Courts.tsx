@@ -1,6 +1,12 @@
 import { Court, CourtCreateRequest, CourtUpdateRequest, DateTimeSelection } from '../models/Courts';
 import axiosInstance from './AxiosInstance';
 
+/**
+ * Creates a new court.
+ * @param data - The court data to be created.
+ * @returns A promise that resolves to the created court.
+ * @throws Error if user type, user email, or user password is not found.
+ */
 export const createCourt = async (data: CourtCreateRequest) => {
     const userType = localStorage.getItem('userType');
     if (!userType) {
@@ -24,6 +30,12 @@ export const createCourt = async (data: CourtCreateRequest) => {
     });
 };
 
+/**
+ * Updates an existing court.
+ * @param data - The court data to be updated.
+ * @returns A promise that resolves to the updated court.
+ * @throws Error if user type, user email, or user password is not found.
+ */
 export const updateCourt = async (data: CourtUpdateRequest) => {
     const userType = localStorage.getItem('userType');
     if (!userType) {
@@ -47,6 +59,12 @@ export const updateCourt = async (data: CourtUpdateRequest) => {
     });
 };
 
+/**
+ * Fetches courts based on the specified date and time selection.
+ * @param dateTime - The date and time selection.
+ * @returns A promise that resolves to an array of courts.
+ * @throws Error if there is an error fetching the courts.
+ */
 export const fetchCourts = async (dateTime: DateTimeSelection): Promise<Court[]> => {
     try {
         console.log("dateTime: ", dateTime);
@@ -62,6 +80,11 @@ export const fetchCourts = async (dateTime: DateTimeSelection): Promise<Court[]>
     }
 };
 
+/**
+ * Fetches all courts.
+ * @returns A promise that resolves to an array of all courts.
+ * @throws Error if there is an error getting all courts.
+ */
 export const fetchAllCourts = async (): Promise<Court[]> => {
     try {
         const response = await axiosInstance.get<Court[]>('/courts-all');
