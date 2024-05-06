@@ -81,32 +81,27 @@ router.post('/login', async (req, res) => {
 
         // Find user by email address using Mongoose
         const user = await User.findOne({ email_address: user_data.email });
+        if (!user) {
+            return res.status(401).send('Invalid email address'); // Stop further processing and return
+        }
         if (!user.emailVerified) {
             res.status(401).send('Email not verified');
         }
-        // Check if user exists and compare passwords (make sure to hash passwords in production)
-        if (user) {
-            const valid_pwd = await bcrypt.compare(user_data.password, user.password);
-
-            if (valid_pwd) {
-                res.status(200).json({
-                    message: 'Login successful',
-                    email: user.email_address,
-                    type: user.type,
-                    password: req.body.password,
-                    credit: user.credit,
-                    name: user.name,
-                    surname: user.surname,
-                });
-            }
-            else {
-                res.status(401).send('Invalid password');
-            }
+        const valid_pwd = await bcrypt.compare(user_data.password, user.password);
+        if (valid_pwd) {
+            res.status(200).json({
+                message: 'Login successful',
+                email: user.email_address,
+                type: user.type,
+                password: req.body.password,
+                credit: user.credit,
+                name: user.name,
+                surname: user.surname,
+            });
         } else {
-            res.status(401).send('Invalid email address');
+            res.status(401).send('Invalid password');
         }
     } catch (error) {
-        console.error('Error logging in:', error); // Log the specific error
         res.status(500).send('An error occurred: ' + error.message);
     }
 });
