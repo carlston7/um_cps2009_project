@@ -2,6 +2,13 @@ import axiosInstance from './AxiosInstance';
 import SignupRequest from '../models/SignupRequest';
 import axios from 'axios';
 
+/**
+ * Sends a signup request to the server.
+ * 
+ * @param data - The signup request data.
+ * @returns A Promise that resolves to the server response.
+ * @throws If an error occurs during the signup process.
+ */
 export const apiSignup = async (data: SignupRequest) => {
     try {
         const response = await axiosInstance.post(`/signup`, data);

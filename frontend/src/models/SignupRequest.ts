@@ -1,3 +1,6 @@
+/**
+ * Interface for SignupRequest
+ */
 export default interface SignupRequest {
     name: string;
     surname: string;

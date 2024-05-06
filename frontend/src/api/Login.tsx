@@ -2,7 +2,12 @@ import axiosInstance from './AxiosInstance';
 import LoginRequest from '../models/LoginRequest';
 import axios from 'axios';
 
-
+/**
+ * Makes an API call to login the user.
+ * @param data - The login request data.
+ * @returns A promise that resolves to the API response.
+ * @throws If an error occurs during the API call.
+ */
 export const apiLogin = async (data: LoginRequest) => {
     try {
         const response = await axiosInstance.post(`/login`, data);
@@ -24,6 +29,12 @@ export const apiLogin = async (data: LoginRequest) => {
     }
 };
 
+/**
+ * Makes an API call to send a one-time code to the user's email.
+ * @param data - The data required to send the one-time code.
+ * @returns A promise that resolves to the API response.
+ * @throws If an error occurs during the API call.
+ */
 export const apiEmailOneTimeCode = async (data: any) => {
     try {
         const response = await axiosInstance.post('/email-one-time-code', data);
@@ -38,8 +49,13 @@ export const apiEmailOneTimeCode = async (data: any) => {
     }
 }
 
+/**
+ * Makes an API call to reset the user's password.
+ * @param data - The data required to reset the password.
+ * @returns A promise that resolves to the API response.
+ * @throws If an error occurs during the API call.
+ */
 export const apiForgetPassword = async (data: any) => {
-
     try {
         const email_address = localStorage.getItem('userEmail');
         const response = await axiosInstance.post('/forget-password', { ...data, email_address });
