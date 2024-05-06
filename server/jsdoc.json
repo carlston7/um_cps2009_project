@@ -1,0 +1,9 @@
+{
+    "source": {
+        "include": ["routes"]
+    },
+    "opts": {
+        "destination": "docs",
+        "template": "node_modules/jsdoc/templates/default"
+    }
+}
