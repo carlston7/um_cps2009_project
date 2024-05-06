@@ -1,6 +1,10 @@
 import axiosInstance from './AxiosInstance';
 
-// Function to fetch user credit from the backend
+/**
+ * Function to fetch user credit from the backend.
+ * @returns The user's credit.
+ * @throws Error if the user type or email is not found, or if there is an error fetching the credit.
+ */
 export const fetchUserCredit = async () => {
     const userType = localStorage.getItem('userType');
     if (!userType) {
@@ -32,6 +36,13 @@ export const fetchUserCredit = async () => {
     }
 }
 
+/**
+ * Function to respond to an invitation.
+ * @param _id - The ID of the invitation.
+ * @param email_address - The email address of the invitation.
+ * @param accept - Whether to accept or decline the invitation.
+ * @returns The response data.
+ */
 export const respondToInvitation = async ({ _id, email_address, accept }: { _id: string, email_address: string, accept: boolean }) => {
     const response = await axiosInstance.post('/respond', {
         _id,
@@ -41,6 +52,13 @@ export const respondToInvitation = async ({ _id, email_address, accept }: { _id:
     return response.data;
 };
 
+/**
+ * Function to send credit to a user.
+ * @param email - The email address of the user.
+ * @param amount - The amount of credit to send.
+ * @returns The response data.
+ * @throws Error if there is an error sending the credit.
+ */
 const sendCredit = async (email: any, amount: any) => {
     try {
         const response = await axiosInstance.patch('/send/credit', { email, amount }, {
