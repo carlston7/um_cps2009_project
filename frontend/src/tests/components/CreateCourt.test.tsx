@@ -15,6 +15,7 @@ import userEvent from '@testing-library/user-event';
 import { createCourt } from '../../api/Courts';
 import { CreateCourtForm } from '../../components/courts/CreateCourt';
 import { toast } from 'react-toastify';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 describe('CreateCourtForm', () => {
     beforeEach(() => {
@@ -22,12 +23,16 @@ describe('CreateCourtForm', () => {
     });
 
     test('renders without crashing', () => {
-        render(<CreateCourtForm />);
+        render(<Router>
+            <CreateCourtForm />
+        </Router>);
         expect(screen.getByRole('button', { name: /Create Court/i })).toBeInTheDocument();
     });
 
     test('allows users to input and submit form', async () => {
-        render(<CreateCourtForm />);
+        render(<Router>
+            <CreateCourtForm />
+        </Router>);
 
         // Simulate user input
         await userEvent.type(screen.getByLabelText(/Name:/i), 'Local Court');
@@ -52,7 +57,9 @@ describe('CreateCourtForm', () => {
     });
 
     test('displays an error message on submission failure', async () => {
-        render(<CreateCourtForm />);
+        render(<Router>
+            <CreateCourtForm />
+        </Router>);
 
         userEvent.type(screen.getByLabelText(/Name:/i), 'Local Court');
         fireEvent.click(screen.getByText(/Create Court/i));
