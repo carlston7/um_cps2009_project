@@ -1,9 +1,13 @@
 {
     "source": {
-        "include": ["routes"]
+    "include": [
+        "routes"
+    ],
+    "includePattern": ".js$",
+    "excludePattern": "(node_modules/|docs)"
     },
     "opts": {
-        "destination": "docs",
-        "template": "node_modules/jsdoc/templates/default"
+    "destination": "./docs/"
     }
 }
+  

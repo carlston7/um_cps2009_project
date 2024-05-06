@@ -1,3 +1,7 @@
+/**
+ * @file This file contains the user routes for user registration, login, profile management, email confirmation, password reset, and friend requests.
+ * @module userRoutes
+ */
 const express = require('express');
 const router = express.Router();
 const { create_user, get_user_credit, edit_user } = require('../controllers/usercontroller');
@@ -6,7 +10,11 @@ const User = require('../models/users');
 const crypto = require('crypto');
 const { send_booking_confirmation } = require('../controllers/mail.js');
 
-// Function to generate and store a token
+/**
+ * 
+ * @param {*} user 
+ * @returns token
+ */
 const generateToken = async (user) => {
     const token = crypto.randomBytes(20).toString('hex');
     user.confirmationToken = token;
@@ -65,6 +73,7 @@ router.post('/signup', async (req, res) => {
         res.status(500).send('Server Error');
     }
 });
+
 
 router.get('/confirm-email', async (req, res) => {
     try {
