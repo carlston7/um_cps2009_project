@@ -55,7 +55,7 @@ jobs:
         working-directory: ./frontend
 
       - name: Run frontend tests
-        run: npm test -- --watchAll=false > frontend-test-results.txt 
+        run: npm test > frontend-test-results.txt 2>&1 
         working-directory: ./frontend
 
       - name: Generate documentation with TypeDoc
