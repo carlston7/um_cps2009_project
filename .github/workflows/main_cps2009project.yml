@@ -41,7 +41,7 @@ jobs:
 
       - name: Generate documentation with TypeDoc
         run: |
-          npx typedoc --out docs src
+          npx typedoc --logLevel Verbose
         working-directory: ./frontend
 
       - name: Upload test results and coverage
