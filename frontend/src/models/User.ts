@@ -1,3 +1,6 @@
+/**
+ * Interface for User model
+ */
 export default interface User {
     name: String,
     surname: String,
