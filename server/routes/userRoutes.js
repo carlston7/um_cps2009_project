@@ -1,3 +1,7 @@
+/**
+ * @file This file contains the user routes for user registration, login, profile management, email confirmation, password reset, and friend requests.
+ * @module userRoutes
+ */
 const express = require('express');
 const router = express.Router();
 const { create_user, get_user_credit, edit_user } = require('../controllers/usercontroller');
@@ -6,7 +10,11 @@ const User = require('../models/users');
 const crypto = require('crypto');
 const { send_booking_confirmation } = require('../controllers/mail.js');
 
-// Function to generate and store a token
+/**
+ * 
+ * @param {*} user 
+ * @returns token
+ */
 const generateToken = async (user) => {
     const token = crypto.randomBytes(20).toString('hex');
     user.confirmationToken = token;
@@ -15,6 +23,19 @@ const generateToken = async (user) => {
     return token;
 };
 
+/**
+ * Sends a POST request to the server allowing a user to register on the platform triggering a confirmation email to be sent to the email address provided.
+ *
+ * @param {Object} req - The request object containing user registration data.
+ * @param {Object} req.body - The request body containing user registration data.
+ * @param {string} req.body.email - The email address of the user being registered.
+ * @param {string} req.body.password - The password of the user being registered.
+ * @param {string} req.body.name - The name of the user being registered.
+ * @param {string} req.body.surname - The surname of the user being registered.
+ * @param {Object} res - The response object used to send responses to the client.
+ * @returns {Promise<any>} - A promise that resolves after the user registration process is completed.
+ * @throws {Error} - If there is an error during the user registration process.
+ */
 router.post('/signup', async (req, res) => {
     try {
 
@@ -52,6 +73,7 @@ router.post('/signup', async (req, res) => {
         res.status(500).send('Server Error');
     }
 });
+
 
 router.get('/confirm-email', async (req, res) => {
     try {

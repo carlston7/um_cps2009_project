@@ -3,3 +3,4 @@ build/
 public
 .env
 /server/.env
+docs
