@@ -28,7 +28,8 @@ describe('Login endpoint', () => {
             email_address: 'test@test.test',
             password: 'testpwd',
             credit: 100,
-            type: 'member'
+            type: 'member',
+            emailVerified: true
         };
 
         require('../../models/users').findOne.mockResolvedValue(mockUser);
