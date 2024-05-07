@@ -6,6 +6,7 @@ const Court = require('../models/courts');
 const bcrypt = require('bcryptjs');
 
 const { create_booking} = require('../controllers/bookingcontroller');
+const { send_booking_confirmation } = require('../controllers/mail.js');
 
 router.get('/admin/bookings', async (req, res) => {
     try {
