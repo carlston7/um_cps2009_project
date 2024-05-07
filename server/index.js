@@ -29,11 +29,13 @@ const courtRoutes = require('./routes/courtRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const adminRoutes = require('./routes/admin');
+const resourcesRoutes = require('./routes/resourcesRoutes');
 app.use(userRoutes);
 app.use(courtRoutes);
 app.use(bookingRoutes);
 app.use(paymentRoutes);
 app.use(adminRoutes);
+app.use(resourcesRoutes);
 
 
 app.use(express.static(path.join(__dirname, 'public')));
