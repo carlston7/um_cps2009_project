@@ -17,7 +17,7 @@ jobs:
         working-directory: ./frontend
 
       - name: Run frontend tests
-        run: npm test > frontend-test-results.txt 2>&1 
+        run: npm test > ../server/frontend-test-results.txt 2>&1  
         working-directory: ./frontend
 
       - name: Generate documentation with TypeDoc
@@ -34,8 +34,8 @@ jobs:
 
       - name: Run backend tests and save results with coverage
         run: |
-          npm test -- --coverage > backend-test-results.txt
-          cp -r coverage coverage-results
+          npm test -- --coverage > ../backend-test-results.txt
+          cp -r coverage ../server/coverage-results
         working-directory: ./server
 
       - name: Upload test results and documentation
@@ -77,14 +77,14 @@ jobs:
 
       - name: Zip artifact for deployment
         run: |
-          zip -r ../release.zip ./* ./docs/* ./frontend-test-results.txt ./backend-test-results.txt ./coverage-results/*
+          zip -r ../release.zip ./*
         working-directory: ./server
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: node-app
-          path: release.zip
+          path: ../release.zip
          
   deploy:
     runs-on: ubuntu-latest
