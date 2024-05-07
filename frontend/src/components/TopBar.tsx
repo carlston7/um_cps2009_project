@@ -65,9 +65,11 @@ export default function TopBar() {
                     {isAuthenticated && !isAdmin && !isMobile && <TopbarLink to="/view-courts" text="Book a Court" />}
                     {isAuthenticated && !isAdmin && !isMobile && <TopbarLink to="/my-bookings" text="My Bookings" />}
                     {isAuthenticated && !isAdmin && !isMobile && <TopbarLink to="/friends" text="My Friends" />}
+                    {isAuthenticated && !isMobile && <TopbarLink to="/topup" text="Top up Credit" />}
+                    {isAuthenticated && isAdmin && <TopbarLink to="/block-courts" text="Block Courts" />}
                     {isAdmin && [
                         <TopbarLink key="new-court" to="/new-court" text="Create Court" />,
-                        <TopbarLink key="edit-court" to="/view-all-courts" text="Edit Court" />
+                        <TopbarLink key="edit-court" to="/view-all-courts" text="Edit Court" />,
                     ]}
                     <Box flexGrow={1} />
                     {isAuthenticated && !isAdmin && [
@@ -76,6 +78,13 @@ export default function TopBar() {
                             label={`Balance: $${formattedCredit}`}
                             color="default" />
                     ]}
+                    {isAuthenticated && isAdmin && !isMobile && [
+                        <Chip
+                            icon={<AccountBalanceWallet />}
+                            label={`Balance: $${formattedCredit}`}
+                            color="default" />
+                    ]}
+
                     <IconButton
                         color="inherit"
                         aria-label="menu"
@@ -91,6 +100,8 @@ export default function TopBar() {
                         {isMobile && isAuthenticated && !isAdmin && <MenuItem onClick={handleMenuClose} component={RouterLink} to="/view-courts">Book a Court</MenuItem>}
                         {isMobile && isAuthenticated && !isAdmin && <MenuItem onClick={handleMenuClose} component={RouterLink} to="/my-bookings">My Bookings</MenuItem>}
                         {isMobile && isAuthenticated && !isAdmin && <MenuItem onClick={handleMenuClose} component={RouterLink} to="/friends">My Friends</MenuItem>}
+                        {isAuthenticated && isMobile && <MenuItem onClick={handleMenuClose} component={RouterLink} to="/topup">Top up Credit</MenuItem>}
+                        {isAuthenticated && <MenuItem onClick={handleMenuClose} component={RouterLink} to="/friends/send/credit">Send Credit to a Friend</MenuItem>}
                         {isMobile && isAdmin && [
                             <MenuItem key="view-courts-mobile" onClick={handleMenuClose} component={RouterLink} to="/view-courts">Book a Court</MenuItem>,
                             <MenuItem key="my-bookings-mobile" onClick={handleMenuClose} component={RouterLink} to="/my-bookings">My Bookings</MenuItem>

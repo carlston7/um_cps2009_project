@@ -1,3 +1,7 @@
+/**
+ * @file This file contains the user routes for user registration, login, profile management, email confirmation, password reset, and friend requests.
+ * @module userRoutes
+ */
 const express = require('express');
 const router = express.Router();
 const { create_user, get_user_credit, edit_user } = require('../controllers/usercontroller');
@@ -6,7 +10,11 @@ const User = require('../models/users');
 const crypto = require('crypto');
 const { send_booking_confirmation } = require('../controllers/mail.js');
 
-// Function to generate and store a token
+/**
+ * 
+ * @param {*} user 
+ * @returns token
+ */
 const generateToken = async (user) => {
     const token = crypto.randomBytes(20).toString('hex');
     user.confirmationToken = token;
@@ -15,6 +23,19 @@ const generateToken = async (user) => {
     return token;
 };
 
+/**
+ * Sends a POST request to the server allowing a user to register on the platform triggering a confirmation email to be sent to the email address provided.
+ *
+ * @param {Object} req - The request object containing user registration data.
+ * @param {Object} req.body - The request body containing user registration data.
+ * @param {string} req.body.email - The email address of the user being registered.
+ * @param {string} req.body.password - The password of the user being registered.
+ * @param {string} req.body.name - The name of the user being registered.
+ * @param {string} req.body.surname - The surname of the user being registered.
+ * @param {Object} res - The response object used to send responses to the client.
+ * @returns {Promise<any>} - A promise that resolves after the user registration process is completed.
+ * @throws {Error} - If there is an error during the user registration process.
+ */
 router.post('/signup', async (req, res) => {
     try {
 
@@ -53,6 +74,7 @@ router.post('/signup', async (req, res) => {
     }
 });
 
+
 router.get('/confirm-email', async (req, res) => {
     try {
         console.log("Confirming email");
@@ -81,32 +103,27 @@ router.post('/login', async (req, res) => {
 
         // Find user by email address using Mongoose
         const user = await User.findOne({ email_address: user_data.email });
+        if (!user) {
+            return res.status(401).send('Invalid email address'); // Stop further processing and return
+        }
         if (!user.emailVerified) {
             res.status(401).send('Email not verified');
         }
-        // Check if user exists and compare passwords (make sure to hash passwords in production)
-        if (user) {
-            const valid_pwd = await bcrypt.compare(user_data.password, user.password);
-
-            if (valid_pwd) {
-                res.status(200).json({
-                    message: 'Login successful',
-                    email: user.email_address,
-                    type: user.type,
-                    password: req.body.password,
-                    credit: user.credit,
-                    name: user.name,
-                    surname: user.surname,
-                });
-            }
-            else {
-                res.status(401).send('Invalid password');
-            }
+        const valid_pwd = await bcrypt.compare(user_data.password, user.password);
+        if (valid_pwd) {
+            res.status(200).json({
+                message: 'Login successful',
+                email: user.email_address,
+                type: user.type,
+                password: req.body.password,
+                credit: user.credit,
+                name: user.name,
+                surname: user.surname,
+            });
         } else {
-            res.status(401).send('Invalid email address');
+            res.status(401).send('Invalid password');
         }
     } catch (error) {
-        console.error('Error logging in:', error); // Log the specific error
         res.status(500).send('An error occurred: ' + error.message);
     }
 });
@@ -332,6 +349,43 @@ router.get('/friends/requests/count', async (req, res) => {
         }
         const count = user.friendRequests.length; // Assuming friendRequests is an array of requests
         res.json({ count });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+router.patch('/send/credit', async (req, res) => {
+    try {
+        const { email, amount } = req.body;
+        const sender = await User.findOne({ email_address: req.headers['user-email'] });
+        const receiver = await User.findOne({ email_address: email });
+
+        if (amount <= 0) {
+            return res.status(400).json({ message: "Amount must be greater than 0." });
+        }
+
+        if (!sender || !receiver) {
+            return res.status(404).json({ message: "User not found." });
+        }
+
+        if (sender.credit < amount) {
+            return res.status(400).json({ message: "Insufficient credit." });
+        }
+
+        // Check if receiver is sender's friend and friendship is accepted
+        const isFriend = sender.friends.some(friend => friend.email === email && friend.accepted);
+        if (!isFriend) {
+            return res.status(403).json({ message: "Receiver is not your friend." });
+        }
+
+        sender.credit -= amount;
+        receiver.credit += amount;
+
+        await sender.save();
+        await receiver.save();
+
+        res.status(200).json({ message: "Credit sent successfully.", senderCredit: sender.credit });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Internal server error" });

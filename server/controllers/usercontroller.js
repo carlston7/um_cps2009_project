@@ -88,3 +88,27 @@ exports.edit_user = async (user_data) => {
         throw new Error('A problem was encountered while editing the user profile.');
     }
 };
+
+exports.is_friend = async (user_email, friend_email) => {
+    try {
+        const user = await User.findOne({ email_address: user_email });
+        
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        let found = false;
+
+        user.friends.forEach(friend => {
+            if (friend.email === friend_email) {
+                found = true;
+                return found;
+            }
+        });
+
+        return found;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};

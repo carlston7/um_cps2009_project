@@ -19,6 +19,11 @@ jobs:
           npm run build
         working-directory: ./frontend
 
+      - name: Copy frontend build to server's public directory
+        run: |
+          mkdir -p ./server/public
+          cp -R ./frontend/build/* ./server/public/
+
       - name: Move to server directory
         run: cd server
         
@@ -28,23 +33,6 @@ jobs:
           npm run build --if-present
         working-directory: ./server
 
-      - name: Run tests and save results
-        run: |
-          npm test > test-results.txt || true
-        working-directory: ./server
-
-      - name: Upload test results
-        uses: actions/upload-artifact@v3
-        if: always() # This ensures that the artifact is uploaded even if the test step fails
-        with:
-          name: test-results
-          path: ./server/test-results.txt
-          
-      - name: Copy frontend build to server's public directory
-        run: |
-          mkdir -p ./server/public
-          cp -R ./frontend/build/* ./server/public/
-      
       - name: Zip artifact for deployment
         run: zip -r ../release.zip ./*
         working-directory: ./server
@@ -55,10 +43,56 @@ jobs:
           name: node-app
           path: release.zip
 
+  test_and_document:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies for frontend
+        run: npm install
+        working-directory: ./frontend
+
+      - name: Run frontend tests
+        run: npm test > frontend-test-results.txt 2>&1 
+        working-directory: ./frontend
+
+      - name: Generate documentation with TypeDoc
+        run: npx typedoc --logLevel Verbose
+        working-directory: ./frontend
+        
+      - name: Move to server directory
+        run: cd server
+
+      - name: Install dependencies for server
+        run: npm install
+        working-directory: ./server
+
+      - name: Generate documentation with JSDoc
+        run: npm run generate-docs
+        working-directory: ./server
+
+      - name: Run backend tests and save results with coverage
+        run: |
+          npm test -- --coverage > backend-test-results.txt
+          cp -r coverage coverage-results
+        working-directory: ./server
+
+      - name: Upload test results and documentation
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-coverage-and-docs
+          path: |
+            ./frontend/frontend-test-results.txt
+            ./frontend/docs
+            ./server/backend-test-results.txt
+            ./server/coverage-results
+            ./server/docs
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    needs: test_and_document
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
