@@ -1,3 +1,7 @@
+/**
+ * @file This file contains the functions for retrieving bookings and blocking courts as an admin.
+ * @module admin
+ */
 const express = require('express');
 const router = express.Router();
 const User = require('../models/users');
@@ -7,7 +11,22 @@ const bcrypt = require('bcryptjs');
 
 const { create_booking} = require('../controllers/bookingcontroller');
 const { send_booking_confirmation } = require('../controllers/mail.js');
-
+/**
+ * GET /admin/bookings
+ * Retrieves bookings based on specified dates and courts.
+ * @name GET/admin/bookings
+ * @function
+ * @memberof module:admin
+ * @param {Object} req - The request object.
+ * @param {Object} req.query - The query parameters.
+ * @param {string|string[]} req.query.dates - The dates to filter the bookings.
+ * @param {string|string[]} req.query.courts - The courts to filter the bookings.
+ * @param {string} req.headers'user-email' - The email address of the user.
+ * @param {string} req.headers'user-password' - The password of the user.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The JSON response containing the bookings.
+ * @throws {Error} - If there is an error retrieving the bookings.
+ */
 router.get('/admin/bookings', async (req, res) => {
     try {
         let { dates, courts } = req.query;
@@ -46,6 +65,20 @@ router.get('/admin/bookings', async (req, res) => {
     }
 });
 
+/**
+ * @name POST/admin/block-courts
+ * @function
+ * @memberof module:admin
+ * @param {Object} req - The request object.
+ * @param {string} req.body.email - The email address of the user.
+ * @param {string} req.body.password - The password of the user.
+ * @param {string} req.body.type - The type of the user (e.g., admin, regular).
+ * @param {string} req.headers'user-email'] - The email address of the user.
+ * @param {string} req.headers'user-password'] - The password of the user.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The JSON response containing the newly created user.
+ * @throws {Error} - If there is an error creating the user.
+ */
 router.post('/admin/block-courts', async (req, res) => {
     try {
         const { dates, courts } = req.body; // Include userEmail in body for admin check
