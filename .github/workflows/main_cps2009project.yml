@@ -61,7 +61,7 @@ jobs:
       - name: Generate documentation with TypeDoc
         run: npx typedoc --logLevel Verbose
         working-directory: ./frontend
-
+        
       - name: Move to server directory
         run: cd server
 
