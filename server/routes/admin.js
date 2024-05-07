@@ -130,14 +130,13 @@ router.post('/admin/block-courts', async (req, res) => {
                     console.log("Refunded: ", invite.email, eachRefund);
                 }
             });
-
             const mailOptions = {
                 from: 'manager.tennisclub@gmail.com',
                 to: `${session.user_email}, manager.tennisclub@gmail.com`,
                 subject: 'Booking Cancellation Confirmation',
                 html: ` 
                     <h4>The following booking made by ${session.user_email} has been cancelled due to the court booked needing to be used on that date:</h4>
-                    <p>Court Name: ${court.court_name}</p>
+                    <p>Court Name: ${session.court_name}</p>
                     <p>Date: ${session.start.getDate()}</p>
                     <p>Time: ${session.start.getHours()}:00 - ${session.start.getHours() + 1}:00</p>
                     <p>Refunded amount: ${eachRefund}</p>
@@ -150,7 +149,7 @@ router.post('/admin/block-courts', async (req, res) => {
         });
 
         await Promise.all(refundProcessing);
-        res.status(200).send('Courts blocked and credits refunded.');
+        res.status(200).send('Courts blocked and credits refunded.'); //2172 + 60
     } catch (e) {
         console.error(e);
         res.status(500).send('Failed to block courts and process refunds.');
