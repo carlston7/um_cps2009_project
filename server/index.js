@@ -28,6 +28,7 @@ const userRoutes = require('./routes/userRoutes');
 const courtRoutes = require('./routes/courtRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
+
 app.use(userRoutes);
 app.use(courtRoutes);
 app.use(bookingRoutes);
