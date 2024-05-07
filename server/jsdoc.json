@@ -1,13 +1,12 @@
 {
     "source": {
-    "include": [
-        "routes"
-    ],
-    "includePattern": ".js$",
-    "excludePattern": "(node_modules/|docs)"
+        "include": [
+            "routes/"
+        ],
+        "includePattern": ".+\\.js(doc|x)?$",
+        "excludePattern": "(^|\\/|\\\\)_"
     },
     "opts": {
     "destination": "./docs/"
     }
 }
-  
