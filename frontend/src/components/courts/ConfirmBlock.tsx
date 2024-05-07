@@ -20,13 +20,13 @@ const ConfirmBlock = () => {
         setLoading(true);
         try {
             const response = await axiosInstance.post('/admin/block-courts', {
-                courts: courts.map((court: { _id: any; }) => court._id),
+                courts: courts.map((court: Court) => court.name),
                 dates,
             }, {
                 headers: {
                     'User-Email': localStorage.getItem('userEmail'),
-                    'User-Password': localStorage.getItem('userPassword'),
-                } // Remove the extra comma here
+                    'User-Password': localStorage.getItem('userPassword')
+                }
             });
 
             if (response.status === 200) {

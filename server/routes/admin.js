@@ -105,7 +105,7 @@ router.post('/admin/block-courts', async (req, res) => {
             const court = await Court.findOne({ name: session.court_name });
             if (!court) {
                 console.error("No court found with the name:", session.court_name);
-                return; // Skip processing this session if the court is not found
+                res.status(404).send('Could not find court with name provided.');
             }
             console.log("Sessions start:" , session.start.getHours());
             const price = session.start.getHours() >= 18 ? court.nightPrice : court.dayPrice; // Price based on time
@@ -132,7 +132,7 @@ router.post('/admin/block-courts', async (req, res) => {
 
             const mailOptions = {
                 from: 'manager.tennisclub@gmail.com',
-                to: `${session.user_email}, ${invite.email},manager.tennisclub@gmail.com`,
+                to: `${session.user_email}, manager.tennisclub@gmail.com`,
                 subject: 'Booking Cancellation Confirmation',
                 html: ` 
                     <h4>The following booking made by ${session.user_email} has been cancelled due to the court booked needing to be used on that date:</h4>
