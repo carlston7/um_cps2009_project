@@ -97,7 +97,6 @@ router.post('/admin/block-courts', async (req, res) => {
                         user_email: user.email_address, // Admin's email as a placeholder
                         invite_responses: []
                     };
-                    console.log("Booking fake session", bookingData);
                     await create_booking(bookingData);
                 }
             }
