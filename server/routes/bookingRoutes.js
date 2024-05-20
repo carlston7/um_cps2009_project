@@ -1,3 +1,7 @@
+/**
+ * @file This file contains the routes and fnctions for booking realted requests.
+ * @module bookings
+ */
 const express = require('express');
 const router = express.Router();
 
@@ -10,6 +14,19 @@ const { send_booking_confirmation, send_booking_invites } = require('../controll
 const User = require('../models/users');
 const bcrypt = require('bcryptjs');
 
+/**
+ * GET /courts
+ * Retrieves all courts avaialble for a specific date and time
+ * @name GET/courts
+ * @function
+ * @memberof module:bookings
+ * @param {Object} req - The request object.
+ * @param {Object} req.query - The query parameters.
+ * @param {string|string[]} req.query.dateTime - The date and time to filter the courts.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The JSON response containing the courts.
+ * @throws {Error} - If there is an error retrieving the courts for that date and time.
+ */
 router.get('/courts', async (req, res) => {
     try {
         const courts = await get_available_courts(req.query.dateTime);
@@ -21,6 +38,21 @@ router.get('/courts', async (req, res) => {
     }
 });
 
+/**
+ * POST /book-court
+ * Creates a booking for a specific court and time if the user has sufficient credit and the court is available.
+ * @name POST/book-court
+ * @function
+ * @memberof module:bookings
+ * @param {Object} req - The request object.
+ * @param {Object} req.headers - User email and password for authentication
+ * @param {Object} req.body - The body of the request containing booking details.
+ * @param {string} req.body.courtName - Name of the court to book.
+ * @param {string} req.body.dateTimeIso - ISO string of the date and time for the booking.
+ * @param {string[]} req.body.emails - Emails of friends invited to the booking.
+ * @returns {Object} - JSON response indicating success or failure of the booking process.
+ * @throws {Error} - If there is an error during the booking creation process.
+ */
 router.post('/book-court', async (req, res) => {
     try {
         const user = await User.findOne({ email_address: req.headers['user-email'] });
@@ -107,6 +139,17 @@ router.post('/book-court', async (req, res) => {
     }
 });
 
+/**
+ * GET /user-bookings
+ * Retrieves all bookings associated with a user's email address.
+ * @name GET/user-bookings
+ * @function
+ * @memberof module:bookings
+ * @param {Object} req - The request object.
+ * @param {Object} req.headers - User's email to fetch bookings.
+ * @returns {Object} - JSON response containing an array of bookings.
+ * @throws {Error} - If there is an error retrieving the user's bookings.
+ */
 router.get('/user-bookings', async (req, res) => {
     try {
         const email = req.headers['email'];
@@ -121,6 +164,19 @@ router.get('/user-bookings', async (req, res) => {
     }
 });
 
+/**
+ * DELETE /cancel-booking
+ * Cancels a specific booking and refunds credits if the cancellation is made at least 24 hours before the booking time.
+ * @name DELETE/cancel-booking
+ * @function
+ * @memberof module:bookings
+ * @param {Object} req - The request object.
+ * @param {Object} req.headers - User's email and password for authentication.
+ * @param {Object} req.body - The body of the request containing the booking ID.
+ * @param {string} req.body._id - ID of the booking to cancel.
+ * @returns {Object} - JSON response indicating success or failure of the booking cancellation.
+ * @throws {Error} - If there is an error during the booking cancellation process.
+ */
 router.delete('/cancel-booking', async (req, res) => {
     try {
         const user = await User.findOne({ email_address: req.headers['user-email'] });
@@ -181,6 +237,19 @@ router.delete('/cancel-booking', async (req, res) => {
     }
 });
 
+/**
+ * POST /respond
+ * Allows a user to accept or reject an invitation to a game, updating the booking accordingly.
+ * @name POST/respond
+ * @function
+ * @memberof module:bookings
+ * @param {Object} req - The request object.
+ * @param {Object} req.body - The body of the request containing response details.
+ * @param {string} req.body.email_address - Email of the user responding to the invite.
+ * @param {boolean} req.body.accept - Whether the invite is accepted or not.
+ * @returns {Object} - JSON response indicating the updated status of the booking.
+ * @throws {Error} - If there is an error while updating the invitation response.
+ */
 router.post('/respond', async (req, res) => {
     try {
         const booking = await accept_game_invite(req.body);
