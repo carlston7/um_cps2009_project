@@ -65,7 +65,6 @@ exports.get_user_credit = async (email) => {
         }
         return user.credit;
     } catch (e) {
-        console.error(`Database access error for email ${email}:`, e);
         throw new Error('A problem was encountered while getting the user\'s credit.');
     }
 };
@@ -108,7 +107,6 @@ exports.is_friend = async (user_email, friend_email) => {
 
         return found;
     } catch (error) {
-        console.error(error);
         throw error;
     }
 };

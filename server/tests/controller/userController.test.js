@@ -116,6 +116,6 @@ describe("is_friend function", () => {
         User.findOne.mockResolvedValue(null);
 
         // Call the is_friend function and expect it to throw an error
-        await expect(is_friend('nonexistent@example.com', 'friend@example.com')).rejects.toThrowError('User not found');
+        await expect(is_friend('nonexistent@example.com', 'friend@example.com')).rejects.toThrow('User not found');
     });
 });
