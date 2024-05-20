@@ -14,7 +14,6 @@ exports.get_available_courts = async (time) => {
 
         return available;
     } catch (e) {
-        console.error(e);
         throw new Error('A problem was encountered while getting available courts.');
     }
 };
@@ -26,7 +25,6 @@ exports.create_booking = async (booking_data) => {
         await booking.save();
         return booking;
     } catch (e) {
-        console.error(e);
         throw new Error('A problem was encountered while creating the booking.');
     }
 };
@@ -36,7 +34,6 @@ exports.get_bookings = async (email) => {
         const bookings = await Booking.find({ user_email: email });
         return bookings;
     } catch (e) {
-        console.error(e);
         throw new Error('Could not get bookings for user');
     }
 };
@@ -51,7 +48,6 @@ exports.delete_booking = async (booking_id) => {
 
         return booking;
     } catch (e) {
-        console.error(e);
         throw e;
     }
 }
@@ -66,7 +62,6 @@ exports.get_booking = async (booking_id) => {
 
         return booking;
     } catch (e) {
-        console.error(e);
         throw e;
     }
 }
@@ -110,7 +105,6 @@ exports.accept_game_invite = async (data) => {
             return booking;
         }
     } catch (error) {
-        console.error(error);
         throw error;
     }
 }
