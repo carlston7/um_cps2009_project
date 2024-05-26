@@ -1,3 +1,8 @@
+/**
+ * @file This file contains the route handlers for payment related requests.
+ * @module payments
+ */
+
 const express = require('express');
 const router = express.Router();
 const stripe = require('stripe')(process.env.SECRET_KEY);
@@ -6,7 +11,20 @@ const { getStripeSessionsBySessionID, saveStripeSession } = require('../controll
 const body_parser = require('body-parser')
 router.use(body_parser.json());
 
-
+/**
+ * POST /topup
+ * Creates a Stripe checkout session for topping up the user's balance.
+ * @name POST/topup
+ * @function
+ * @memberof module:payments
+ * @param {Object} req - The request object.
+ * @param {Object} req.body - The body of the request containing the top-up details.
+ * @param {string} req.body.email - The email address of the user.
+ * @param {number} req.body.amount - The amount to top up, in euros.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The JSON response containing the URL for the Stripe checkout session.
+ * @throws {Error} - If there is an error creating the Stripe checkout session.
+ */
 router.post("/topup", async (req, res) => {
     try {
         const { email, amount } = req.body;
@@ -37,6 +55,21 @@ router.post("/topup", async (req, res) => {
     }
 });
 
+
+/**
+ * POST /success
+ * Handles the successful payment notification from Stripe and updates the user's credit balance.
+ * @name POST/success
+ * @function
+ * @memberof module:payments
+ * @param {Object} req - The request object.
+ * @param {Object} req.body - The body of the request containing payment details.
+ * @param {string} req.body.session_id - The ID of the Stripe checkout session.
+ * @param {string} req.body.email - The email address of the user.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The response indicating the success or failure of the operation.
+ * @throws {Error} - If there is an error handling the successful payment.
+ */
 router.post("/success", async (req, res) => {
     try {
         const session_id = req.body.session_id;

@@ -1,9 +1,25 @@
+/**
+ * @file This file contains the route handlers for court related requests.
+ * @module courts
+ */
+
 const express = require('express');
 const router = express.Router();
 const { create_court, get_courts, edit_court } = require('../controllers/courtcontroller');
 const bcrypt = require('bcryptjs');
 const User = require('../models/users');
 
+/**
+ * GET /courts-all
+ * Retrieves all courts
+ * @name GET/courts-all
+ * @function
+ * @memberof module:courts
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The JSON response containing the courts.
+ * @throws {Error} - If there is an error retrieving the courts.
+ */
 router.get('/courts-all', async (req, res) => {
     try {
         const courts = await get_courts();
@@ -15,6 +31,24 @@ router.get('/courts-all', async (req, res) => {
     }
 });
 
+/**
+ * POST /court
+ * Creates a new court resource and stores it in the database.
+ * @name POST/court
+ * @function
+ * @memberof module:courts
+ * @param {Object} req - The request object.
+ * @param {Object} req.headers - The request headers.
+ * @param {string} req.headers'user-email' - The email address of the user.
+ * @param {string} req.headers'user-password' - The password of the user.
+ * @param {string} req.headers'user-type' - The type of the user (must be 'admin').
+ * @param {Object} req.body - The body of the request containing the court data.
+ * @param {string} req.body.name - The name of the court to be created.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The JSON response containing a message indicating the outcome.
+ * @throws {Error} - If there is an error creating the court.
+ * @throws {Error} - If the user is not authorized or if the court already exists.
+ */
 // app.post('/court', requireAdmin, async (req, res) => {
 router.post('/court', async (req, res) => {
     try {
@@ -49,6 +83,24 @@ router.post('/court', async (req, res) => {
     }
 });
 
+/**
+ * PATCH /court
+ * Updates an existing court resource in the database.
+ * @name PATCH/court
+ * @function
+ * @memberof module:courts
+ * @param {Object} req - The request object.
+ * @param {Object} req.headers - The request headers.
+ * @param {string} req.headers'user-email' - The email address of the user.
+ * @param {string} req.headers'user-password' - The password of the user.
+ * @param {string} req.headers'user-type' - The type of the user (must be 'admin').
+ * @param {Object} req.body - The body of the request containing the court data to be updated.
+ * @param {string} req.body.name - The name of the court to be updated.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The JSON response containing a message indicating the outcome.
+ * @throws {Error} - If there is an error updating the court.
+ * @throws {Error} - If the user is not authorized.
+ */
 router.patch('/court', async (req, res) => {
     try {
         const user = await User.findOne({ email_address: req.headers['user-email'] });

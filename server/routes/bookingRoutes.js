@@ -1,5 +1,5 @@
 /**
- * @file This file contains the routes and fnctions for booking realted requests.
+ * @file This file contains the route handlers for booking related requests.
  * @module bookings
  */
 const express = require('express');
