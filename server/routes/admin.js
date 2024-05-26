@@ -1,5 +1,5 @@
 /**
- * @file This file contains the functions for retrieving bookings and blocking courts as an admin.
+ * @file This file contains the route handlers for retrieving bookings and blocking courts as an admin.
  * @module admin
  */
 const express = require('express');

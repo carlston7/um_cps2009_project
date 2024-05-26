@@ -1,6 +1,6 @@
 /**
- * @file This file contains the user routes for user registration, login, profile management, email confirmation, password reset, and friend requests.
- * @module userRoutes
+ * @file This file contains the user route handlers and functions for user registration, login, profile management, email confirmation, password reset, and friend requests.
+ * @module profile
  */
 const express = require('express');
 const router = express.Router();
@@ -11,12 +11,21 @@ const crypto = require('crypto');
 const { send_booking_confirmation } = require('../controllers/mail.js');
 
 /**
- * 
- * @param {*} user 
- * @returns token
+ * Generates a confirmation token for the user, stores it in the user document, and returns the token.
+ * @async
+ * @function generateToken
+ * @param {Object} user - The user object to generate the token for.
+ * @param {string} user.confirmationToken - The confirmation token to be generated and stored.
+ * @param {number} user.tokenExpiration - The expiration timestamp of the token.
+ * @returns {Promise<string>} - The generated confirmation token.
  */
 const generateToken = async (user) => {
+    /**
+     * Generate a random confirmation token.
+     * @type {string}
+     */
     const token = crypto.randomBytes(20).toString('hex');
+
     user.confirmationToken = token;
     user.tokenExpiration = Date.now() + 3600000; // 1 hour from now
     await user.save();
@@ -24,17 +33,20 @@ const generateToken = async (user) => {
 };
 
 /**
- * Sends a POST request to the server allowing a user to register on the platform triggering a confirmation email to be sent to the email address provided.
- *
- * @param {Object} req - The request object containing user registration data.
- * @param {Object} req.body - The request body containing user registration data.
- * @param {string} req.body.email - The email address of the user being registered.
- * @param {string} req.body.password - The password of the user being registered.
- * @param {string} req.body.name - The name of the user being registered.
- * @param {string} req.body.surname - The surname of the user being registered.
- * @param {Object} res - The response object used to send responses to the client.
- * @returns {Promise<any>} - A promise that resolves after the user registration process is completed.
- * @throws {Error} - If there is an error during the user registration process.
+ * POST /signup
+ * Creates a new user account and sends a confirmation email with a verification link.
+ * @name POST/signup
+ * @function
+ * @memberof module:profile
+ * @param {Object} req - The request object.
+ * @param {Object} req.body - The body of the request containing user signup data.
+ * @param {string} req.body.email - The email address of the user.
+ * @param {string} req.body.password - The password of the user.
+ * @param {string} req.body.name - The name of the user.
+ * @param {string} req.body.surname - The surname of the user.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The JSON response indicating the success of the signup process.
+ * @throws {Error} - If there is an error during the signup process.
  */
 router.post('/signup', async (req, res) => {
     try {
@@ -75,6 +87,19 @@ router.post('/signup', async (req, res) => {
 });
 
 
+/**
+ * GET /confirm-email
+ * Confirms the user's email address using a token.
+ * @name GET/confirm-email
+ * @function
+ * @memberof module:profile
+ * @param {Object} req - The request object.
+ * @param {Object} req.query - The query parameters.
+ * @param {string} req.query.token - The token for email confirmation.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The JSON response indicating the success or failure of the email verification.
+ * @throws {Error} - If there is a server error or if the token is invalid or expired.
+ */
 router.get('/confirm-email', async (req, res) => {
     try {
         console.log("Confirming email");
@@ -96,7 +121,20 @@ router.get('/confirm-email', async (req, res) => {
     }
 });
 
-//Login validation
+/**
+ * POST /login
+ * Validates user login credentials and returns user information if successful.
+ * @name POST/login
+ * @function
+ * @memberof module:profile
+ * @param {Object} req - The request object.
+ * @param {Object} req.body - The body of the request containing login credentials.
+ * @param {string} req.body.email - The email address of the user.
+ * @param {string} req.body.password - The password of the user.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The JSON response containing user information if login is successful.
+ * @throws {Error} - If there is an error during the login process.
+ */
 router.post('/login', async (req, res) => {
     try {
         const user_data = req.body;
@@ -128,6 +166,19 @@ router.post('/login', async (req, res) => {
     }
 });
 
+/**
+ * GET /credit
+ * Retrieves the credit balance of the user based on the email address provided in the request headers.
+ * @name GET/credit
+ * @function
+ * @memberof module:profile
+ * @param {Object} req - The request object.
+ * @param {Object} req.headers - The headers of the request containing the user's email.
+ * @param {string} req.headers'user-email' - The email address of the user.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The JSON response containing the user's credit balance.
+ * @throws {Error} - If there is an error retrieving the user's credit balance.
+ */
 router.get("/credit", async (req, res) => {
     const email = req.headers['user-email'];
     if (!email) {
@@ -146,6 +197,22 @@ router.get("/credit", async (req, res) => {
     }
 });
 
+/**
+ * PATCH /profile
+ * Updates the user's profile information.
+ * @name PATCH/profile
+ * @function
+ * @memberof module:profile
+ * @param {Object} req - The request object.
+ * @param {Object} req.body - The body of the request containing user profile data.
+ * @param {string} req.body.email - The email address of the user.
+ * @param {string} req.body.password - The current password of the user.
+ * @param {string} [req.body.name] - The new name of the user.
+ * @param {string} [req.body.surname] - The new surname of the user.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The JSON response indicating the success or failure of the profile update.
+ * @throws {Error} - If there is an error updating the profile.
+ */
 router.patch('/profile', async (req, res) => {
     try {
         res.set('Cache-Control', 'no-store');
@@ -170,12 +237,34 @@ router.patch('/profile', async (req, res) => {
     }
 });
 
-// Helper function to generate a 4-digit code
+/**
+ * Generates a random 4-digit code.
+ * @function generateFourDigitCode
+ * @returns {string} - A string representation of the generated 4-digit code.
+ */
 const generateFourDigitCode = () => {
-    return Math.floor(1000 + Math.random() * 9000).toString();  // Generate a number between 1000 and 9999
+    /**
+     * Generate a random number between 1000 and 9999.
+     * @type {number}
+     */
+    const code =  Math.floor(1000 + Math.random() * 9000);  // Generate a number between 1000 and 9999
+
+    return code.toString();
 };
 
-// Route to initiate the password reset process
+/**
+ * POST /email-one-time-code
+ * Sends a one-time code to the user's email address for password reset.
+ * @name POST/email-one-time-code
+ * @function
+ * @memberof module:profile
+ * @param {Object} req - The request object.
+ * @param {Object} req.body - The body of the request containing the user's email address.
+ * @param {string} req.body.email_address - The email address of the user requesting the password reset code.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The JSON response indicating the success of sending the one-time code.
+ * @throws {Error} - If there is an error during the process of sending the code.
+ */
 router.post('/email-one-time-code', async (req, res) => {
     const { email_address } = req.body;
 
@@ -206,7 +295,21 @@ router.post('/email-one-time-code', async (req, res) => {
     }
 });
 
-// Route to reset the password using the 4-digit code
+/**
+ * POST /forget-password
+ * Resets the user's password using a provided reset code and updates it with a new password.
+ * @name POST/forget-password
+ * @function
+ * @memberof module:profile
+ * @param {Object} req - The request object.
+ * @param {Object} req.body - The body of the request containing user data for password reset.
+ * @param {string} req.body.email_address - The email address of the user.
+ * @param {string} req.body.code - The reset code sent to the user's email.
+ * @param {string} req.body.newPassword - The new password to set for the user.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The JSON response indicating the success of the password reset.
+ * @throws {Error} - If there is an error during the password reset process.
+ */
 router.post('/forget-password', async (req, res) => {
     const { email_address, code, newPassword } = req.body;
 
@@ -236,7 +339,19 @@ router.post('/forget-password', async (req, res) => {
     }
 });
 
-// GET /friends/requests - Fetch all friend requests for the logged-in user
+/**
+ * GET /friends/requests
+ * Retrieves pending friend requests for the user.
+ * @name GET/friends/requests
+ * @function
+ * @memberof module:profile
+ * @param {Object} req - The request object.
+ * @param {Object} req.headers - The headers of the request containing the user's email.
+ * @param {string} req.headers'user-email' - The email address of the user.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The JSON response containing the pending friend requests.
+ * @throws {Error} - If there is an error retrieving the friend requests.
+ */
 router.get('/friends/requests', async (req, res) => {
     const userEmail = req.headers['user-email'];
 
@@ -261,7 +376,21 @@ router.get('/friends/requests', async (req, res) => {
 });
 
 
-// POST /api/friends/request
+/**
+ * POST /friends/request
+ * Sends a friend request from the logged-in user to another user.
+ * @name POST/friends/request
+ * @function
+ * @memberof module:profile
+ * @param {Object} req - The request object.
+ * @param {Object} req.body - The body of the request containing the receiver's email address.
+ * @param {string} req.body.receiverEmail - The email address of the user to whom the friend request is sent.
+ * @param {Object} req.headers - The headers of the request containing the logged-in user's email address.
+ * @param {string} req.headers'user-email' - The email address of the logged-in user.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The JSON response indicating the success of sending the friend request.
+ * @throws {Error} - If there is an error sending the friend request.
+ */
 router.post('/friends/request', async (req, res) => {
     const { receiverEmail } = req.body;
     const senderEmail = req.headers['user-email'];
@@ -293,7 +422,22 @@ router.post('/friends/request', async (req, res) => {
     }
 });
 
-// POST /friends/respond
+/**
+ * POST /friends/respond
+ * Responds to a friend request sent by another user.
+ * @name POST/friends/respond
+ * @function
+ * @memberof module:respondToFriendRequest
+ * @param {Object} req - The request object.
+ * @param {Object} req.body - The body of the request containing the sender's email and response (accept/decline).
+ * @param {string} req.body.senderEmail - The email address of the user who sent the friend request.
+ * @param {boolean} req.body.accept - Indicates whether the user accepts the friend request (true) or declines it (false).
+ * @param {Object} req.headers - The headers of the request containing the receiver's email address.
+ * @param {string} req.headers'user-email' - The email address of the user responding to the friend request.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The JSON response indicating the success of responding to the friend request.
+ * @throws {Error} - If there is an error responding to the friend request.
+ */
 router.post('/friends/respond', async (req, res) => {
     const { senderEmail, accept } = req.body;
     const receiverEmail = req.headers['user-email'];
@@ -323,7 +467,19 @@ router.post('/friends/respond', async (req, res) => {
     }
 });
 
-// GET /friends/list
+/**
+ * GET /friends/list
+ * Retrieves the list of accepted friends for the logged-in user.
+ * @name GET/friends/list
+ * @function
+ * @memberof module:profile
+ * @param {Object} req - The request object.
+ * @param {Object} req.headers - The headers of the request containing the user's email address.
+ * @param {string} req.headers'user-email' - The email address of the logged-in user.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The JSON response containing the list of accepted friends.
+ * @throws {Error} - If there is an error retrieving the list of accepted friends.
+ */
 router.get('/friends/list', async (req, res) => {
     const userEmail = req.headers['user-email'];
 
@@ -339,7 +495,19 @@ router.get('/friends/list', async (req, res) => {
     }
 });
 
-// GET /api/friends/requests/count - Get the count of friend requests
+/**
+ * GET /friends/requests/count
+ * Retrieves the count of pending friend requests for the logged-in user.
+ * @name GET/friends/requests/count
+ * @function
+ * @memberof module:profile
+ * @param {Object} req - The request object.
+ * @param {Object} req.headers - The headers of the request containing the user's email address.
+ * @param {string} req.headers'user-email' - The email address of the logged-in user.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The JSON response containing the count of pending friend requests.
+ * @throws {Error} - If there is an error retrieving the count of pending friend requests.
+ */
 router.get('/friends/requests/count', async (req, res) => {
     const userEmail = req.headers['user-email'];
     try {
@@ -355,6 +523,22 @@ router.get('/friends/requests/count', async (req, res) => {
     }
 });
 
+/**
+ * PATCH /send/credit
+ * Sends credit from one user to another.
+ * @name PATCH/send/credit
+ * @function
+ * @memberof module:profile
+ * @param {Object} req - The request object.
+ * @param {Object} req.body - The body of the request containing the receiver's email and the amount of credit to send.
+ * @param {string} req.body.email - The email address of the user who will receive the credit.
+ * @param {number} req.body.amount - The amount of credit to send.
+ * @param {Object} req.headers - The headers of the request containing the sender's email address.
+ * @param {string} req.headers'user-email' - The email address of the user sending the credit.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The JSON response indicating the success of sending the credit.
+ * @throws {Error} - If there is an error sending the credit.
+ */
 router.patch('/send/credit', async (req, res) => {
     try {
         const { email, amount } = req.body;
